@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter.messagebox import showerror
 from app.login import load_login
-from app.common import center
-from app.functionality import weatherapi
+from app.common import center, dark_title_bar
+from app.functionality import weatherapi 
 
 class AuthWindow():
     def __init__(self):
@@ -22,4 +22,5 @@ class AuthWindow():
         window.resizable(False, False)
         window.iconbitmap('images/logo.ico')
         window.deiconify()
+        dark_title_bar(window)
         window.mainloop()
