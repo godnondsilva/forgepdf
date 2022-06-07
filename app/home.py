@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showerror
 from tkinter.font import BOLD
-from app import auth, options, extractpdf, encryptpdf, scrapy, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
+from app import main, options, extractpdf, encryptpdf, scrapy, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
 from app.user import user_details
 from app.functionality import weatherapi
 from app.common import center
@@ -24,58 +24,58 @@ class HomeWindow():
 
         #Button Functions
         def toLoginPage():
-            # destroy the current window instance (AuthWindow)
+            # destroy the current window instance (MainWindow)
             window.destroy()
             # call the auth window class which will load the login screen
-            auth.AuthWindow()
+            main.MainWindow()
 
 
         def toEncryptPDF():
-             # destroy the current window instance (AuthWindow)
+             # destroy the current window instance (MainWindow)
             window.destroy()
             # call the encrypt pdf window class
             encryptpdf.encryptWindow()
 
         def toDecryptPDF():
-             # destroy the current window instance (AuthWindow)
+             # destroy the current window instance (MainWindow)
             window.destroy()
             # call the decrypt pdf window class
             decryptpdf.decryptWindow()
 
         def toEmailPdf():
-            # destroy the current window instance (AuthWindow)
+            # destroy the current window instance (MainWindow)
             window.destroy()
             # call the email pdf window class
             emailpdf.EmailPdfWindow()
 
         def toExtractPDF():
-            # destroy the current window instance (AuthWindow)
+            # destroy the current window instance (MainWindow)
             window.destroy()
             # call the extract pdf window class
             extractpdf.extractWindow()
 
 
         def toSplitPdf():
-             # destroy the current window instance (AuthWindow)
+             # destroy the current window instance (MainWindow)
             window.destroy()
             # call the splitPdf window class
             splitpdf.SplitPdfWIndow()
             
         def toMergedPdf():
-            # destroy the current window instance (AuthWindow)
+            # destroy the current window instance (MainWindow)
             window.destroy()
             # call the merge pdf window class
             mergepdf.MergePdfWindow()
 
         def toSavedPdfs():
-            # destroy the current window instance (AuthWindow)
+            # destroy the current window instance (MainWindow)
             window.destroy()
             # call the saved pdf window class
             savedpdfs.SavedPdfWindow()
 
 
         def toScrapy():
-             # destroy the current window instance (AuthWindow)
+             # destroy the current window instance (MainWindow)
             window.destroy()
             # call the scrapy window class
             scrapy.ScrapyWindow()
@@ -85,7 +85,7 @@ class HomeWindow():
             #set the value of the pdf select by the user in the user details class
             user_details.setSelectPdf(SelectPdf)
 
-            # destroy the current window instance (AuthWindow)
+            # destroy the current window instance (MainWindow)
             window.destroy()
             # call the options up window class
             options.OptionsPdfWindow()

@@ -4,7 +4,7 @@ from app.login import load_login
 from app.common import center, dark_title_bar
 from app.functionality import weatherapi 
 
-class AuthWindow():
+class MainWindow():
     def __init__(self):
         # window configuration
         window = Tk()
