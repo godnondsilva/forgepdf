@@ -4,7 +4,7 @@ from tkinter.messagebox import showwarning, showerror
 
 import PyPDF2
 from app.functionality import merge
-from app.user import user_details
+from app.state import main
 from app import login
 from app import home
 from app.common import center,executeQuery
@@ -25,7 +25,7 @@ class MergePdfWindow():
 
         #Button Functions
         def toHomePage():
-            user_details.NotSelectPdfBool()
+            main.NotSelectPdfBool()
             # destroy the current window instance (LogInWindow)
             window.destroy()
             # call the home up window class
@@ -80,9 +80,9 @@ class MergePdfWindow():
             height = 87)
 
             #if routed from options page then set the values of the pdf to be merged
-            if user_details.GetselectedPdfBool() == True:
-                pdfstomerge.append(user_details.getSelectPdf())
-                Pdf1name.insert('0', os.path.basename(user_details.getSelectPdf()))
+            if main.GetselectedPdfBool() == True:
+                pdfstomerge.append(main.getSelectPdf())
+                Pdf1name.insert('0', os.path.basename(main.getSelectPdf()))
                 Pdf1name.bind("<Key>", lambda e: "break")
 
 
@@ -127,18 +127,18 @@ class MergePdfWindow():
         def MoveToFolder():
 
             #increment the count of the pdf to prevent overwriting
-            user_details.IncrementCount()
-            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\MergePdf' + str(user_details.getCount()+1) + '.pdf'
+            main.IncrementCount()
+            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\MergePdf' + str(main.getCount()+1) + '.pdf'
             shutil.move('Merge.pdf' , add)
             shutil.copy(add , 'C:\\Users\\User\\Desktop')
             
             #converts the address to form that can be saved in the database
-            newAdd = user_details.ConvertAddress(add)
+            newAdd = main.ConvertAddress(add)
             saveToDB(newAdd)
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(user_details.getUID()) + "')")
+            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(main.getUID()) + "')")
 
 
         #Canvas Config
@@ -357,7 +357,7 @@ class MergePdfWindow():
 
 
         #if we are routing from options page then set the pdf was the select in options page
-        if user_details.GetselectedPdfBool() == True:
+        if main.GetselectedPdfBool() == True:
             showPdf1pic()
 
 

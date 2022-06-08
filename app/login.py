@@ -3,7 +3,7 @@ from tkinter.messagebox import showinfo, showwarning, showerror
 from app import register, home
 import mysql.connector
 from app.functionality import inputValidation
-from app.user import user_details
+from app.state.main import state
 import os
 
 def load_login(window):
@@ -42,13 +42,11 @@ def load_login(window):
                         # destroy the current window instance (SignUpWindow)
                     
                     #Stores the UID in a py file
-                    user_details.setUID(result[2])
-                    user_details.setUsername(email)
-                    # print(result)
+                    state.set_uid(result[2])
+                    state.set_username(email)
 
-                    window.destroy()
                     # call the Home window class
-                    home.HomeWindow()
+                    home.load_home(window)
                 mydb.close()
         except Exception as e:
             print(e)

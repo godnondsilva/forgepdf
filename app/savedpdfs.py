@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import mysql.connector
 from app import home,options
-from app.user import user_details
+from app.state import main
 from app.common import center
 import os
 
@@ -28,7 +28,7 @@ class SavedPdfWindow():
         #Route to options page and store the selected pdf
         def toOptionsPage(SelectPdf):
             #set the value in the user details class
-            user_details.setSelectPdf(SelectPdf)
+            main.setSelectPdf(SelectPdf)
 
             # destroy the current window instance (LogInWindow)
             window.destroy()
@@ -71,7 +71,7 @@ class SavedPdfWindow():
 
 
         #gettting the current logged in user's id
-        uid.append(user_details.getUID())
+        uid.append(main.getUID())
         
         # creating a mysql connection
         mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")

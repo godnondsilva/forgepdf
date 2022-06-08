@@ -3,7 +3,6 @@ from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
 from app import login
 from app.functionality import inputValidation
-from app.user import user_details
 from app.common import executeQuery
 import os
 
@@ -39,8 +38,6 @@ def load_register(window):
                 # TODO: Display status message (success/failure)
                 if result == None:
                     showinfo('Successfull','You have successfully registered an account! Please login to continue!')
-                    
-                    user_details.setUID('')
                     # call the Home window class
                     login.load_login(window)
 
@@ -161,4 +158,3 @@ def load_register(window):
         width = 160,
         height = 51)
 
-    register_canvas.pack()

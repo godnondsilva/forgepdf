@@ -1,6 +1,30 @@
 #Stores the current users id ,selectedpdf and name here
 from ntpath import join
 
+from jinja2 import Undefined
+
+class State:
+    def __init__(self):
+        self.uid = 0
+        self.username = ''
+    
+    def __str__(self):
+        return f'State: \nUID: {self.uid} \nUsername: {self.username}'
+
+    def get_uid(self):
+        return self.uid
+    
+    def set_uid(self, uid):
+        self.uid = uid
+
+    def get_username(self):
+        return self.username
+    
+    def set_username(self, username):
+        self.username = username
+
+
+state = State()
 
 uid = []
 username = []
