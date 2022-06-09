@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.messagebox import showerror
 from app.login import load_login
-from app.common import center, dark_title_bar
+from app.utility import center, dark_title_bar
 from app.functionality import weatherapi 
 
 class MainWindow():

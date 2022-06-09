@@ -2,8 +2,8 @@ from tkinter import *
 from tkinter import filedialog
 import mysql.connector
 from app import home,emailpdf,mergepdf, splitpdf
-from app.state import main
-from app.common import center
+from app import store
+from app.utility import center
 import os
 
 class OptionsPdfWindow():
@@ -26,21 +26,21 @@ class OptionsPdfWindow():
             home.HomeWindow()
 
         def toEmailPage():
-            main.SetSelectedPdfBool()
+            store.SetSelectedPdfBool()
             # destroy the current window instance (LogInWindow)
             window.destroy()
             # call the login up window class
             emailpdf.EmailPdfWindow()
 
         def toSplitPdf():
-            main.SetSelectedPdfBool()
+            store.SetSelectedPdfBool()
             # destroy the current window instance (LogInWindow)
             window.destroy()
             # call the login up window class
             splitpdf.SplitPdfWIndow()
 
         def toMergePdf():
-            main.SetSelectedPdfBool()
+            store.SetSelectedPdfBool()
             # destroy the current window instance (LogInWindow)
             window.destroy()
             # call the login up window class
@@ -163,7 +163,7 @@ class OptionsPdfWindow():
             insertbackground= "#0B132B",
             highlightthickness = 0)
 
-        SelectedPdfEntry.insert('0',os.path.basename(main.getSelectPdf()))
+        SelectedPdfEntry.insert('0',os.path.basename(store.getSelectPdf()))
         SelectedPdfEntry.bind("<Key>", lambda e: "break")
 
         SelectedPdfEntry.place(

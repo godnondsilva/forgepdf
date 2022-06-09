@@ -3,9 +3,9 @@ from tkinter import filedialog
 from tkinter.messagebox import showerror
 from tkinter.font import BOLD
 from app import main, options, extractpdf, encryptpdf, scrapy, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
-from app.state import main
+from app import store
 from app.functionality import weatherapi
-from app.common import center
+from app.utility import center
 import os
 import mysql.connector
 import datetime
@@ -19,7 +19,7 @@ def load_home(window):
         # destroy the current window instance (MainWindow)
         window.destroy()
         # call the auth window class which will load the login screen
-        main.MainWindow()
+        store.MainWindow()
 
 
     def toEncryptPDF():
@@ -75,7 +75,7 @@ def load_home(window):
 
     def toOptionsPage(SelectPdf):
         #set the value of the pdf select by the user in the user details class
-        main.setSelectPdf(SelectPdf)
+        store.setSelectPdf(SelectPdf)
 
         # destroy the current window instance (MainWindow)
         window.destroy()
@@ -90,7 +90,7 @@ def load_home(window):
         window.destroy()
     print(weatherData)
 
-    uid.append(main.getUID())
+    uid.append(store.getUID())
     
     # creating a mysql connection
     mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
@@ -283,10 +283,10 @@ def load_home(window):
     # selecting only the first row from the fetched data
     result1 = mycursor.fetchone()
     print(result1)
-    main.SetCount(result1[0])
+    store.SetCount(result1[0])
     
     
-    Username = Label(text = main.getUsername(), font=('Poppins', 25, BOLD), fg= "#5BC0BE",bg = "#0B132B")
+    Username = Label(text = store.getUsername(), font=('Poppins', 25, BOLD), fg= "#5BC0BE",bg = "#0B132B")
     Username.place(x = 280, y = 137)  
 
     SunnyImage = PhotoImage(file = f"./images/home/SunnyImage.png")
@@ -367,7 +367,7 @@ def load_home(window):
     FeelsLikeTextBox = canvas.create_image(
         435.0, 381.5,
         image = FeelsLikeTextBoxImage)
-    uid.append(main.getUID())
+    uid.append(store.getUID())
     
 
     FeelsLikeTextBoxEntry = Entry(

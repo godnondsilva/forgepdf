@@ -5,8 +5,8 @@ from tkinter.messagebox import showerror, showwarning
 from app import login
 from app import home
 from app.functionality import emailbot, emailvalidateapi
-from app.state import main
-from app.common import center
+from app import store
+from app.utility import center
 import os
 
 class EmailPdfWindow():
@@ -27,7 +27,7 @@ class EmailPdfWindow():
         #Button Functions
         def toHomePage():
             #reseting the setting of selected pdf
-            main.NotSelectPdfBool()
+            store.NotSelectPdfBool()
             # destroy the current window instance (LogInWindow)
             window.destroy()
             # call the login up window class
@@ -114,9 +114,9 @@ class EmailPdfWindow():
 
 
             #if routed from options page then set the values for the pdf to be emailed
-            if main.GetselectedPdfBool() == True:
-                attachmentPath.append(main.getSelectPdf())
-                TextBoxAttachmentEntry.insert('0' , 'Attachment : ' + os.path.basename(main.getSelectPdf()))
+            if store.GetselectedPdfBool() == True:
+                attachmentPath.append(store.getSelectPdf())
+                TextBoxAttachmentEntry.insert('0' , 'Attachment : ' + os.path.basename(store.getSelectPdf()))
                 TextBoxAttachmentEntry.bind("<Key>", lambda e: "break")
 
 
@@ -308,7 +308,7 @@ class EmailPdfWindow():
         AddAttachmentButton.pack()
 
         
-        if main.GetselectedPdfBool() == False and haveAttachment[0] == False:
+        if store.GetselectedPdfBool() == False and haveAttachment[0] == False:
             AddAttachmentButton.place(
                 x = 50, y = 584,
                 width = 536,

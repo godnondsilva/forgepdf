@@ -1,9 +1,9 @@
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning, showerror
-from app import register, home
+from app import register
 import mysql.connector
 from app.functionality import inputValidation
-from app.state.main import state
+from app.store import state
 import os
 
 def load_login(window):

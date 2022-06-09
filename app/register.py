@@ -3,7 +3,7 @@ from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
 from app import login
 from app.functionality import inputValidation
-from app.common import executeQuery
+from app.utility import executeQuery
 import os
 
 def load_register(window):

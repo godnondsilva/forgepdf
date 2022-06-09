@@ -4,9 +4,9 @@ from tkinter.messagebox import showwarning, showerror
 from app.functionality import splitter, inputValidation
 from app import login
 from app import home
-from app.state import main
+from app import store
 import os, shutil
-from app.common import center, executeQuery
+from app.utility import center, executeQuery
 
 class SplitPdfWIndow():
     def __init__(self):
@@ -23,7 +23,7 @@ class SplitPdfWIndow():
         #Button Functions
         def toHomePage():
             #makes the selectpdf false so that we can start fresh
-            main.NotSelectPdfBool()
+            store.NotSelectPdfBool()
             # destroy the current window instance (LogInWindow)
             window.destroy()
             # call the login up window class
@@ -89,18 +89,18 @@ class SplitPdfWIndow():
         def MoveToFolder():
 
             #increment the count of the pdf to prevent overwriting
-            main.IncrementCount()
-            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\SplitPdf' + str(main.getCount()+1) + '.pdf'
+            store.IncrementCount()
+            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\SplitPdf' + str(store.getCount()+1) + '.pdf'
             shutil.move('output.pdf' , add)
             shutil.copy(add , 'C:\\Users\\User\\Desktop')
             
             #converts the address to form that can be saved in the database
-            newAdd = main.ConvertAddress(add)
+            newAdd = store.ConvertAddress(add)
             saveToDB(newAdd)
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(main.getUID()) + "')")  
+            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")  
 
        
         #shows the selected pdf along with the name
@@ -120,11 +120,11 @@ class SplitPdfWIndow():
             height = 87)
 
             #if case we have routed from options page , then make neccessary arrangments
-            if main.GetselectedPdfBool() == True:
-                PDFTextBoxEntry.insert('0' , os.path.basename(main.getSelectPdf()))
+            if store.GetselectedPdfBool() == True:
+                PDFTextBoxEntry.insert('0' , os.path.basename(store.getSelectPdf()))
                 PDFTextBoxEntry.bind("<Key>", lambda e: "break")
 
-                PdfToSplit.append(main.getSelectPdf())
+                PdfToSplit.append(store.getSelectPdf())
 
 
         #shows the message that pdf is split
@@ -294,7 +294,7 @@ class SplitPdfWIndow():
         PdfImageIcon.pack_forget()
 
         #if we have routed from options page then set the pdf to be split
-        if main.GetselectedPdfBool() == True:
+        if store.GetselectedPdfBool() == True:
             showSplitPdf()
 
         # additional window config

@@ -2,9 +2,9 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
 from app import home
-from app.state import main
+from app.store import state
 from app.functionality import decrypt, inputValidation
-from app.common import center, executeQuery
+from app.utility import center, executeQuery
 import os, shutil
 
 class decryptWindow():
@@ -74,18 +74,18 @@ class decryptWindow():
         #Moves the files to a specific directory and copies to desktop
         def MoveToFolder():
             #increment the count of the pdf to prevent overwriting
-            main.IncrementCount()
-            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\DecryptPdf' + str(main.getCount()+1) + '.pdf'
+            state.IncrementCount()
+            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\DecryptPdf' + str(state.getCount()+1) + '.pdf'
             shutil.move('decrypted.pdf' , add)
             shutil.copy(add , 'C:\\Users\\User\\Desktop')
             
             #converts the address to form that can be saved in the database
-            newAdd = main.ConvertAddress(add)
+            newAdd = state.ConvertAddress(add)
             saveToDB(newAdd)
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(main.getUID()) + "')")
+            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(state.getUID()) + "')")
 
        
         #shows the selected pdf along with the name
