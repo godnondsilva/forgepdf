@@ -2,10 +2,10 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showerror
 from tkinter.font import BOLD
-from app import main, options, extractpdf, encryptpdf, scrapy, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
+from app import main, options, extractpdf, encryptpdf, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
+from app.store import state
 from app import store
-from app.functionality import weatherapi
-from app.utility import center
+from app.functionality import weather
 import os
 import mysql.connector
 import datetime
@@ -19,7 +19,7 @@ def load_home(window):
         # destroy the current window instance (MainWindow)
         window.destroy()
         # call the auth window class which will load the login screen
-        store.MainWindow()
+        main.MainWindow()
 
 
     def toEncryptPDF():
@@ -66,13 +66,6 @@ def load_home(window):
         savedpdfs.SavedPdfWindow()
 
 
-    def toScrapy():
-            # destroy the current window instance (MainWindow)
-        window.destroy()
-        # call the scrapy window class
-        scrapy.ScrapyWindow()
-
-
     def toOptionsPage(SelectPdf):
         #set the value of the pdf select by the user in the user details class
         store.setSelectPdf(SelectPdf)
@@ -84,10 +77,10 @@ def load_home(window):
     
 
     # calling the weather api and storing the object in the variable weatherData
-    weatherData=weatherapi.loadWeatherData()
-    if 'error' in weatherData:
-        showerror('Error', weatherData['error'])
-        window.destroy()
+    weatherData=weather.get_weather()
+    # if 'error' in weatherData:
+    #     showerror('Error', weatherData['error'])
+    #     window.destroy()
     print(weatherData)
 
     uid.append(store.getUID())
@@ -193,7 +186,7 @@ def load_home(window):
         highlightthickness = 0,
         background="#1C2541",
         activebackground="#1C2541",
-        command = toScrapy,
+        command = lambda: None,
         relief = "flat")
 
     ScrapyButton.place(
@@ -270,7 +263,7 @@ def load_home(window):
     mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
     mycursor = mydb.cursor()
     # getting all the user data from the database
-    mycursor.execute("select file_address from files where user_id='" + str(uid[0]) + "' order by file_id desc")
+    mycursor.execute("select file_address from files where user_id='" + str(state.get_uid()) + "' order by file_id desc")
     # selecting only the first row from the fetched data
     result = mycursor.fetchall()
     print(result)

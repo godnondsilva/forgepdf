@@ -1,13 +1,11 @@
-#Stores the current users id ,selectedpdf and name here
-from ntpath import join
-
 class GlobalState:
     def __init__(self):
         self.uid = 0
         self.username = ''
+        self.email = ''
     
     def __str__(self):
-        return f'State: \nUID: {self.uid} \nUsername: {self.username}'
+        return f'State: \nUID: {self.uid} \nUsername: {self.username} \nEmail: {self.email}'
 
     def get_uid(self):
         return self.uid
@@ -20,6 +18,12 @@ class GlobalState:
     
     def set_username(self, username):
         self.username = username
+
+    def get_email(self):
+        return self.email
+    
+    def set_email(self, email):
+        self.email = email
 
 
 state = GlobalState()

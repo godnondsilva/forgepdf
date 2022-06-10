@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning, showerror
-from app import register
+
+from app import register, home
 import mysql.connector
+from app import store
 from app.functionality import inputValidation
 from app.store import state
 import os
@@ -25,7 +27,7 @@ def load_login(window):
                 mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
                 mycursor = mydb.cursor()
                 # getting all the user data from the database
-                mycursor.execute("select email, password, user_id from users where email='" + email + "'")
+                mycursor.execute("select name, password, user_id from users where email='" + email + "'")
                 # selecting only the first row from the fetched data
                 result = mycursor.fetchone()
                 print(result)
@@ -43,7 +45,9 @@ def load_login(window):
                     
                     #Stores the UID in a py file
                     state.set_uid(result[2])
-                    state.set_username(email)
+                    state.set_username(result[0])
+                    store.setUID(result[2])
+                    store.setUsername(result[0])
 
                     # call the Home window class
                     home.load_home(window)

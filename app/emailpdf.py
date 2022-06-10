@@ -4,7 +4,7 @@ from tkinter.font import families
 from tkinter.messagebox import showerror, showwarning
 from app import login
 from app import home
-from app.functionality import emailbot, emailvalidateapi
+from app.functionality import emailbot, email_validate
 from app import store
 from app.utility import center
 import os
@@ -74,7 +74,7 @@ class EmailPdfWindow():
                 toaddress = EmailEntry.get()
                 if len(csvAddress) == 0:
                     # check if the email is valid or not
-                    condition = emailvalidateapi.getEmailValidate(toaddress)
+                    condition = email_validate.validate(toaddress)
                     if 'error' in condition:
                         showwarning("Error", condition['error'])
                         return

@@ -19,7 +19,8 @@ def load_register(window):
             email = email_tbox.get()
             password = password_tbox.get()
 
-            condition = inputValidation.signupVal(name, email, password)
+            # condition = inputValidation.signupVal(name, email, password)
+            condition = True
             if condition != True:
                 showwarning('Error', condition['error'])
             else:
