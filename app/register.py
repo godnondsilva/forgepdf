@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
 from app import login
-from app.functionality import inputValidation
+from app.functionality import validate
 from app.utility import executeQuery
 import os
 
@@ -19,8 +19,7 @@ def load_register(window):
             email = email_tbox.get()
             password = password_tbox.get()
 
-            # condition = inputValidation.signupVal(name, email, password)
-            condition = True
+            condition = validate.validate_register(name, email, password)
             if condition != True:
                 showwarning('Error', condition['error'])
             else:

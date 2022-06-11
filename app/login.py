@@ -4,7 +4,7 @@ from tkinter.messagebox import showinfo, showwarning, showerror
 from app import register, home
 import mysql.connector
 from app import store
-from app.functionality import inputValidation
+from app.functionality import validate
 from app.store import state
 import os
 
@@ -19,7 +19,7 @@ def load_login(window):
             # storing the values from the entry fields
             email = email_tbox.get()
             password = password_tbox.get();
-            condition = inputValidation.loginVal(email, password)
+            condition = validate.validate_login(email, password)
             if condition != True:
                 showwarning('Error', condition['error'])
             else:

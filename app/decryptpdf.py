@@ -3,7 +3,7 @@ from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
 from app import home
 from app.store import state
-from app.functionality import decrypt, inputValidation
+from app.functionality import decrypt, validate
 from app.utility import center, executeQuery
 import os, shutil
 
@@ -52,7 +52,7 @@ class decryptWindow():
             new_password = password.strip()
             # exception handling 
             try:
-                condition = inputValidation.decryptVal(new_password)
+                condition = validate.validate_decrypt(new_password)
                 if condition != True:
                     showwarning('Error', condition['error'])
                 else:

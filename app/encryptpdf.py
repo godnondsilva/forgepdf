@@ -5,7 +5,7 @@ from app import home
 from app.utility import center, executeQuery
 import os, shutil
 from app import store
-from app.functionality import encrypt, inputValidation
+from app.functionality import encrypt, validate
 
 class encryptWindow():
     def __init__(self):
@@ -50,7 +50,7 @@ class encryptWindow():
             password = PasswordEntry.get()
             new_password = password.strip()
             try:
-                condition = inputValidation.encryptVal(new_password)
+                condition = validate.validate_encrypt(new_password)
                 if condition != True:
                     showwarning('Error', condition['error'])
                 else:

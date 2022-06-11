@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
-from app.functionality import splitter, inputValidation
+from app.functionality import splitter, validate
 from app import login
 from app import home
 from app import store
@@ -60,7 +60,7 @@ class SplitPdfWIndow():
                 endRange = EndingRange.get()
                 print(startRange)
                     
-                condition = inputValidation.splitVal(startRange, endRange)
+                condition = validate.validate_split(startRange, endRange)
                 print(condition)
                 if condition != True:
                     showwarning('Error', condition['error'])

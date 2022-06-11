@@ -4,7 +4,7 @@ from tkinter import filedialog
 from app import home
 from app.utility import center
 import os, shutil
-from app.functionality import extract, inputValidation
+from app.functionality import extract, validate
 class extractWindow():
     def __init__(self):
         #Window Config
@@ -40,7 +40,7 @@ class extractWindow():
 
         def extractPDF():
             try:
-                condition = inputValidation.extractVal(self.pdfToExtract)
+                condition = validate.validate_extract(self.pdfToExtract)
                 if condition != True:
                     showwarning('Error', condition['error'])
                 else:
