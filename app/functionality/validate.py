@@ -2,7 +2,6 @@ import requests, re
 
 # function to validate the inputs from the signup page
 def validate_register(name, email, password):
-    count = 0
     # stripping the name and storing it in new_name variable
     new_name = name.strip()
     # re for checking if the email is valid or not
@@ -10,24 +9,16 @@ def validate_register(name, email, password):
     # re for checking if the phone no. is valid or not
     passwordRe = re.compile(r'.{2,20}')
     # checking if the name is not a decimal
-    if not new_name.isdecimal():
-        count+=1           
-    else:
+    if new_name.isdecimal():
         return {"error": "Please enter your name in the correct format"}
     # checking if the email is valid
-    if len(emailRe.findall(email)) >= 1:
-        count += 1
-    else:
+    if len(emailRe.findall(email)) < 1:
         return {"error": "Please enter your email in the correct format"}
     # checking if the password is valid
-    if len(passwordRe.findall(password)) >= 1:
-        count += 1
-    else:
+    if len(passwordRe.findall(password)) < 1:
         return {"error": "Please enter your password"}
-    if count==3:
-        return True
     else:
-        return {"error": "Something went wrong"}
+        return True
 
 
 def validate_email(email):
@@ -52,18 +43,13 @@ def validate_email(email):
 #input validation for login
 def validate_login(name, password):
     passwordRe = re.compile(r'.{2,20}')
-    loginCounter = 0
     # stripping the name and storing it in new_name variable
     new_name = name.strip()
-    if not new_name.isdecimal():
-        loginCounter = loginCounter + 1
-    else:
+    if new_name.isdecimal():
         return {"error": "Please enter your name in the correct format"}
-    if len(passwordRe.findall(password)) >= 1:
-        loginCounter = loginCounter + 1
-    else:
+    if len(passwordRe.findall(password)) < 1:
         return {"error": "Please enter your password"}
-    if loginCounter == 2:
+    else:
         return True
 
 
