@@ -3,7 +3,7 @@ from tkinter import filedialog
 from tkinter.messagebox import showerror
 from tkinter.font import BOLD
 from app import main, options, extractpdf, encryptpdf, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
-from app.store import state
+from app.store import state, states
 from app import store
 from app.functionality import weather
 import os
@@ -263,7 +263,7 @@ def load_home(window):
     mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
     mycursor = mydb.cursor()
     # getting all the user data from the database
-    mycursor.execute("select file_address from files where user_id='" + str(state.get_uid()) + "' order by file_id desc")
+    mycursor.execute("select file_address from files where user_id='" + str(state.get_state(states.UID)) + "' order by file_id desc")
     # selecting only the first row from the fetched data
     result = mycursor.fetchall()
     print(result)

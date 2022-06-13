@@ -5,7 +5,7 @@ from app import register, home
 import mysql.connector
 from app import store
 from app.functionality import validate
-from app.store import state
+from app.store import state, states
 import os
 
 def load_login(window):
@@ -44,10 +44,11 @@ def load_login(window):
                         # destroy the current window instance (SignUpWindow)
                     
                     #Stores the UID in a py file
-                    state.set_uid(result[2])
-                    state.set_username(result[0])
                     store.setUID(result[2])
                     store.setUsername(result[0])
+                    print(states)
+                    # state.set_state(states.UID, result[2])
+                    # state.set_state(states.USERNAME, result[0])
 
                     # call the Home window class
                     home.load_home(window)

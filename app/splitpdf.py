@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
-from app.functionality import splitter, validate
+from app.functionality import split, validate
 from app import login
 from app import home
 from app import store
@@ -70,7 +70,7 @@ class SplitPdfWIndow():
                     endRan = int(endRange)
 
                     #checking if we got exception in page ranges
-                    condition = splitter.spliter(startRan , endRan , PdfToSplit[0])
+                    condition = split.spliter(startRan , endRan , PdfToSplit[0])
                     if condition == False:
                         showwarning("Error" , "Please add the pages numbers within the range of the pdf.")
                         return

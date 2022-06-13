@@ -1,32 +1,31 @@
 class GlobalState:
     def __init__(self):
-        self.uid = 0
-        self.username = ''
-        self.email = ''
+        self.data = {
+            'uid': 0,
+            'username': '',
+            'email': '',
+            'selected_pdf': ''
+        }
+
+    def get_state(self, key):
+        return self.data[key]
+    
+    def set_state(self, key, value):
+        self.data[key] = value
     
     def __str__(self):
-        return f'State: \nUID: {self.uid} \nUsername: {self.username} \nEmail: {self.email}'
-
-    def get_uid(self):
-        return self.uid
-    
-    def set_uid(self, uid):
-        self.uid = uid
-
-    def get_username(self):
-        return self.username
-    
-    def set_username(self, username):
-        self.username = username
-
-    def get_email(self):
-        return self.email
-    
-    def set_email(self, email):
-        self.email = email
-
+        return f'State: \nUID: {self.data.uid} \nUsername: {self.data.username} \nEmail: {self.data.email}'
 
 state = GlobalState()
+
+class States:
+    def __init__(self):
+        self.UID = 'uid'
+        self.USERNAME = 'username'
+        self.EMAIL = 'email'
+        self.SELECTED_PDF = 'selected_pdf'
+    
+states = States()
 
 uid = []
 username = []
