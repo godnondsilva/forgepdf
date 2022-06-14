@@ -4,7 +4,8 @@ class GlobalState:
             'uid': 0,
             'username': '',
             'email': '',
-            'selected_pdf': ''
+            'selected_pdf': '',
+            'count': 0
         }
 
     def get_state(self, key):
@@ -16,15 +17,15 @@ class GlobalState:
     def __str__(self):
         return f'State: \nUID: {self.data.uid} \nUsername: {self.data.username} \nEmail: {self.data.email}'
 
-state = GlobalState()
-
 class States:
     def __init__(self):
         self.UID = 'uid'
         self.USERNAME = 'username'
         self.EMAIL = 'email'
         self.SELECTED_PDF = 'selected_pdf'
+        self.COUNT = 'count'
     
+state = GlobalState()
 states = States()
 
 uid = []

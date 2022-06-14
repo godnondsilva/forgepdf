@@ -46,9 +46,8 @@ def load_login(window):
                     #Stores the UID in a py file
                     store.setUID(result[2])
                     store.setUsername(result[0])
-                    print(states)
-                    # state.set_state(states.UID, result[2])
-                    # state.set_state(states.USERNAME, result[0])
+                    state.set_state(states.UID, result[2])
+                    state.set_state(states.USERNAME, result[0])
 
                     # call the Home window class
                     home.load_home(window)

@@ -1,10 +1,8 @@
 from tkinter import *
 from tkinter import filedialog
-from tkinter.font import families
 from tkinter.messagebox import showerror, showwarning
-from app import login
 from app import home
-from app.functionality import emailbot, validate
+from app.functionality import email, validate
 from app import store
 from app.utility import center
 import os
@@ -93,9 +91,10 @@ class EmailPdfWindow():
                 showEmailSent()
                 #giving priority on the csv emails then the ones typed
                 if len(csvAddress) != 0 :
-                    emailbot.csvToStr(csvAddress[0] , attachmentPath[0])
+                    email.csvToStr(csvAddress[0] , attachmentPath[0])
                 else:
-                    emailbot.emailbot(toaddress , attachmentPath[0])
+                    # TODO: send the email
+                    pass
             except:
                 # show the error message
                 showerror("Error" , "An error has occurred!")
