@@ -16,9 +16,8 @@ class EmailPdfWindow():
         window.title('ForgePDF | Email PDF')
         center(window)
 
-        #Variable to hold the attachment and csv address
+        #Variable to hold the attachment
         attachmentPath = []
-        csvAddress = []
         haveAttachment = [False]
 
 
@@ -49,52 +48,26 @@ class EmailPdfWindow():
             haveAttachment[0] = True
             showAttachment()
 
-        def ImportCSV():
-            #gets csv from user
-            csvAddressvar = filedialog.askopenfilename(initialdir= "D:\\Users\\ashis\\Desktop", title="Select a file" , filetypes=(("CSV files","*.csv*"),("all files","*.*")))
-            filename = os.path.basename(csvAddressvar)
-            if len(csvAddressvar) == 0:
-                showwarning("Error" , "Please select a csv file")
-                return
-
-            #stores csv in list
-            csvAddress.append(csvAddressvar)
-
-            #adds the value in the textbox and displays it
-            TextBoxCSVEntry.insert('0' , 'CSV File : ' + filename)
-            TextBoxCSVEntry.bind("<Key>", lambda e: "break")
-            showCSVFile()
-
         
         def SendEmail():
             # exception handling
             try:
                 toaddress = EmailEntry.get()
-                if len(csvAddress) == 0:
-                    # check if the email is valid or not
-                    condition = validate.validate_email(toaddress)
-                    if 'error' in condition:
-                        showwarning("Error", condition['error'])
-                        return
                 #checks if the attachment is added or not
                 if len(attachmentPath) == 0:
                     showwarning("Error" , "Please choose an attachment")
                     return
 
                 #doesntsend email if there is ambiguity
-                if toaddress != '' and len(csvAddress) != 0 :
+                if toaddress != '':
                     showwarning("Error" , "Please choose any one way for email receipients.")
                     EmailEntry.insert('0' , '')
                     return
 
                 #sends the email and shows that the email is sent
                 showEmailSent()
-                #giving priority on the csv emails then the ones typed
-                if len(csvAddress) != 0 :
-                    email.csvToStr(csvAddress[0] , attachmentPath[0])
-                else:
-                    # TODO: send the email
-                    pass
+                # TODO: send the email
+                pass
             except:
                 # show the error message
                 showerror("Error" , "An error has occurred!")
@@ -118,16 +91,6 @@ class EmailPdfWindow():
                 TextBoxAttachmentEntry.insert('0' , 'Attachment : ' + os.path.basename(store.getSelectPdf()))
                 TextBoxAttachmentEntry.bind("<Key>", lambda e: "break")
 
-
-        #shows thw csv filr selected in a text box
-        def showCSVFile():
-            CSVFileButton.pack_forget()
-            TextBoxCSVEntry.pack()
-
-            TextBoxCSVEntry.place(
-            x = 750, y = 377,
-            width = 440,
-            height = 63)
 
         #shows message that email is sent
         def showEmailSent():
@@ -195,25 +158,6 @@ class EmailPdfWindow():
             width = 139,
             height = 58)
 
-
-        #Import CSV file button config
-        CSVFileImage = PhotoImage(file = f"./images/emailpdf/CSVFile.png")
-        CSVFileButton = Button(
-            image = CSVFileImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            activebackground="#0B132B",
-            command = ImportCSV,
-            relief = "flat")
-
-        CSVFileButton.pack()
-
-        CSVFileButton.place(
-            x = 750, y = 377,
-            width = 440,
-            height = 63)
-
         #Email Entry Config
         EmailEntryBGImage = PhotoImage(file = f"./images/emailpdf/EmailEntryBG.png")
         EmailEntryBG = canvas.create_image(
@@ -254,32 +198,11 @@ class EmailPdfWindow():
         TextBoxAttachmentEntry.pack()
         TextBoxAttachmentEntry.pack_forget()
 
-       
-
-
-        #Text Box for CSV File
-        TextBoxCSVImage = PhotoImage(file = f"./images/emailpdf/TextboxBG.png")
-        TextBoxCSV = canvas.create_image(
-            1124.5, 605.5,
-            image = TextBoxCSVImage)
-
-        TextBoxCSVEntry = Entry(
-            bd = 0,
-            bg = "#0B132B",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#0B132B",
-            highlightthickness = 0)
-
-        TextBoxCSVEntry.pack()
-        TextBoxCSVEntry.pack_forget()
-
         #EmailSent Config
         EmailSentImage = PhotoImage(file = f"./images/emailpdf/Emailsent.png")
         EmailSent = canvas.create_image(
             1124.5, 605.5,
-            image = TextBoxCSVImage)
+            image = EmailSentImage)
 
         EmailSentLabel = Label(
             image = EmailSentImage,
