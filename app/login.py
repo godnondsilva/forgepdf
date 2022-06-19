@@ -17,8 +17,8 @@ def load_login(window):
     def submit_details():
         try:
             # storing the values from the entry fields
-            email = email_tbox.get()
-            password = password_tbox.get();
+            email = email_entry.get()
+            password = password_entry.get();
             condition = validate.validate_login(email, password)
             if condition != True:
                 showwarning('Error', condition['error'])
@@ -99,12 +99,12 @@ def load_login(window):
         height = 51)
 
     # Email entry field
-    email_tbox_img = PhotoImage(file = f"./images/login/tbox.png")
-    email_tbox_bg = login_canvas.create_image(
+    email_entry_img = PhotoImage(file = f"./images/login/entry.png")
+    email_entry_bg = login_canvas.create_image(
         807.0, 429.5,
-        image = email_tbox_img)
+        image = email_entry_img)
 
-    email_tbox = Entry(
+    email_entry = Entry(
         bd = 0,
         font=16,
         fg= "#eeeeee",
@@ -112,18 +112,18 @@ def load_login(window):
         insertbackground= "#eeeeee",
         highlightthickness = 0)
 
-    email_tbox.place(
+    email_entry.place(
         x = 641, y = 311,
         width = 331,
         height = 35)
 
     # Password entry field
-    password_tbox_img = PhotoImage(file = f"./images/login/tbox.png")
-    password_tbox_bg = login_canvas.create_image(
+    password_entry_img = PhotoImage(file = f"./images/login/entry.png")
+    password_entry_bg = login_canvas.create_image(
         807.0, 329.5,
-        image = password_tbox_img)
+        image = password_entry_img)
 
-    password_tbox = Entry(
+    password_entry = Entry(
         bd = 0,
         font=16,
         fg= "#eeeeee",
@@ -132,7 +132,7 @@ def load_login(window):
         show="*",
         highlightthickness = 0)
 
-    password_tbox.place(
+    password_entry.place(
         x = 641, y = 411,
         width = 331,
         height = 35)

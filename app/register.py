@@ -15,9 +15,9 @@ def load_register(window):
     def submit_details():
         try:
             # storing the values from the entry fields
-            name = name_tbox.get()
-            email = email_tbox.get()
-            password = password_tbox.get()
+            name = name_entry.get()
+            email = email_entry.get()
+            password = password_entry.get()
 
             condition = validate.validate_register(name, email, password)
             if condition != True:
@@ -85,12 +85,12 @@ def load_register(window):
         width = 142,
         height = 41)
     
-    name_tbox_img = PhotoImage(file = f"./images/register/tbox.png")
-    name_tbox_bg = register_canvas.create_image(
+    name_entry_img = PhotoImage(file = f"./images/register/entry.png")
+    name_entry_bg = register_canvas.create_image(
         807.0, 527.5,
-        image = name_tbox_img)
+        image = name_entry_img)
     
-    name_tbox = Entry(
+    name_entry = Entry(
         bd = 0,
         font=16,
         fg= "#eeeeee",
@@ -98,17 +98,17 @@ def load_register(window):
         insertbackground= "#eeeeee",
         highlightthickness = 0)
 
-    name_tbox.place(
+    name_entry.place(
         x = 641, y = 310,
         width = 331,
         height = 35)
 
-    email_tbox_img = PhotoImage(file = f"./images/register/tbox.png")
-    email_tbox_bg = register_canvas.create_image(
+    email_entry_img = PhotoImage(file = f"./images/register/entry.png")
+    email_entry_bg = register_canvas.create_image(
         807.0, 427.5,
-        image = email_tbox_img)
+        image = email_entry_img)
 
-    email_tbox = Entry(
+    email_entry = Entry(
         bd = 0,
         font=16,
         fg= "#eeeeee",
@@ -116,17 +116,17 @@ def load_register(window):
         insertbackground= "#eeeeee",
         highlightthickness = 0)
 
-    email_tbox.place(
+    email_entry.place(
         x = 641, y = 410,
         width = 331,
         height = 35)
 
-    password_tbox_img = PhotoImage(file = f"./images/register/tbox.png")
-    password_tbox_bg = register_canvas.create_image(
+    password_entry_img = PhotoImage(file = f"./images/register/entry.png")
+    password_entry_bg = register_canvas.create_image(
         807.0, 328.5,
-        image = password_tbox_img)
+        image = password_entry_img)
 
-    password_tbox = Entry(
+    password_entry = Entry(
         bd = 0,
         font=16,
         fg= "#eeeeee",
@@ -135,7 +135,7 @@ def load_register(window):
         show="*",
         highlightthickness = 0)
 
-    password_tbox.place(
+    password_entry.place(
         x = 641, y = 510,
         width = 331,
         height = 35)
