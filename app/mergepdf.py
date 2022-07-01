@@ -7,7 +7,7 @@ from app.functionality import merge
 from app import store
 from app import login
 from app import home
-from app.utility import center,executeQuery
+from app.utility import center,execute_query
 import os
 import shutil
 
@@ -138,7 +138,7 @@ class MergePdfWindow():
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
+            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
 
 
         #Canvas Config

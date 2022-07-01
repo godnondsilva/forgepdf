@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
 from app import home
-from app.utility import center, executeQuery
+from app.utility import center, execute_query
 import os, shutil
 from app import store
 from app.functionality import encrypt, validate
@@ -78,7 +78,7 @@ class encryptWindow():
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
+            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
 
        
         #shows the selected pdf along with the name

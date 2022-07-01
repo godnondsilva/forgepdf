@@ -6,7 +6,7 @@ from app import login
 from app import home
 from app import store
 import os, shutil
-from app.utility import center, executeQuery
+from app.utility import center, execute_query
 
 class SplitPdfWIndow():
     def __init__(self):
@@ -100,7 +100,7 @@ class SplitPdfWIndow():
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")  
+            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")  
 
        
         #shows the selected pdf along with the name

@@ -155,3 +155,6 @@ def load_login(window):
         x = 1131, y = 41,
         width = 142,
         height = 41)
+
+    email_entry.insert(0, "tester@tester.com");
+    password_entry.insert(0, "something")

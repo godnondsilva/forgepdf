@@ -18,13 +18,24 @@ def center(window):
 
 # This exportable function is used to execute 
 # queries passed as a parameter
-def executeQuery(query):
+def execute_query(query):
     mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
     mycursor=mydb.cursor()
     mycursor.execute(query)
     mydb.commit()
     mycursor.close()
     mydb.close()
+
+# This exportable function is used to execute
+# queries and return the result cursors
+def get_cursor_data(query):
+    mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
+    mycursor=mydb.cursor()
+    mycursor.execute(query)
+    result=mycursor.fetchall()
+    mycursor.close()
+    mydb.close()
+    return result
 
 # This exportable function is used to update the 
 # title bar to dark theme

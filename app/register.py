@@ -3,7 +3,7 @@ from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
 from app import login
 from app.functionality import validate
-from app.utility import executeQuery
+from app.utility import execute_query
 import os
 
 def load_register(window):
@@ -33,7 +33,7 @@ def load_register(window):
                     
                 # creating a query to insert the user details into the database
                 query = "insert into users (name, email, password) values('" + name + "','" + email + "','" + password + "')"
-                executeQuery(query)
+                execute_query(query)
 
                 # TODO: Display status message (success/failure)
                 if result == None:

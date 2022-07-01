@@ -4,7 +4,7 @@ from tkinter.messagebox import showwarning, showerror
 from app import home
 from app.store import state
 from app.functionality import decrypt, validate
-from app.utility import center, executeQuery
+from app.utility import center, execute_query
 import os, shutil
 
 class decryptWindow():
@@ -85,7 +85,7 @@ class decryptWindow():
         
         #Store the value in database
         def saveToDB(add):
-            executeQuery("insert into files (file_address , user_id) values ('" + add + "',' " + str(state.getUID()) + "')")
+            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(state.getUID()) + "')")
 
        
         #shows the selected pdf along with the name
