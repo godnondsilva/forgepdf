@@ -281,24 +281,43 @@ def load_home(window):
         width = 145,
         height = 28)
     
-    text = Text(window, 
+    thought_text = Text(window, 
         height=549, 
         width=259, 
         wrap=WORD,
-        font=("Poppins", 12),
+        font=("Poppins", 11),
         highlightthickness = 0, 
         borderwidth=0,
         fg= "#CCCCCC",
         bg = "#333333")
 
-    text.place(
+    thought_text.place(
         x = 358, y = 221,
         width = 358,
         height = 74)
 
-    thought_text = thought.get_thought()
-    text.insert(END, thought_text)
-    text.config(state=DISABLED)
+    thought_text_value = thought.get_thought()
+    thought_text.insert(END, thought_text_value)
+    thought_text.config(state=DISABLED)
+
+    name_text = Text(window, 
+        height=549, 
+        width=259, 
+        wrap=WORD,
+        font=("Poppins", 18),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
+
+    name_text.place(
+        x = 358, y = 135,
+        width = 250,
+        height = 36)
+
+    name_text_value = state.get_state(states.USERNAME)
+    name_text.insert(END, "Welcome, "+name_text_value.title())
+    name_text.config(state=DISABLED)
 
 #####################################################################
 
