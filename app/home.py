@@ -7,95 +7,55 @@ from app.store import state, states
 from app import store
 from app.functionality import weather, thought
 from app.utility import get_cursor_data
+import datetime
 
 
 def load_home(window):
     #Button Functions
-    def toLoginPage():
-        # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_login():
         # call the auth window class which will load the login screen
         main.MainWindow()
 
 
-    def toEncryptPDF():
-            # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_encypt_pdf():
         # call the encrypt pdf window class
         encryptpdf.encryptWindow()
 
-    def toDecryptPDF():
-            # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_decrypt_pdf():
         # call the decrypt pdf window class
         decryptpdf.decryptWindow()
 
-    def toEmailPdf():
-        # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_email_pdf():
         # call the email pdf window class
         emailpdf.EmailPdfWindow()
 
-    def toExtractPDF():
-        # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_extract_pdf():
         # call the extract pdf window class
         extractpdf.extractWindow()
 
 
-    def toSplitPdf():
-            # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_split_pdf():
         # call the splitPdf window class
         splitpdf.SplitPdfWIndow()
         
-    def toMergedPdf():
-        # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_merge_pdf():
         # call the merge pdf window class
         mergepdf.MergePdfWindow()
 
-    def toSavedPdfs():
-        # destroy the current window instance (MainWindow)
-        window.destroy()
+    def route_saved_pdf():
         # call the saved pdf window class
         savedpdfs.SavedPdfWindow()
 
 
-    def toOptionsPage(SelectPdf):
+    def route_options(SelectPdf):
         #set the value of the pdf select by the user in the user details class
         store.setSelectPdf(SelectPdf)
-
-        # destroy the current window instance (MainWindow)
-        window.destroy()
         # call the options up window class
         options.OptionsPdfWindow()
     
     def btn_clicked():
         pass
     
-
-    # calling the weather api and storing the object in the variable weatherData
-    weatherData=weather.get_weather()
-    # if 'error' in weatherData:
-    #     showerror('Error', weatherData['error'])
-    #     window.destroy()
-    print(weatherData)
-
-    # uid.append(store.getUID())
-    # uid[0] = store.getUID()
-    
-    # # creating a mysql connection
-    # mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
-    # mycursor = mydb.cursor()
-    # # getting all the user data from the database
-    # mycursor.execute("select file_address from files where user_id='" + str(uid[0]) + "' order by file_id desc")
-    # # selecting only the first row from the fetched data
-    # result = mycursor.fetchall()
-    # print(result)
-
-    result = get_cursor_data("select file_address from files where user_id='" + str(store.getUID()) + "' order by file_id desc")
-
     canvas = Canvas(
         window,
         bg = "#111111",
@@ -107,6 +67,8 @@ def load_home(window):
     canvas.place(x = 0, y = 0)
 
     background_img = PhotoImage(file = f"./images/home/background.png")
+    background_label = Label(image=background_img)
+    background_label.image = background_img
     background = canvas.create_image(
         671.0, 384.0,
         image=background_img)
@@ -277,7 +239,7 @@ def load_home(window):
         relief = "flat")
 
     view_more_btn.place(
-        x = 534, y = 471,
+        x = 522, y = 471,
         width = 145,
         height = 28)
     
@@ -296,10 +258,6 @@ def load_home(window):
         width = 358,
         height = 74)
 
-    thought_text_value = thought.get_thought()
-    thought_text.insert(END, thought_text_value)
-    thought_text.config(state=DISABLED)
-
     name_text = Text(window, 
         height=549, 
         width=259, 
@@ -315,9 +273,75 @@ def load_home(window):
         width = 250,
         height = 36)
 
+    datetime_entry_img = PhotoImage(file = f"./images/home/datetime_entry.png")
+    datetime_entry_bg = canvas.create_image(
+        927.5, 156.5,
+        image = datetime_entry_img)
+
+    datetime_entry = Entry(
+        bd = 0,
+        font=("Poppins", 10),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#2F8FFF",
+        bg = "#333333")
+
+    datetime_entry.place(
+        x = 860, y = 146,
+        width = 115,
+        height = 19)
+
+    location_entry_img = PhotoImage(file = f"./images/home/location_entry.png")
+    location_entry_bg = canvas.create_image(
+        955.0, 179.0,
+        image = location_entry_img)
+
+    location_entry = Entry(
+        bd = 0,
+        font=("Poppins", 14),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
+
+    location_entry.place(
+        x = 860, y = 167,
+        width = 170,
+        height = 22)
+
+    # Configuration
+    thought_text_value = thought.get_thought()
+    thought_text.insert(END, thought_text_value)
+    thought_text.config(state=DISABLED)
+
     name_text_value = state.get_state(states.USERNAME)
+    if 'error' in name_text_value:
+        showerror('Error', name_text_value['error'])
     name_text.insert(END, "Welcome, "+name_text_value.title())
     name_text.config(state=DISABLED)
+
+    # calling the weather api and storing the object in the variable weatherData
+    weatherData = weather.get_weather(state.get_state(states.LOCATION))
+    if 'error' in weatherData:
+        showerror('Error', weatherData['error'])
+    print(weatherData)
+
+    datetime_entry.insert(0, datetime.date.today().strftime("%A") + ', ' + datetime.datetime.now().strftime("%I:%M %p"))
+    datetime_entry.bind("<Key>", lambda e: "break")
+
+    location_entry.insert(0, "Mangalore")
+    location_entry.bind("<Key>", lambda e: "break")
+
+    # # creating a mysql connection
+    # mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
+    # mycursor = mydb.cursor()
+    # # getting all the user data from the database
+    # mycursor.execute("select file_address from files where user_id='" + str(uid[0]) + "' order by file_id desc")
+    # # selecting only the first row from the fetched data
+    # result = mycursor.fetchall()
+    # print(result)
+
+    # result = get_cursor_data("select file_address from files where user_id='" + str(store.getUID()) + "' order by file_id desc")
 
 #####################################################################
 
@@ -341,19 +365,16 @@ def load_home(window):
     # print(result1)
     # store.SetCount(result1[0])
     
-    
-    # Username = Label(text = store.getUsername(), font=('Poppins', 25, BOLD), fg= "#5BC0BE",bg = "#0B132B")
-    # Username.place(x = 280, y = 137)  
 
 #####################################################################
 
-    SunnyImage = PhotoImage(file = f"./images/home/SunnyImage.png")
-    CloudyImage = PhotoImage(file = f"./images/home/CloudyImage.png")
-    RainyImage = PhotoImage(file = f"./images/home/RainyImage.png")
-    WeatherImageButton = Label(
-        bg="#0B132B",
-        activebackground="#0B132B"
-    )
+    # SunnyImage = PhotoImage(file = f"./images/home/SunnyImage.png")
+    # CloudyImage = PhotoImage(file = f"./images/home/CloudyImage.png")
+    # RainyImage = PhotoImage(file = f"./images/home/RainyImage.png")
+    # WeatherImageButton = Label(
+    #     bg="#0B132B",
+    #     activebackground="#0B132B"
+    # )
 
     # # setting the image for the button based on the description
     # if weatherData['description'] == "clear sky":
@@ -484,26 +505,6 @@ def load_home(window):
     #     x = 895, y = 358,
     #     width = 28,
     #     height = 23)
-
-    # DayTimeTextBoxImage = PhotoImage(file = f"./images/home/DayTimeTextBox.png")
-    # DayTimeTextBox = canvas.create_image(
-    #     829.0, 159.5,
-    #     image = DayTimeTextBoxImage)
-
-    # DayTimeTextBoxEntry = Entry(
-    #     bd = 0,
-    #     bg = "#0b132b",
-    #     font = ('Poppins', 15, BOLD),
-    #     fg= "#5BC0BE",
-    #     justify=CENTER,
-    #     highlightthickness = 0)
-    # DayTimeTextBoxEntry.insert(0, datetime.date.today().strftime("%A") + ', ' + datetime.datetime.now().strftime("%I:%M %p"))
-    # DayTimeTextBoxEntry.bind("<Key>", lambda e: "break")
-
-    # DayTimeTextBoxEntry.place(
-    #     x = 706, y = 141,
-    #     width = 246,
-    #     height = 35)
 
 #####################################################################
 

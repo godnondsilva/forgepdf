@@ -60,18 +60,17 @@ def load_register(window):
         relief = "ridge")
     register_canvas.place(x = 0, y = 0)
 
-    background_img = PhotoImage(file = f"./images/register/background.png")
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/register/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
     background = register_canvas.create_image(
         671.0, 384.0,
         image=background_img)
 
-    login_label_img = PhotoImage(file = f"./images/register/login_btn.png")
+    login_label_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/register/login_btn.png")
     login_btn_label = Label(image=login_label_img)
     login_btn_label.image = login_label_img
     login_btn = Button(
-        register_canvas,
         image = login_label_img,
         borderwidth = 0,
         highlightthickness = 0,
@@ -85,7 +84,7 @@ def load_register(window):
         width = 142,
         height = 41)
     
-    name_entry_img = PhotoImage(file = f"./images/register/entry.png")
+    name_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/register/entry.png")
     name_entry_bg = register_canvas.create_image(
         807.0, 527.5,
         image = name_entry_img)
@@ -103,7 +102,7 @@ def load_register(window):
         width = 331,
         height = 35)
 
-    email_entry_img = PhotoImage(file = f"./images/register/entry.png")
+    email_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/register/entry.png")
     email_entry_bg = register_canvas.create_image(
         807.0, 427.5,
         image = email_entry_img)
@@ -121,7 +120,7 @@ def load_register(window):
         width = 331,
         height = 35)
 
-    password_entry_img = PhotoImage(file = f"./images/register/entry.png")
+    password_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/register/entry.png")
     password_entry_bg = register_canvas.create_image(
         807.0, 328.5,
         image = password_entry_img)
@@ -140,11 +139,10 @@ def load_register(window):
         width = 331,
         height = 35)
 
-    register_img = PhotoImage(file = f"./images/register/register_btn.png")
+    register_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/register/register_btn.png")
     register_btn_label = Label(image=register_img)
     register_btn_label.image = register_img
     register_btn = Button(
-        register_canvas,
         image = register_img,
         borderwidth = 0,
         highlightthickness = 0,

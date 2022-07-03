@@ -3,7 +3,6 @@ from tkinter.messagebox import showinfo, showwarning, showerror
 
 from app import register, home
 import mysql.connector
-from app import store
 from app.functionality import validate
 from app.store import state, states
 import os
@@ -43,9 +42,6 @@ def load_login(window):
                     showinfo('Successfull', 'You have successfully logged in!')
                         # destroy the current window instance (SignUpWindow)
                     
-                    #Stores the UID in a py file
-                    store.setUID(result[2])
-                    store.setUsername(result[0])
                     state.set_state(states.UID, result[2])
                     state.set_state(states.USERNAME, result[0])
 
@@ -72,7 +68,7 @@ def load_login(window):
     login_canvas.place(x = 0, y = 0)
 
     # Background image
-    background_img = PhotoImage(file = f"./images/login/background.png")
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
     background = login_canvas.create_image(
@@ -80,11 +76,10 @@ def load_login(window):
         image=background_img)
 
     # Login button
-    login_btn_img = PhotoImage(file = f"./images/login/login_btn.png")
+    login_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/login_btn.png")
     login_btn_label = Label(image=login_btn_img)
     login_btn_label.image = login_btn_img
     login_btn = Button(
-        login_canvas,
         image = login_btn_img,
         borderwidth = 0,
         highlightthickness = 0,
@@ -99,7 +94,7 @@ def load_login(window):
         height = 51)
 
     # Email entry field
-    email_entry_img = PhotoImage(file = f"./images/login/entry.png")
+    email_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/entry.png")
     email_entry_bg = login_canvas.create_image(
         807.0, 429.5,
         image = email_entry_img)
@@ -118,7 +113,7 @@ def load_login(window):
         height = 35)
 
     # Password entry field
-    password_entry_img = PhotoImage(file = f"./images/login/entry.png")
+    password_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/entry.png")
     password_entry_bg = login_canvas.create_image(
         807.0, 329.5,
         image = password_entry_img)
@@ -138,11 +133,10 @@ def load_login(window):
         height = 35)
 
     # Register button
-    register_btn_img = PhotoImage(file = f"./images/login/register_btn.png")
+    register_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/register_btn.png")
     register_btn_label = Label(image=register_btn_img)
     register_btn_label.image = register_btn_img
     register_btn = Button(
-        login_canvas,
         image = register_btn_img,
         borderwidth = 0,
         highlightthickness = 0,

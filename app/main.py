@@ -1,7 +1,7 @@
 from tkinter import *
-from tkinter.messagebox import showerror
-from app import login
+from app.login import load_login
 from app.utility import center, dark_title_bar
+import os
 
 class MainWindow():
     def __init__(self):
@@ -13,10 +13,10 @@ class MainWindow():
         center(window)
 
         # Call the loadLogIn function to load the login screen
-        login.load_login(window)
+        load_login(window)
         # Additional window config
         window.resizable(False, False)
-        window.iconbitmap('images/logo.ico')
+        window.iconbitmap(os.getenv('IMAGE_FOLDER_PATH')+'/logo.ico')
         window.deiconify()
         dark_title_bar(window)
         window.mainloop()

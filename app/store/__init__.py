@@ -5,7 +5,8 @@ class GlobalState:
             'username': '',
             'email': '',
             'selected_pdf': '',
-            'count': 0
+            'count': 0,
+            'location': 'mangalore'
         }
 
     def get_state(self, key):
@@ -24,6 +25,7 @@ class States:
         self.EMAIL = 'email'
         self.SELECTED_PDF = 'selected_pdf'
         self.COUNT = 'count'
+        self.LOCATION = 'location'
     
 state = GlobalState()
 states = States()
