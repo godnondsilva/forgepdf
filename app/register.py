@@ -3,7 +3,7 @@ from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
 from app import login
 from app.functionality import validate
-from app.utility import execute_query
+from app.utility import execute_query, execute_query_fetch_one
 import os
 
 def load_register(window):
@@ -19,28 +19,26 @@ def load_register(window):
             email = email_entry.get()
             password = password_entry.get()
 
+            # validating the details
             condition = validate.validate_register(name, email, password)
+            # if validation fails
             if condition != True:
                 showwarning('Error', condition['error'])
             else:
-                # creating a query and checking if there exist a account before signing up
-                mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
-                mycursor = mydb.cursor()
-                # getting all the user data from the database
-                mycursor.execute("select name, password from users where name='" + name + "'")
-                # selecting only the first row from the fetched data
-                result = mycursor.fetchone()
-                    
-                # creating a query to insert the user details into the database
-                query = "insert into users (name, email, password) values('" + name + "','" + email + "','" + password + "')"
-                execute_query(query)
+                # Get the name and the password from the database
+                result = execute_query_fetch_one("select name, password from users where name='" + name + "'")            
 
-                # TODO: Display status message (success/failure)
                 if result == None:
-                    showinfo('Successfull','You have successfully registered an account! Please login to continue!')
-                    # call the Home window class
-                    login.load_login(window)
-
+                    try:
+                        # Insert the new user into the database
+                        execute_query("insert into users (name, email, password) values('" + name + "','" + email + "','" + password + "')")
+                        # Display a success message
+                        showinfo('Successfull','You have successfully registered an account! Please login to continue!')
+                        # Call the load_login function
+                        login.load_login(window)
+                    except:
+                        showerror('Error', 'Could not create an account, please contact support')
+                # If the name already exists in the database
                 elif result != None:
                     showwarning("Error" , "A user with this name already exist, please choose a new one!")
         except:

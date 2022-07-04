@@ -2,9 +2,9 @@ from tkinter import *
 from tkinter.messagebox import showinfo, showwarning, showerror
 
 from app import register, home
-import mysql.connector
 from app.functionality import validate
 from app.store import state, states
+from app.utility import execute_query_fetch_one
 import os
 
 def load_login(window):
@@ -19,19 +19,14 @@ def load_login(window):
             email = email_entry.get()
             password = password_entry.get();
             condition = validate.validate_login(email, password)
+            # if validation fails
             if condition != True:
                 showwarning('Error', condition['error'])
             else:
-                # creating a mysql connection
-                mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
-                mycursor = mydb.cursor()
-                # getting all the user data from the database
-                mycursor.execute("select name, password, user_id from users where email='" + email + "'")
-                # selecting only the first row from the fetched data
-                result = mycursor.fetchone()
-                print(result)
+                # Get the name and the password from the database
+                result = execute_query_fetch_one("select name, password, user_id from users where email='" + email + "'")
 
-                # checking if the 'name' exists in the database
+                # checking if the 'email' exists in the database
                 if result == None:
                     showwarning('Error', 'Email not found.')
                 # checking if the 'password' matches the one in the database
@@ -40,14 +35,11 @@ def load_login(window):
                 # else, successfull login
                 else:
                     showinfo('Successfull', 'You have successfully logged in!')
-                        # destroy the current window instance (SignUpWindow)
-                    
+                    # Set the UID and the name in the state variable
                     state.set_state(states.UID, result[2])
                     state.set_state(states.USERNAME, result[0])
-
                     # call the Home window class
                     home.load_home(window)
-                mydb.close()
         except Exception as e:
             print(e)
             showerror('Error', 'An error has occurred.')
@@ -150,5 +142,5 @@ def load_login(window):
         width = 142,
         height = 41)
 
-    email_entry.insert(0, "tester@tester.com");
+    email_entry.insert(0, "testing@testing.com");
     password_entry.insert(0, "something")

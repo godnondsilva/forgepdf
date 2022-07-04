@@ -6,7 +6,7 @@ from app import main, options, extractpdf, encryptpdf, emailpdf, mergepdf, saved
 from app.store import state, states
 from app import store
 from app.functionality import weather, thought
-from app.utility import get_cursor_data
+from app.utility import execute_query_fetch_all
 import datetime
 
 
@@ -341,7 +341,7 @@ def load_home(window):
     # result = mycursor.fetchall()
     # print(result)
 
-    # result = get_cursor_data("select file_address from files where user_id='" + str(store.getUID()) + "' order by file_id desc")
+    # result = execute_query_fetch_all("select file_address from files where user_id='" + str(store.getUID()) + "' order by file_id desc")
 
 #####################################################################
 

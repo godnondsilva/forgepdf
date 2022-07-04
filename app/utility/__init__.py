@@ -27,15 +27,26 @@ def execute_query(query):
     mydb.close()
 
 # This exportable function is used to execute
-# queries and return the result cursors
-def get_cursor_data(query):
+# a query and return one row from the cursor
+def execute_query_fetch_one(query):
     mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
     mycursor=mydb.cursor()
     mycursor.execute(query)
-    result=mycursor.fetchall()
+    result=mycursor.fetchone()
     mycursor.close()
     mydb.close()
     return result
+
+# This exportable function is used to execute
+# queries and return the all the rows from the cursor
+def execute_query_fetch_all(query):
+    mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
+    mycursor=mydb.cursor()
+    mycursor.execute(query)
+    result=mycursor
+    # mycursor.close()
+    # mydb.close()
+    return mycursor
 
 # This exportable function is used to update the 
 # title bar to dark theme
