@@ -14,9 +14,16 @@ class GlobalState:
     
     def set_state(self, key, value):
         self.data[key] = value
-    
-    def __str__(self):
-        return f'State: \nUID: {self.data.uid} \nUsername: {self.data.username} \nEmail: {self.data.email}'
+
+    def reset_state(self):
+        self.data = {
+            'uid': 0,
+            'username': '',
+            'email': '',
+            'selected_pdf': '',
+            'count': 0,
+            'location': 'mangalore'
+        }
 
 class States:
     def __init__(self):

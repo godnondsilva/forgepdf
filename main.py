@@ -8,7 +8,7 @@ from tkinter import *
 from app.main import MainWindow
 load_dotenv(find_dotenv())
 
-if len(sys.argv)>1 and sys.argv[1]=='--dev':
+if len(sys.argv)==2 and sys.argv[1]=='--dev':
     print("Info: --dev option is specified. Running in development mode.")
     os.environ["IMAGE_FOLDER_PATH"] = os.getenv("IMAGE_FOLDER_PATH_DEVELOPMENT")
 else:

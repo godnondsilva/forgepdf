@@ -2,56 +2,58 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showerror
 from tkinter.font import BOLD
-from app import main, options, extractpdf, encryptpdf, emailpdf, mergepdf, savedpdfs, decryptpdf, splitpdf
+from app import login
 from app.store import state, states
 from app import store
 from app.functionality import weather, thought
 from app.utility import execute_query_fetch_all
-import datetime
+import datetime, os
 
 
 def load_home(window):
     #Button Functions
-    def route_login():
-        # call the auth window class which will load the login screen
-        main.MainWindow()
+    def logout():
+        # Reset the state
+        state.reset_state()
+        # route to the login frame
+        login.load_login(window);
 
 
-    def route_encypt_pdf():
-        # call the encrypt pdf window class
-        encryptpdf.encryptWindow()
+    # def route_encypt_pdf():
+    #     # call the encrypt pdf window class
+    #     encryptpdf.encryptWindow()
 
-    def route_decrypt_pdf():
-        # call the decrypt pdf window class
-        decryptpdf.decryptWindow()
+    # def route_decrypt_pdf():
+    #     # call the decrypt pdf window class
+    #     decryptpdf.decryptWindow()
 
-    def route_email_pdf():
-        # call the email pdf window class
-        emailpdf.EmailPdfWindow()
+    # def route_email_pdf():
+    #     # call the email pdf window class
+    #     emailpdf.EmailPdfWindow()
 
-    def route_extract_pdf():
-        # call the extract pdf window class
-        extractpdf.extractWindow()
+    # def route_extract_pdf():
+    #     # call the extract pdf window class
+    #     extractpdf.extractWindow()
 
 
-    def route_split_pdf():
-        # call the splitPdf window class
-        splitpdf.SplitPdfWIndow()
+    # def route_split_pdf():
+    #     # call the splitPdf window class
+    #     splitpdf.SplitPdfWIndow()
         
-    def route_merge_pdf():
-        # call the merge pdf window class
-        mergepdf.MergePdfWindow()
+    # def route_merge_pdf():
+    #     # call the merge pdf window class
+    #     mergepdf.MergePdfWindow()
 
-    def route_saved_pdf():
-        # call the saved pdf window class
-        savedpdfs.SavedPdfWindow()
+    # def route_saved_pdf():
+    #     # call the saved pdf window class
+    #     savedpdfs.SavedPdfWindow()
 
 
-    def route_options(SelectPdf):
-        #set the value of the pdf select by the user in the user details class
-        store.setSelectPdf(SelectPdf)
-        # call the options up window class
-        options.OptionsPdfWindow()
+    # def route_options(SelectPdf):
+    #     #set the value of the pdf select by the user in the user details class
+    #     store.setSelectPdf(SelectPdf)
+    #     # call the options up window class
+    #     options.OptionsPdfWindow()
     
     def btn_clicked():
         pass
@@ -66,14 +68,14 @@ def load_home(window):
         relief = "ridge")
     canvas.place(x = 0, y = 0)
 
-    background_img = PhotoImage(file = f"./images/home/background.png")
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
     background = canvas.create_image(
         671.0, 384.0,
         image=background_img)
 
-    logout_btn_img = PhotoImage(file = f"./images/home/logout_btn.png")
+    logout_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/logout_btn.png")
     logout_btn_label = Label(image=logout_btn_img)
     logout_btn_label.image = logout_btn_img
     logout_btn = Button(
@@ -82,15 +84,15 @@ def load_home(window):
         highlightthickness = 0,
         background="#111111",
         activebackground="#111111",
-        # command = btn_clicked,
+        command = logout,
         relief = "flat")
 
     logout_btn.place(
-        x = 1122, y = 35,
+        x = 1111, y = 35,
         width = 160,
         height = 45)
 
-    encrypt_btn_img = PhotoImage(file = f"./images/home/encrypt_btn.png")
+    encrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/encrypt_btn.png")
     encrypt_btn_label = Label(image=encrypt_btn_img)
     encrypt_btn_label.image = encrypt_btn_img
     encrypt_btn = Button(
@@ -107,7 +109,7 @@ def load_home(window):
         width = 105,
         height = 27)
 
-    decrypt_btn_img = PhotoImage(file = f"./images/home/decrypt_btn.png")
+    decrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/decrypt_btn.png")
     decrypt_btn_label = Label(image=decrypt_btn_img)
     decrypt_btn_label.image = decrypt_btn_img
     decrypt_btn = Button(
@@ -124,7 +126,7 @@ def load_home(window):
         width = 108,
         height = 27)
 
-    email_btn_img = PhotoImage(file = f"./images/home/email_btn.png")
+    email_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/email_btn.png")
     email_btn_label = Label(image=email_btn_img)
     email_btn_label.image = email_btn_img
     email_btn = Button(
@@ -141,7 +143,7 @@ def load_home(window):
         width = 86,
         height = 27)
 
-    extract_btn_img = PhotoImage(file = f"./images/home/extract_btn.png")
+    extract_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/extract_btn.png")
     extract_btn_label = Label(image=extract_btn_img)
     extract_btn_label.image = extract_btn_img
     extract_btn = Button(
@@ -158,7 +160,7 @@ def load_home(window):
         width = 98,
         height = 27)
 
-    split_btn_img = PhotoImage(file = f"./images/home/split_btn.png")
+    split_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/split_btn.png")
     split_btn_label = Label(image=split_btn_img)
     split_btn_label.image = split_btn_img
     split_btn = Button(
@@ -175,7 +177,7 @@ def load_home(window):
         width = 76,
         height = 27)
 
-    merge_btn_img = PhotoImage(file = f"./images/home/merge_btn.png")
+    merge_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/merge_btn.png")
     merge_btn_label = Label(image=merge_btn_img)
     merge_btn_label.image = merge_btn_img
     merge_btn = Button(
@@ -192,7 +194,7 @@ def load_home(window):
         width = 94,
         height = 27)
 
-    send_bug_report_btn_img = PhotoImage(file = f"./images/home/send_bug_report_btn.png")
+    send_bug_report_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/send_bug_report_btn.png")
     send_bug_report_btn_label = Label(image=send_bug_report_btn_img)
     send_bug_report_btn_label.image = send_bug_report_btn_img
     send_bug_report_btn = Button(
@@ -209,7 +211,7 @@ def load_home(window):
         width = 114,
         height = 21)
 
-    send_feedback_btn_img = PhotoImage(file = f"./images/home/send_feedback_btn.png")
+    send_feedback_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/send_feedback_btn.png")
     send_feedback_btn_label = Label(image=send_feedback_btn_img)
     send_feedback_btn_label.image = send_feedback_btn_img
     send_feedback_btn = Button(
@@ -226,7 +228,7 @@ def load_home(window):
         width = 106,
         height = 21)
 
-    view_more_btn_img = PhotoImage(file = f"./images/home/view_more_btn.png")
+    view_more_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/view_more_btn.png")
     view_more_btn_label = Label(image=view_more_btn_img)
     view_more_btn_label.image = view_more_btn_img
     view_more_btn = Button(
@@ -242,6 +244,14 @@ def load_home(window):
         x = 522, y = 471,
         width = 145,
         height = 28)
+
+    empty_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/empty.png")
+    empty_label = Label(image = empty_img, bg = "#333333")
+    empty_label.image = empty_img
+    empty_label.place(
+        x = 544, y = 590,
+        width = 528,
+        height = 50)
     
     thought_text = Text(window, 
         height=549, 
@@ -273,7 +283,7 @@ def load_home(window):
         width = 250,
         height = 36)
 
-    datetime_entry_img = PhotoImage(file = f"./images/home/datetime_entry.png")
+    datetime_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/datetime_entry.png")
     datetime_entry_bg = canvas.create_image(
         927.5, 156.5,
         image = datetime_entry_img)
@@ -288,10 +298,10 @@ def load_home(window):
 
     datetime_entry.place(
         x = 860, y = 146,
-        width = 115,
+        width = 120,
         height = 19)
 
-    location_entry_img = PhotoImage(file = f"./images/home/location_entry.png")
+    location_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/location_entry.png")
     location_entry_bg = canvas.create_image(
         955.0, 179.0,
         image = location_entry_img)
@@ -309,28 +319,160 @@ def load_home(window):
         width = 170,
         height = 22)
 
+    weather_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/weather_btn.png")
+    weather_btn_label = Label(
+        image=weather_btn_img,
+        bg="#333333",
+        activebackground="#333333")
+    weather_btn_label.image = weather_btn_img
+
+    weather_btn_label.place(
+        x = 860, y = 196,
+        width = 63,
+        height = 55)
+
+    # TODO: Change the weather icon based on the current weather
+    sunny_image_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/sunny.png")
+    weather_btn_label.config(image = sunny_image_img)
+    weather_btn_label.image = sunny_image_img
+
+    temperature_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/temperature_entry.png")
+    temperature_entry_bg = canvas.create_image(
+        979.0, 223.5,
+        image = temperature_entry_img)
+
+    temperature_entry = Entry(
+        bd = 0,
+        font=("Poppins", 26),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
+
+    temperature_entry.place(
+        x = 929, y = 196,
+        width = 100,
+        height = 53)
+
+    description_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/description_entry.png")
+    description_entry_bg = canvas.create_image(
+        1006.5, 278.0,
+        image = description_entry_img)
+
+    description_entry = Entry(
+        bd = 0,
+        font=("Poppins", 10),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
+    
+    description_entry.place(
+        x = 860, y = 268,
+        width = 271,
+        height = 18)
+
+    wind_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/wind_entry.png")
+    wind_entry_bg = canvas.create_image(
+        935.5, 349.0,
+        image = wind_entry_img)
+
+    wind_entry = Entry(
+        bd = 0,
+        font=("Poppins", 10),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
+    wind_entry.place(
+        x = 875, y = 338,
+        width = 99,
+        height = 20)
+
+    humidity_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/humidity_entry.png")
+    humidity_entry_bg = canvas.create_image(
+        941.5, 324.0,
+        image = humidity_entry_img)
+
+    humidity_entry = Entry(
+        bd = 0,
+        font=("Poppins", 10),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
+    humidity_entry.place(
+        x = 875, y = 313,
+        width = 111,
+        height = 20)
+
+    pressure_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/pressure_entry.png")
+    pressure_entry_bg = canvas.create_image(
+        939.0, 374.0,
+        image = pressure_entry_img)
+
+    pressure_entry = Entry(
+        bd = 0,
+        font=("Poppins", 10),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
+    pressure_entry.place(
+        x = 875, y = 363,
+        width = 106,
+        height = 20)
+
     # Configuration
+    # Weather API call
+    weatherData = weather.get_weather(state.get_state(states.LOCATION))
+    if 'error' in weatherData:
+        showerror('Error', weatherData['error'])
+
+    # Thought text
     thought_text_value = thought.get_thought()
     thought_text.insert(END, thought_text_value)
     thought_text.config(state=DISABLED)
 
+    # Name text
     name_text_value = state.get_state(states.USERNAME)
     if 'error' in name_text_value:
         showerror('Error', name_text_value['error'])
     name_text.insert(END, "Welcome, "+name_text_value.title())
     name_text.config(state=DISABLED)
 
-    # calling the weather api and storing the object in the variable weatherData
-    weatherData = weather.get_weather(state.get_state(states.LOCATION))
-    if 'error' in weatherData:
-        showerror('Error', weatherData['error'])
-    print(weatherData)
-
+    # Datetime text
     datetime_entry.insert(0, datetime.date.today().strftime("%A") + ', ' + datetime.datetime.now().strftime("%I:%M %p"))
     datetime_entry.bind("<Key>", lambda e: "break")
 
+    # Location text
     location_entry.insert(0, "Mangalore")
     location_entry.bind("<Key>", lambda e: "break")
+
+    # Description text
+    description_entry.insert(0, "Feels like " + str(int(weatherData['temp'])) + "°C. " + weatherData['main'].capitalize() + ". " + str(weatherData['description']).capitalize())
+    description_entry.bind("<Key>", lambda e: "break")
+
+    # Temperature text
+    temperature_entry.insert(0, str(int(weatherData['temp'])) + "°C")
+    temperature_entry.bind("<Key>", lambda e: "break")
+
+    # Humidity text
+    humidity_entry.insert(0, "Humidity: " + str(int(weatherData['temp'])) + "%")
+    humidity_entry.bind("<Key>", lambda e: "break")
+
+    # Wind text
+    wind_entry.insert(0, "Wind: " + str(int(weatherData['temp'])) + "km/hr")
+    wind_entry.bind("<Key>", lambda e: "break")
+
+    # Pressure text
+    pressure_entry.insert(0, "Pressure: " + str(int(weatherData['temp'])) + "Pa")
+    pressure_entry.bind("<Key>", lambda e: "break")
+
+
 
     # # creating a mysql connection
     # mydb = mysql.connector.connect(host=os.getenv('HOST'), user=os.getenv('USER'), password=os.getenv('PASSWORD'), database="forgepdf")
@@ -371,10 +513,7 @@ def load_home(window):
     # SunnyImage = PhotoImage(file = f"./images/home/SunnyImage.png")
     # CloudyImage = PhotoImage(file = f"./images/home/CloudyImage.png")
     # RainyImage = PhotoImage(file = f"./images/home/RainyImage.png")
-    # WeatherImageButton = Label(
-    #     bg="#0B132B",
-    #     activebackground="#0B132B"
-    # )
+
 
     # # setting the image for the button based on the description
     # if weatherData['description'] == "clear sky":
@@ -394,119 +533,8 @@ def load_home(window):
     # else:
     #     WeatherImageButton.config(image = CloudyImage)
 
-    # WeatherImageButton.place(
-    #     x = 95, y = 252,
-    #     width = 102,
-    #     height = 94)
 
-    # WeatherDescTextBoxImage = PhotoImage(file = f"./images/home/WeatherDescTextBox.png")
-    # WeatherDescTextBox = canvas.create_image(
-    #     143.5, 363.0,
-    #     image = WeatherDescTextBoxImage)
-
-    # WeatherDescTextBoxEntry = Entry(
-    #     bd = 0,
-    #     bg = "#0b132b",
-    #     font = ('Poppins', 16, BOLD),
-    #     fg= "#5BC0BE",
-    #     justify=CENTER,
-    #     highlightthickness = 0)
-    # WeatherDescTextBoxEntry.insert(0, weatherData['description'].title())
-    # WeatherDescTextBoxEntry.bind("<Key>", lambda e: "break")
-
-    # WeatherDescTextBoxEntry.place(
-    #     x = 63, y = 349,
-    #     width = 161,
-    #     height = 26)
-
-
-    # TempTextBoxImage = PhotoImage(file = f"./images/home/TempTextBox.png")
-    # TempTextBox = canvas.create_image(
-    #     417.0, 349.5,
-    #     image = TempTextBoxImage)
-
-    # TempTextBoxEntry = Entry(
-    #     bd = 0,
-    #     bg = "#0b132b",
-    #     font = ('Poppins', 13, BOLD),
-    #     fg= "#5BC0BE",
-    #     justify=RIGHT,
-    #     highlightthickness = 0)
-    # TempTextBoxEntry.insert(0, weatherData['temp'])
-    # TempTextBoxEntry.bind("<Key>", lambda e: "break")
-
-    # TempTextBoxEntry.place(
-    #     x = 394, y = 339,
-    #     width = 44,
-    #     height = 23)
-
-
-
-    # FeelsLikeTextBoxImage = PhotoImage(file = f"./images/home/FeelsLikeTextBox.png")
-    # FeelsLikeTextBox = canvas.create_image(
-    #     435.0, 381.5,
-    #     image = FeelsLikeTextBoxImage)
-    # uid.append(store.getUID())
-    
-
-    # FeelsLikeTextBoxEntry = Entry(
-    #     bd = 0,
-    #     bg = "#0b132b",
-    #     font = ('Poppins', 13, BOLD),
-    #     fg= "#5BC0BE",
-    #     justify=RIGHT,
-    #     highlightthickness = 0)
-    # FeelsLikeTextBoxEntry.insert(0, weatherData['feels_like'])
-    # FeelsLikeTextBoxEntry.bind("<Key>", lambda e: "break")
-
-    # FeelsLikeTextBoxEntry.place(
-    #     x = 408, y = 370,
-    #     width = 44,
-    #     height = 23)
-
-
-
-    # WindTextBoxImage = PhotoImage(file = f"./images/home/WindTextBox.png")
-    # WindTextBox = canvas.create_image(
-    #     626.0, 369.5,
-    #     image = WindTextBoxImage)
-
-    # WindTextBoxEntry = Entry(
-    #     bd = 0,
-    #     bg = "#0b132b",
-    #     font = ('Poppins', 15, BOLD),
-    #     fg= "#5BC0BE",
-    #     justify=CENTER,
-    #     highlightthickness = 0)
-    # WindTextBoxEntry.insert(0, weatherData['wind_speed'])
-    # WindTextBoxEntry.bind("<Key>", lambda e: "break")
-
-    # WindTextBoxEntry.place(
-    #     x = 597, y = 358,
-    #     width = 53,
-    #     height = 23)
-
-    # HumidityTextBoxImage = PhotoImage(file = f"./images/home/HumidityTextBox.png")
-    # HumidityTextBox = canvas.create_image(
-    #     904.5, 369.5,
-    #     image = HumidityTextBoxImage)
-
-    # HumidityTextBoxEntry = Entry(
-    #     bd = 0,
-    #     bg = "#0b132b",
-    #     font = ('Poppins', 15, BOLD),
-    #     fg= "#5BC0BE",
-    #     justify=CENTER,
-    #     highlightthickness = 0)
-    # HumidityTextBoxEntry.insert(0, weatherData['humidity'])
-    # HumidityTextBoxEntry.bind("<Key>", lambda e: "break")
-
-    # HumidityTextBoxEntry.place(
-    #     x = 895, y = 358,
-    #     width = 28,
-    #     height = 23)
-
-#####################################################################
+    # #####################################################################
 
     # if len(result) > 0:
     # # # Image for most recent Pdf in database

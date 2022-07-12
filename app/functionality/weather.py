@@ -18,9 +18,11 @@ def get_weather(location):
         data = {
             'temp': convert_to_celsius(weather_data['main']['temp']),
             'feels_like': convert_to_celsius(weather_data['main']['feels_like']),
-            'humidity': weather_data['main']['humidity'],
+            'main': weather_data['weather'][0]['main'],
             'description': weather_data['weather'][0]['description'],
-            'wind_speed': weather_data['wind']['speed']
+            'humidity': weather_data['main']['humidity'],
+            'wind_speed': weather_data['wind']['speed'],
+            'pressure': weather_data['main']['pressure'],
         }
     except:
         data = {
