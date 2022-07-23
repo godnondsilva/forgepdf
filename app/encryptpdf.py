@@ -1,251 +1,186 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
-from app import home
+from app import home, sidebar
 from app.utility import center, execute_query
 import os, shutil
 from app import store
+from app.store import state, states
 from app.functionality import encrypt, validate
+from pathlib import Path
 
-class encryptWindow():
-    def __init__(self):
-        #Window Config
-        window = Tk()
-        window.geometry("1280x720")
-        window.title('ForgePDF | Encrypt PDF')
-        center(window)
-        window.configure(bg = "#0b132b")
+def load_encrypt_pdf(window):
+    canvas = Canvas(
+        window,
+        bg = "#111111",
+        height = 768,
+        width = 1366,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge")
+    canvas.place(x = 0, y = 0)
 
-        # variable to store the pdf to encrypt
-        self.pdfToEncrypt = ''
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/background.png")
+    background_label = Label(image=background_img)
+    background_label.image = background_img
+    background = canvas.create_image(
+        682.0, 384.0,
+        image=background_img)
 
-        #Button Functions
-        def toHomePage():
-            # destroy the current window instance (LogInWindow)
-            window.destroy()
-            # call the login up window class
+    sidebar.load_sidebar(window)
+
+    cancel_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/cancel_btn.png")
+    cancel_btn_label = Label(image=cancel_btn_img)
+    cancel_btn_label.image = cancel_btn_img
+    cancel_btn = Button(
+        image = cancel_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        # command = btn_clicked,
+        relief = "flat")
+
+    cancel_btn.place(
+        x = 940, y = 658,
+        width = 160,
+        height = 49)
+
+    selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+    selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+    selected_pdf_btn_label.image = selected_pdf_btn_image
+    selected_pdf_btn = Button(
+        image = selected_pdf_btn_image,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        relief = "flat")
+
+    selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+    selected_pdf_bg = canvas.create_image(
+        1151.5, 381.5,
+        image = selected_pdf_entry_img)
+
+    selected_pdf_entry = Entry(
+        bd = 0,
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
+    selected_pdf_entry.bind("<Key>", lambda e: "break")
+
+    def get_pdf():
+        if state.get_state(states.SELECTED_PDF) != '':
+            showwarning("Error" , "You can encrypt only one pdf at a time")
+            return
+        pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
+        filename = os.path.basename(pdf_path)
+        if len(pdf_path) == 0:
+            showwarning("Error" , "Please select a PDF file")
+            return
+        show_preview_pdf(filename, pdf_path)
+
+    def encrypt_pdf():
+        password = encrypt_password_entry.get().strip()
+        try:
+            condition = validate.validate_encrypt(password)
+            if condition != True:
+                showwarning('Error', condition['error'])
+            else:
+                encrypt.encrypt(state.get_state(states.SELECTED_PDF), password)
+                move_to_downloads()
+                showwarning('Success', 'PDF encrypted successfully')
+        except:
+            showerror("Error" , "An error has occurred")
             home.HomeWindow()
+
+
+    def move_to_downloads():
+        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
+        new_name = 'forgepdf' + '1' + '.pdf'
+        shutil.move('encrypted.pdf', path_to_download_folder+new_name)
+
+        # store.IncrementCount()
+
+        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
+        
+        #converts the address to form that can be saved in the database
+        # newAdd = store.ConvertAddress(add)
+        # saveToDB(newAdd)
+    
+    #Store the value in database
+    # def saveToDB(add):
+    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
+
+    
+    def show_preview_pdf(filename, pdf_path):
+        selected_pdf_entry.insert('0' , filename)
+        state.set_state(states.SELECTED_PDF, pdf_path)
+        selected_pdf_btn.place(
+            x = 1082, y = 248,
+            width = 137,
+            height = 159)
+        selected_pdf_entry.place(
+            x = 1101, y = 374,
+            width = 101,
+            height = 13)
         
 
-        #gets the pdf to encrypt
-        def getPdf():
-            if self.pdfToEncrypt != '':
-                showwarning("Error" , "You can encrypt only one pdf at a time")
-                return
-            #gets attachement from user
-            attachmentPathvar = filedialog.askopenfilename(initialdir= "D:\\Users\\ashis\\Desktop", title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
-            filename = os.path.basename(attachmentPathvar)
-            if len(attachmentPathvar) == 0:
-                showwarning("Error" , "Please select a pdf file")
-                return
-            #adds the value in the textbox and displays it
-            PDFTextBoxEntry.insert('0' , filename)
-            PDFTextBoxEntry.bind("<Key>", lambda e: "break")
-            self.pdfToEncrypt = attachmentPathvar
-            showEncryptPdf()
+    choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/choose_file_btn.png")
+    choose_file_btn_label = Label(image=choose_file_btn_img)
+    choose_file_btn_label.image = choose_file_btn_img
+    choose_file_btn = Button(
+        image = choose_file_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = get_pdf,
+        relief = "flat")
 
+    choose_file_btn.place(
+        x = 333, y = 214,
+        width = 314,
+        height = 75)
 
-        # function to encrypt the pdf
-        def EncryptPdf():
-            password = PasswordEntry.get()
-            new_password = password.strip()
-            try:
-                condition = validate.validate_encrypt(new_password)
-                if condition != True:
-                    showwarning('Error', condition['error'])
-                else:
-                    encrypt.encrypt(self.pdfToEncrypt, new_password)
-                    showPdfEncryptMessage()
-                    MoveToFolder()
-            except:
-                showerror("Error" , "An error has occurred!")
-                window.destroy()
-                home.HomeWindow()
+    encrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/encrypt_btn.png")
+    encrypt_btn_label = Label(image=encrypt_btn_img)
+    encrypt_btn_label.image = encrypt_btn_img
+    encrypt_btn = Button(
+        image = encrypt_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = encrypt_pdf,
+        relief = "flat")
 
+    encrypt_btn.place(
+        x = 1126, y = 658,
+        width = 158,
+        height = 49)
 
-        #Moves the files to a specific directory and copies to desktop
-        def MoveToFolder():
+    encrypt_password_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/encrypt_password_entry.png")
+    encrypt_password_entry_bg = canvas.create_image(
+        491.0, 422.5,
+        image = encrypt_password_entry_img)
 
-            #increment the count of the pdf to prevent overwriting
-            store.IncrementCount()
-            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
-            shutil.move('encrypted.pdf' , add)
-            shutil.copy(add , 'C:\\Users\\User\\Desktop')
-            
-            #converts the address to form that can be saved in the database
-            newAdd = store.ConvertAddress(add)
-            saveToDB(newAdd)
-        
-        #Store the value in database
-        def saveToDB(add):
-            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
+    encrypt_password_entry = Entry(
+        bd = 0,
+        font=("Poppins", 14),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
 
-       
-        #shows the selected pdf along with the name
-        def showEncryptPdf():
-            PDFTextBoxEntry.pack()
+    encrypt_password_entry.place(
+        x = 335, y = 404,
+        width = 312,
+        height = 35)
 
-            PDFTextBoxEntry.place(
-            x = 100, y = 600,
-            width = 800,
-            height = 87)
+    
 
-            PdfImageIcon.pack()
-
-            PdfImageIcon.place(
-            x = 100, y = 525,
-            width = 800,
-            height = 87)
-
-
-        #shows the message that pdf is encypted
-        def showPdfEncryptMessage():
-            EncryptPdfSubmitButton.pack_forget()
-            PdfEncryptLabel.pack()
-
-            PdfEncryptLabel.place(
-            x = 1012, y = 604,
-            width = 230,
-            height = 46)
-
-
-        #Canvas Config
-        canvas = Canvas(
-            window,
-            bg = "#0b132b",
-            height = 720,
-            width = 1280,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge")
-        canvas.place(x = 0, y = 0)
-
-
-        #EncryptPdf  background Config
-        encryptpdfBGImage = PhotoImage(file =  f"./images/encryptpdf/encryptpdfBG.png")
-        encryptpdfBG = canvas.create_image(
-            640.0, 360.0,
-            image=encryptpdfBGImage)
-
-
-        #ChooseFile BG
-        ChooseFileImage = PhotoImage(file = f"./images/encryptpdf/ChooseFile.png")
-        ChooseFileButton = Button(
-            image = ChooseFileImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            activebackground="#0B132B",
-            command = getPdf,
-            relief = "flat")
-
-        ChooseFileButton.place(
-            x = 243, y = 344,
-            width = 536,
-            height = 100)
-
-
-        #BackButton Config
-        BackButtonImage = PhotoImage(file = f"./images/encryptpdf/BackButton.png")
-        BackButton = Button(
-            image = BackButtonImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            activebackground="#1C2541",
-            command = toHomePage,
-            relief = "flat")
-
-        BackButton.place(
-            x = 17, y = 21,
-            width = 139,
-            height = 58)
-
-
-        #Encrypt pdf button config
-        EncryptPdfImage = PhotoImage(file = f"./images/encryptpdf/Encrypt.png")
-        EncryptPdfSubmitButton = Button(
-            image = EncryptPdfImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            activebackground="#1C2541",
-            command = EncryptPdf,
-            relief = "flat")
-
-        EncryptPdfSubmitButton.place(
-            x = 1022, y = 604,
-            width = 206,
-            height = 46)
-
-
-        #Ending Range Entry Config
-        passwordEntryImage = PhotoImage(file = f"./images/encryptpdf/TextBox.png")
-        PasswordEntryCanvasImage = canvas.create_image(
-            1124.0, 443.0,
-            image = passwordEntryImage)
-
-        PasswordEntry = Entry(
-            bd = 0,
-            bg = "#0b132b",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#5BC0BE",
-            highlightthickness = 0)
-
-        PasswordEntry.place(
-            x = 987, y = 410,
-            width = 274,
-            height = 66)
-
-        
-        #PdfTextBox
-        PDFTextBoxImage = PhotoImage(file = f"./images/encryptpdf/TextboxBG.png")
-        PDFTextBox = canvas.create_image(
-            1124.5, 605.5,
-            image = PDFTextBoxImage)
-
-        PDFTextBoxEntry = Entry(
-            bd = 0,
-            bg = "#0B132B",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#0B132B",
-            highlightthickness = 0)
-
-        PDFTextBoxEntry.pack()
-        PDFTextBoxEntry.pack_forget()
-
-
-        #PdfMerged Message
-        PdfEncryptImage = PhotoImage(file = f"./images/encryptpdf/Encrypted.png")
-        PdfEncryptLabel = Label(
-            image = PdfEncryptImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            relief = "flat")
-
-        PdfEncryptLabel.pack()
-        PdfEncryptLabel.pack_forget()
-
-
-        #PdfImage Config
-        PdfImage = PhotoImage(file = f"./images/encryptpdf/pdfImage.png")
-        PdfImageIcon = Label(
-            image = PdfImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            relief = "flat")
-
-        PdfImageIcon.pack()
-        PdfImageIcon.pack_forget()
-
-        # additional config
-        window.resizable(False, False)
-        window.iconbitmap('images/logo.ico')
-        window.deiconify()
-        window.mainloop()
+    

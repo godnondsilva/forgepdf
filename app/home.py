@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showerror
 from tkinter.font import BOLD
-from app import login
+from app import login, encryptpdf, sidebar
 from app.store import state, states
 from app import store
 from app.functionality import weather, thought
@@ -16,12 +16,7 @@ def load_home(window):
         # Reset the state
         state.reset_state()
         # route to the login frame
-        login.load_login(window);
-
-
-    # def route_encypt_pdf():
-    #     # call the encrypt pdf window class
-    #     encryptpdf.encryptWindow()
+        login.load_login(window)
 
     # def route_decrypt_pdf():
     #     # call the decrypt pdf window class
@@ -92,107 +87,7 @@ def load_home(window):
         width = 160,
         height = 45)
 
-    encrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/encrypt_btn.png")
-    encrypt_btn_label = Label(image=encrypt_btn_img)
-    encrypt_btn_label.image = encrypt_btn_img
-    encrypt_btn = Button(
-        image = encrypt_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    encrypt_btn.place(
-        x = 38, y = 188,
-        width = 105,
-        height = 27)
-
-    decrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/decrypt_btn.png")
-    decrypt_btn_label = Label(image=decrypt_btn_img)
-    decrypt_btn_label.image = decrypt_btn_img
-    decrypt_btn = Button(
-        image = decrypt_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    decrypt_btn.place(
-        x = 38, y = 222,
-        width = 108,
-        height = 27)
-
-    email_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/email_btn.png")
-    email_btn_label = Label(image=email_btn_img)
-    email_btn_label.image = email_btn_img
-    email_btn = Button(
-        image = email_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    email_btn.place(
-        x = 38, y = 256,
-        width = 86,
-        height = 27)
-
-    extract_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/extract_btn.png")
-    extract_btn_label = Label(image=extract_btn_img)
-    extract_btn_label.image = extract_btn_img
-    extract_btn = Button(
-        image = extract_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    extract_btn.place(
-        x = 38, y = 290,
-        width = 98,
-        height = 27)
-
-    split_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/split_btn.png")
-    split_btn_label = Label(image=split_btn_img)
-    split_btn_label.image = split_btn_img
-    split_btn = Button(
-        image = split_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    split_btn.place(
-        x = 38, y = 324,
-        width = 76,
-        height = 27)
-
-    merge_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/merge_btn.png")
-    merge_btn_label = Label(image=merge_btn_img)
-    merge_btn_label.image = merge_btn_img
-    merge_btn = Button(
-        image = merge_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    merge_btn.place(
-        x = 38, y = 358,
-        width = 94,
-        height = 27)
+    sidebar.load_sidebar(window)
 
     send_bug_report_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/send_bug_report_btn.png")
     send_bug_report_btn_label = Label(image=send_bug_report_btn_img)
