@@ -1,14 +1,21 @@
 from tkinter import *
-from app import home, encryptpdf
+from app import home, encryptpdf, decryptpdf
 import os
 
 def load_sidebar(window):
+    # Router guard 
+    def route_frame(location):
+        # Guard before going to the next frame
 
-    def route_home():
-        home.load_home(window)
+        # Route paths
+        if location == "home":
+            home.load_home(window)
 
-    def route_encypt_pdf():
-        encryptpdf.load_encrypt_pdf(window)
+        if location == "encryptpdf":
+            encryptpdf.load_encrypt_pdf(window)
+
+        if location == "decryptpdf":
+            decryptpdf.load_decrypt_pdf(window)
 
     def btn_clicked():
         pass
@@ -30,7 +37,7 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = route_home,
+        command = lambda: route_frame("home"),
         relief = "flat")
 
     home_btn.place(
@@ -47,7 +54,7 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = route_encypt_pdf,
+        command = lambda: route_frame("encryptpdf"),
         relief = "flat")
 
     encrypt_btn.place(
@@ -64,7 +71,7 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = btn_clicked,
+        command = lambda: route_frame("decryptpdf"),
         relief = "flat")
 
     decrypt_btn.place(

@@ -2,9 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
 from app import home, sidebar
-from app.utility import center, execute_query
 import os, shutil
-from app import store
 from app.store import state, states
 from app.functionality import encrypt, validate
 from pathlib import Path

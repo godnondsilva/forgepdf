@@ -9,9 +9,49 @@ from app.functionality import weather, thought
 from app.utility import execute_query_fetch_all
 import datetime, os
 
+import threading
 
 def load_home(window):
     #Button Functions
+    class WeatherThread(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+    
+            # helper function to execute the threads
+        def run(self):
+            weatherData = weather.get_weather(state.get_state(states.LOCATION))
+            if 'error' in weatherData:
+                showerror('Error', weatherData['error'])
+            # Description text
+            description_entry.insert(0, "Feels like " + str(int(weatherData['temp'])) + "°C. " + weatherData['main'].capitalize() + ". " + str(weatherData['description']).capitalize())
+            description_entry.bind("<Key>", lambda e: "break")
+
+            # Temperature text
+            temperature_entry.insert(0, str(int(weatherData['temp'])) + "°C")
+            temperature_entry.bind("<Key>", lambda e: "break")
+
+            # Humidity text
+            humidity_entry.insert(0, "Humidity: " + str(int(weatherData['temp'])) + "%")
+            humidity_entry.bind("<Key>", lambda e: "break")
+
+            # Wind text
+            wind_entry.insert(0, "Wind: " + str(int(weatherData['temp'])) + "km/hr")
+            wind_entry.bind("<Key>", lambda e: "break")
+
+            # Pressure text
+            pressure_entry.insert(0, "Pressure: " + str(int(weatherData['temp'])) + "Pa")
+            pressure_entry.bind("<Key>", lambda e: "break")
+
+    class ThoughtThread(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+         # helper function to execute the threads
+        def run(self):
+            thought_text_value = thought.get_thought()
+            thought_text.delete(1.0, END)
+            thought_text.insert(END, thought_text_value)
+            thought_text.config(state=DISABLED)
+
     def logout():
         # Reset the state
         state.reset_state()
@@ -323,14 +363,13 @@ def load_home(window):
 
     # Configuration
     # Weather API call
-    weatherData = weather.get_weather(state.get_state(states.LOCATION))
-    if 'error' in weatherData:
-        showerror('Error', weatherData['error'])
+    weather_thread = WeatherThread()
+    weather_thread.start()
 
     # Thought text
-    thought_text_value = thought.get_thought()
-    thought_text.insert(END, thought_text_value)
-    thought_text.config(state=DISABLED)
+    thought_text.insert(END, "Loading...")
+    thought_thread = ThoughtThread()
+    thought_thread.start()
 
     # Name text
     name_text_value = state.get_state(states.USERNAME)
@@ -346,27 +385,6 @@ def load_home(window):
     # Location text
     location_entry.insert(0, "Mangalore")
     location_entry.bind("<Key>", lambda e: "break")
-
-    # Description text
-    description_entry.insert(0, "Feels like " + str(int(weatherData['temp'])) + "°C. " + weatherData['main'].capitalize() + ". " + str(weatherData['description']).capitalize())
-    description_entry.bind("<Key>", lambda e: "break")
-
-    # Temperature text
-    temperature_entry.insert(0, str(int(weatherData['temp'])) + "°C")
-    temperature_entry.bind("<Key>", lambda e: "break")
-
-    # Humidity text
-    humidity_entry.insert(0, "Humidity: " + str(int(weatherData['temp'])) + "%")
-    humidity_entry.bind("<Key>", lambda e: "break")
-
-    # Wind text
-    wind_entry.insert(0, "Wind: " + str(int(weatherData['temp'])) + "km/hr")
-    wind_entry.bind("<Key>", lambda e: "break")
-
-    # Pressure text
-    pressure_entry.insert(0, "Pressure: " + str(int(weatherData['temp'])) + "Pa")
-    pressure_entry.bind("<Key>", lambda e: "break")
-
 
 
     # # creating a mysql connection

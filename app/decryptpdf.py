@@ -1,258 +1,182 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
-from app import home
-from app.store import state
+from app import home, sidebar
+from app.store import state, states
 from app.functionality import decrypt, validate
-from app.utility import center, execute_query
 import os, shutil
+from pathlib import Path
 
-class decryptWindow():
-    def __init__(self):
-        #Window Config
-        window = Tk()
-        window.geometry("1280x720")
-        window.title('ForgePDF | Decrypt PDF')
-        center(window)
-        window.configure(bg = "#0b132b")
-        
-        # variable to store the pdf to decrypt
-        self.pdfToDecrypt = ''
+def load_decrypt_pdf(window):
+    #Canvas Config
+    canvas = Canvas(
+        window,
+        bg = "#111111",
+        height = 720,
+        width = 1280,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge")
+    canvas.place(x = 0, y = 0)
 
-        #Button Functions
-        def toHomePage():
-            # destroy the current window instance (LogInWindow)
-            window.destroy()
-            # call the login up window class
+    sidebar.load_sidebar(window)
+
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/background.png")
+    background_label = Label(image=background_img)
+    background_label.image = background_img
+    background = canvas.create_image(
+        805.5, 242.0,
+        image=background_img)
+
+
+    cancel_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/cancel_btn.png")
+    cancel_btn_label = Label(image=cancel_btn_img)
+    cancel_btn_label.image = cancel_btn_img
+    cancel_btn = Button(
+        image = cancel_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        # command = btn_clicked,
+        relief = "flat")
+
+    cancel_btn.place(
+        x = 940, y = 658,
+        width = 160,
+        height = 49)
+
+    
+    selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/selected_pdf_btn.png")
+    selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+    selected_pdf_btn_label.image = selected_pdf_btn_image
+    selected_pdf_btn = Button(
+        image = selected_pdf_btn_image,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        # command = get_pdf,
+        relief = "flat")
+
+
+    selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/selected_pdf_entry.png")
+    selected_pdf_bg = canvas.create_image(
+        1151.5, 381.5,
+        image = selected_pdf_entry_img)
+
+    selected_pdf_entry = Entry(
+        bd = 0,
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
+
+    selected_pdf_entry.bind("<Key>", lambda e: "break")
+
+    def get_pdf():
+        if state.get_state(states.SELECTED_PDF) != '':
+            showwarning("Error" , "You can encrypt only one pdf at a time")
+            return
+        pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
+        filename = os.path.basename(pdf_path)
+        if len(pdf_path) == 0:
+            showwarning("Error" , "Please select a PDF file")
+            return
+        show_preview_pdf(filename, pdf_path)
+
+    def decrypt_pdf():
+        password = decrypt_password_entry.get().strip()
+        try:
+            condition = validate.validate_encrypt(password)
+            if condition != True:
+                showwarning('Error', condition['error'])
+            else:
+                decrypt.decrypt(state.get_state(states.SELECTED_PDF), password)
+                move_to_downloads()
+                showwarning('Success', 'PDF encrypted successfully')
+        except:
+            showerror("Error" , "An error has occurred")
             home.HomeWindow()
 
-        #gets the pdf to decrypt
-        def getPdf():
-            if self.pdfToDecrypt != '':
-                showwarning("Error" , "You can decrypt only one pdf at a time")
-                return
-            #gets attachement from user
-            attachmentPathvar = filedialog.askopenfilename(initialdir= "D:\\Users\\ashis\\Desktop", title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
-            filename = os.path.basename(attachmentPathvar)
-            if len(attachmentPathvar) == 0:
-                showwarning("Error" , "Please select a pdf file")
-                return
-            #adds the value in the textbox and displays it
-            PDFTextBoxEntry.insert('0' , filename)
-            PDFTextBoxEntry.bind("<Key>", lambda e: "break")
-            self.pdfToDecrypt = attachmentPathvar
-            showDecryptPdf()
 
+    def move_to_downloads():
+        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
+        new_name = 'forgepdf' + '1' + '.pdf'
+        shutil.move('encrypted.pdf', path_to_download_folder+new_name)
 
-        # function to decrypt the pdf
-        def DecryptPdf():
-            # getting the password 
-            password = PasswordEntry.get()
-            # stripping the password and storing it in a variable
-            new_password = password.strip()
-            # exception handling 
-            try:
-                condition = validate.validate_decrypt(new_password)
-                if condition != True:
-                    showwarning('Error', condition['error'])
-                else:
-                    condition,message = decrypt.decrypt(self.pdfToDecrypt, new_password)
-                    if condition == False:
-                        showwarning("Error", message)
-                        if message == 'This pdf is NOT Encrypted!':
-                            window.destroy()
-                            home.HomeWindow()
-                        return 
-                    showPdfDecryptMessage()
-                    MoveToFolder()
-            except Exception as e:
-                print(e)
-                showerror("Error" , "An error has occurred!")
-                window.destroy()
-                home.HomeWindow()
+        # store.IncrementCount()
 
-        #Moves the files to a specific directory and copies to desktop
-        def MoveToFolder():
-            #increment the count of the pdf to prevent overwriting
-            state.IncrementCount()
-            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\DecryptPdf' + str(state.getCount()+1) + '.pdf'
-            shutil.move('decrypted.pdf' , add)
-            shutil.copy(add , 'C:\\Users\\User\\Desktop')
-            
-            #converts the address to form that can be saved in the database
-            newAdd = state.ConvertAddress(add)
-            saveToDB(newAdd)
+        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
         
-        #Store the value in database
-        def saveToDB(add):
-            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(state.getUID()) + "')")
+        #converts the address to form that can be saved in the database
+        # newAdd = store.ConvertAddress(add)
+        # saveToDB(newAdd)
+    
+    #Store the value in database
+    # def saveToDB(add):
+    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
 
-       
-        #shows the selected pdf along with the name
-        def showDecryptPdf():
-            PDFTextBoxEntry.pack()
+    
+    def show_preview_pdf(filename, pdf_path):
+        selected_pdf_entry.insert('0' , filename)
+        state.set_state(states.SELECTED_PDF, pdf_path)
+        selected_pdf_btn.place(
+            x = 1082, y = 248,
+            width = 137,
+            height = 159)
+        selected_pdf_entry.place(
+            x = 1101, y = 374,
+            width = 101,
+            height = 13)
 
-            PDFTextBoxEntry.place(
-            x = 100, y = 600,
-            width = 800,
-            height = 87)
+    choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/choose_file_btn.png")
+    choose_file_btn_label = Label(image=choose_file_btn_img)
+    choose_file_btn_label.image = choose_file_btn_img
+    choose_file_btn = Button(
+        image = choose_file_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = get_pdf,
+        relief = "flat")
 
-            PdfImageIcon.pack()
+    choose_file_btn.place(
+        x = 333, y = 214,
+        width = 314,
+        height = 75)
 
-            PdfImageIcon.place(
-            x = 100, y = 525,
-            width = 800,
-            height = 87)
+    decrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/decrypt_btn.png")
+    decrypt_btn_label = Label(image=decrypt_btn_img)
+    decrypt_btn_label.image = decrypt_btn_img
+    decrypt_btn = Button(
+        image = decrypt_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = decrypt_pdf,
+        relief = "flat")
 
+    decrypt_btn.place(
+        x = 1126, y = 658,
+        width = 158,
+        height = 49)
 
-        #shows the message that pdf is encypted
-        def showPdfDecryptMessage():
-            DecryptPdfSubmitButton.pack_forget()
-            PdfDecryptLabel.pack()
+    decrypt_password_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/decrypt_password_entry.png")
+    decrypt_password_entry_bg = canvas.create_image(
+        491.0, 422.5,
+        image = decrypt_password_entry_img)
 
-            PdfDecryptLabel.place(
-            x = 1012, y = 604,
-            width = 230,
-            height = 46)
+    decrypt_password_entry = Entry(
+        bd = 0,
+        bg = "#333333",
+        highlightthickness = 0)
 
-
-        #Canvas Config
-        canvas = Canvas(
-            window,
-            bg = "#0b132b",
-            height = 720,
-            width = 1280,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge")
-        canvas.place(x = 0, y = 0)
-
-
-        #DecryptPdf  background Config
-        decryptpdfBGImage = PhotoImage(file =  f"./images/decryptpdf/decryptpdfBG.png")
-        decryptpdfBG = canvas.create_image(
-            640.0, 360.0,
-            image=decryptpdfBGImage)
-
-
-        #ChooseFile BG
-        ChooseFileImage = PhotoImage(file = f"./images/decryptpdf/ChooseFile.png")
-        ChooseFileButton = Button(
-            image = ChooseFileImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            activebackground="#0B132B",
-            command = getPdf,
-            relief = "flat")
-
-        ChooseFileButton.place(
-            x = 243, y = 344,
-            width = 536,
-            height = 100)
-
-
-        #BackButton Config
-        BackButtonImage = PhotoImage(file = f"./images/decryptpdf/BackButton.png")
-        BackButton = Button(
-            image = BackButtonImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            activebackground="#1C2541",
-            command = toHomePage,
-            relief = "flat")
-
-        BackButton.place(
-            x = 17, y = 21,
-            width = 139,
-            height = 58)
-
-
-        #Decrypt pdf button config
-        DecryptPdfImage = PhotoImage(file = f"./images/decryptpdf/Decrypt.png")
-        DecryptPdfSubmitButton = Button(
-            image = DecryptPdfImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            activebackground="#1C2541",
-            command = DecryptPdf,
-            relief = "flat")
-
-        DecryptPdfSubmitButton.place(
-            x = 1022, y = 604,
-            width = 206,
-            height = 46)
-
-
-        #Ending Range Entry Config
-        passwordEntryImage = PhotoImage(file = f"./images/decryptpdf/TextBox.png")
-        PasswordEntryCanvasImage = canvas.create_image(
-            1124.0, 443.0,
-            image = passwordEntryImage)
-
-        PasswordEntry = Entry(
-            bd = 0,
-            bg = "#0b132b",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#5BC0BE",
-            highlightthickness = 0)
-
-        PasswordEntry.place(
-            x = 987, y = 410,
-            width = 274,
-            height = 66)
-
-        
-        #PdfTextBox
-        PDFTextBoxImage = PhotoImage(file = f"./images/decryptpdf/TextboxBG.png")
-        PDFTextBox = canvas.create_image(
-            1124.5, 605.5,
-            image = PDFTextBoxImage)
-
-        PDFTextBoxEntry = Entry(
-            bd = 0,
-            bg = "#0B132B",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#0B132B",
-            highlightthickness = 0)
-
-        PDFTextBoxEntry.pack()
-        PDFTextBoxEntry.pack_forget()
-
-
-        #PdfMerged Message
-        PdfDecryptImage = PhotoImage(file = f"./images/decryptpdf/Decrypted.png")
-        PdfDecryptLabel = Label(
-            image = PdfDecryptImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            relief = "flat")
-
-        PdfDecryptLabel.pack()
-        PdfDecryptLabel.pack_forget()
-
-
-        #PdfImage Config
-        PdfImage = PhotoImage(file = f"./images/decryptpdf/pdfImage.png")
-        PdfImageIcon = Label(
-            image = PdfImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            relief = "flat")
-
-        PdfImageIcon.pack()
-        PdfImageIcon.pack_forget()
-
-        # additional window config
-        window.resizable(False, False)
-        window.iconbitmap('images/logo.ico')
-        window.deiconify()
-        window.mainloop()
+    decrypt_password_entry.place(
+        x = 335, y = 404,
+        width = 312,
+        height = 35)
