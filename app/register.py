@@ -1,17 +1,12 @@
 from tkinter import *
 from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
-from app import login
+from app.functionality import routing
 from app.functionality import validate
 from app.utility import execute_query, execute_query_fetch_one
 import os
 
 def load_register(window):
-        # Button functions
-    def route_login():
-        # call the load_login function to swap the frame to login screen
-        login.load_login(window)
-
     def submit_details():
         try:
             # storing the values from the entry fields
@@ -74,7 +69,7 @@ def load_register(window):
         highlightthickness = 0,
         background="#111111",
         activebackground="#111111",
-        command = route_login,
+        command = lambda: routing.route_frame(window, "login"),
         relief = "flat")
 
     login_btn.place(

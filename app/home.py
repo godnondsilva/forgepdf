@@ -11,6 +11,8 @@ import datetime, os
 
 import threading
 
+from app.functionality import routing
+
 def load_home(window):
     #Button Functions
     class WeatherThread(threading.Thread):
@@ -56,7 +58,7 @@ def load_home(window):
         # Reset the state
         state.reset_state()
         # route to the login frame
-        login.load_login(window)
+        routing.route_frame(window, "login")
 
     # def route_decrypt_pdf():
     #     # call the decrypt pdf window class

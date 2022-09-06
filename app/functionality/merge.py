@@ -6,8 +6,8 @@ def merge(pdfList):
     if len(pdfList) == 0:
         return "Enter Atleast 2 pdf files"
     # checking whether more than 3 pdf files have entered
-    elif len(pdfList) > 3:
-        return "Maximum Of 3 Pdf Files Are Allowed"
+    elif len(pdfList) > 5:
+        return "Maximum Of 5 Pdf Files Are Allowed"
     # if above 2 condition is false continue with the following
     else:
         pdfWriter = PyPDF2.PdfFileWriter()

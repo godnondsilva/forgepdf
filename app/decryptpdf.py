@@ -21,6 +21,62 @@ def load_decrypt_pdf(window):
 
     sidebar.load_sidebar(window)
 
+    def get_pdf():
+        if state.get_state(states.SELECTED_PDF) != '':
+            showwarning("Error" , "You can decrypt only one pdf at a time")
+            return
+        pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
+        filename = os.path.basename(pdf_path)
+        if len(pdf_path) == 0:
+            showwarning("Error" , "Please select a PDF file")
+            return
+        show_preview_pdf(filename, pdf_path)
+
+    def decrypt_pdf():
+        password = decrypt_password_entry.get().strip()
+        try:
+            condition = validate.validate_decrypt(password)
+            if condition != True:
+                showwarning('Error', condition['error'])
+            else:
+                decrypt.decrypt(state.get_state(states.SELECTED_PDF), password)
+                move_to_downloads()
+                showwarning('Success', 'PDF decrypted successfully')
+        except:
+            showerror("Error" , "An error has occurred")
+            home.HomeWindow()
+
+
+    def move_to_downloads():
+        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
+        new_name = 'forgepdf' + '1' + '.pdf'
+        shutil.move('decrypted.pdf', path_to_download_folder+new_name)
+
+        # store.IncrementCount()
+
+        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
+        
+        #converts the address to form that can be saved in the database
+        # newAdd = store.ConvertAddress(add)
+        # saveToDB(newAdd)
+    
+    #Store the value in database
+    # def saveToDB(add):
+    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
+
+    
+    def show_preview_pdf(filename, pdf_path):
+        selected_pdf_entry.insert('0' , filename)
+        state.set_state(states.SELECTED_PDF, pdf_path)
+        selected_pdf_btn.place(
+            x = 1082, y = 248,
+            width = 137,
+            height = 159)
+        selected_pdf_entry.place(
+            x = 1101, y = 374,
+            width = 101,
+            height = 13)
+
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
@@ -75,62 +131,6 @@ def load_decrypt_pdf(window):
 
 
     selected_pdf_entry.bind("<Key>", lambda e: "break")
-
-    def get_pdf():
-        if state.get_state(states.SELECTED_PDF) != '':
-            showwarning("Error" , "You can encrypt only one pdf at a time")
-            return
-        pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
-        filename = os.path.basename(pdf_path)
-        if len(pdf_path) == 0:
-            showwarning("Error" , "Please select a PDF file")
-            return
-        show_preview_pdf(filename, pdf_path)
-
-    def decrypt_pdf():
-        password = decrypt_password_entry.get().strip()
-        try:
-            condition = validate.validate_encrypt(password)
-            if condition != True:
-                showwarning('Error', condition['error'])
-            else:
-                decrypt.decrypt(state.get_state(states.SELECTED_PDF), password)
-                move_to_downloads()
-                showwarning('Success', 'PDF encrypted successfully')
-        except:
-            showerror("Error" , "An error has occurred")
-            home.HomeWindow()
-
-
-    def move_to_downloads():
-        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
-        new_name = 'forgepdf' + '1' + '.pdf'
-        shutil.move('encrypted.pdf', path_to_download_folder+new_name)
-
-        # store.IncrementCount()
-
-        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
-        
-        #converts the address to form that can be saved in the database
-        # newAdd = store.ConvertAddress(add)
-        # saveToDB(newAdd)
-    
-    #Store the value in database
-    # def saveToDB(add):
-    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
-
-    
-    def show_preview_pdf(filename, pdf_path):
-        selected_pdf_entry.insert('0' , filename)
-        state.set_state(states.SELECTED_PDF, pdf_path)
-        selected_pdf_btn.place(
-            x = 1082, y = 248,
-            width = 137,
-            height = 159)
-        selected_pdf_entry.place(
-            x = 1101, y = 374,
-            width = 101,
-            height = 13)
 
     choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/choose_file_btn.png")
     choose_file_btn_label = Label(image=choose_file_btn_img)

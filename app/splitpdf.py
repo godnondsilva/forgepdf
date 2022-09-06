@@ -2,303 +2,210 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
 from app.functionality import split, validate
-from app import login
-from app import home
-from app import store
+from app import home, sidebar
+from app.store import state, states
 import os, shutil
-from app.utility import center, execute_query
+from pathlib import Path
 
-class SplitPdfWIndow():
-    def __init__(self):
-        #Window Config
-        window = Tk()
-        window.geometry("1280x720")
-        window.title('ForgePDF | Split PDF')
-        center(window)
-        window.configure(bg = "#0b132b")
+def load_split_pdf(window):
+    #Canvas Config
+    canvas = Canvas(
+        window,
+        bg = "#111111",
+        height = 720,
+        width = 1280,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge")
+    canvas.place(x = 0, y = 0)
+    
+    sidebar.load_sidebar(window)
 
-        #Variable to hold the address of the pdf to be split
-        PdfToSplit = []
+    def get_pdf():
+        if state.get_state(states.SELECTED_PDF) != '':
+            showwarning("Error" , "You can decrypt only one pdf at a time")
+            return
+        pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
+        filename = os.path.basename(pdf_path)
+        if len(pdf_path) == 0:
+            showwarning("Error" , "Please select a PDF file")
+            return
+        show_preview_pdf(filename, pdf_path)
 
-        #Button Functions
-        def toHomePage():
-            #makes the selectpdf false so that we can start fresh
-            store.NotSelectPdfBool()
-            # destroy the current window instance (LogInWindow)
-            window.destroy()
-            # call the login up window class
-            home.HomeWindow()
-        
+    #checks the condition and splits the pdf
+    def split_pdf():
+        try:
+            start_range = starting_range_entry.get()
+            end_range = ending_range_entry.get()
+            print(start_range)
+                
+            condition = validate.validate_split(start_range, end_range)
+            print(condition)
+            if condition != True:
+                showwarning('Error', condition['error'])
+            else:
+                
+                start_range_integer = int(start_range)
+                end_range_integer = int(end_range)
 
-        #gets the pdf the split
-        def getPdf():
-            if len(PdfToSplit) != 0:
-                showwarning("Error" , "You can split only one pdf at a time")
-                return
-
-            #gets attachement from user
-            attachmentPathvar = filedialog.askopenfilename(initialdir= "D:\\Users\\ashis\\Desktop", title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
-            filename = os.path.basename(attachmentPathvar)
-
-            if len(attachmentPathvar) == 0:
-                showwarning("Error" , "Please select a pdf file")
-                return
-            
-            #stores attachement in list
-            PdfToSplit.append(attachmentPathvar)
-
-            #adds the value in the textbox and displays it
-            PDFTextBoxEntry.insert('0' , filename)
-            PDFTextBoxEntry.bind("<Key>", lambda e: "break")
-            showSplitPdf()
-
-
-        #checks the condition and splits the pdf
-        def SplitPdf():
-            try:
-                startRange = StartingRange.get()
-                endRange = EndingRange.get()
-                print(startRange)
-                    
-                condition = validate.validate_split(startRange, endRange)
-                print(condition)
-                if condition != True:
-                    showwarning('Error', condition['error'])
+                #checking if we got exception in page ranges
+                condition = split.spliter(start_range_integer, end_range_integer, state.get_state(states.SELECTED_PDF))
+                if condition == False:
+                    showwarning("Error" , "Please add the pages numbers within the range of the pdf.")
+                    return
                 else:
-                   
-                    startRan = int(startRange)
-                    endRan = int(endRange)
+                    #Move the file to specific folder and move one copy to desktop
+                    showinfo("Success" , "The pdf has been split successfully.")
+                    move_to_downloads()
 
-                    #checking if we got exception in page ranges
-                    condition = split.spliter(startRan , endRan , PdfToSplit[0])
-                    if condition == False:
-                        showwarning("Error" , "Please add the pages numbers within the range of the pdf.")
-                        return
-                    else:    
-                        showPdfSplitMessage()
-                        
-                        #Move the file to specific folder and move one copy to desktop
-                        MoveToFolder()
-            except Exception as e:
-                print(e)
-                showwarning("ERROR" , "An error has occurred!")
-                window.destroy()
-                home.HomeWindow()
+        except Exception as e:
+            print(e)
+            showwarning("ERROR" , "An error has occurred!")
 
-        #Moves the files to a specific directory and copies to desktop
-        def MoveToFolder():
+    def move_to_downloads():
+        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
+        new_name = 'forgepdf' + '1' + '.pdf'
+        shutil.move('output.pdf', path_to_download_folder+new_name)
 
-            #increment the count of the pdf to prevent overwriting
-            store.IncrementCount()
-            add = 'C:\\Users\\User\\Downloads\\ForgePdf\\SplitPdf' + str(store.getCount()+1) + '.pdf'
-            shutil.move('output.pdf' , add)
-            shutil.copy(add , 'C:\\Users\\User\\Desktop')
-            
-            #converts the address to form that can be saved in the database
-            newAdd = store.ConvertAddress(add)
-            saveToDB(newAdd)
+        # store.IncrementCount()
+
+        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
         
-        #Store the value in database
-        def saveToDB(add):
-            execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")  
+        #converts the address to form that can be saved in the database
+        # newAdd = store.ConvertAddress(add)
+        # saveToDB(newAdd)
+    
+    #Store the value in database
+    # def saveToDB(add):
+    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
 
-       
-        #shows the selected pdf along with the name
-        def showSplitPdf():
-            PDFTextBoxEntry.pack()
+    
+    def show_preview_pdf(filename, pdf_path):
+        selected_pdf_entry.insert('0' , filename)
+        state.set_state(states.SELECTED_PDF, pdf_path)
+        selected_pdf_btn.place(
+            x = 1082, y = 248,
+            width = 137,
+            height = 159)
+        selected_pdf_entry.place(
+            x = 1101, y = 374,
+            width = 101,
+            height = 13)
+    
 
-            PDFTextBoxEntry.place(
-            x = 100, y = 600,
-            width = 800,
-            height = 87)
+    #Store the value in database
+    # def saveToDB(add):
+    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")  
 
-            PdfImageIcon.pack()
+    
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/background.png")
+    background_label = Label(image=background_img)
+    background_label.image = background_img
+    background = canvas.create_image(
+        683.0, 384.0,
+        image=background_img)
 
-            PdfImageIcon.place(
-            x = 100, y = 525,
-            width = 800,
-            height = 87)
+    cancel_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/cancel_btn.png")
+    cancel_btn_label = Label(image=cancel_btn_img)
+    cancel_btn_label.image = cancel_btn_img
+    cancel_btn = Button(
+        image = cancel_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        # command = btn_clicked,
+        relief = "flat")
 
-            #if case we have routed from options page , then make neccessary arrangments
-            if store.GetselectedPdfBool() == True:
-                PDFTextBoxEntry.insert('0' , os.path.basename(store.getSelectPdf()))
-                PDFTextBoxEntry.bind("<Key>", lambda e: "break")
+    cancel_btn.place(
+        x = 940, y = 658,
+        width = 160,
+        height = 49)
 
-                PdfToSplit.append(store.getSelectPdf())
+    choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/choose_file_btn.png")
+    choose_file_btn_label = Label(image=choose_file_btn_img)
+    choose_file_btn_label.image = choose_file_btn_img
+    choose_file_btn = Button(
+        image = choose_file_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = get_pdf,
+        relief = "flat")
 
+    choose_file_btn.place(
+        x = 333, y = 214,
+        width = 314,
+        height = 75)
 
-        #shows the message that pdf is split
-        def showPdfSplitMessage():
-            SplitPdfSubmitButton.pack_forget()
-            PdfSplitLabel.pack()
+    split_pdf_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/split_pdf_btn.png")
+    split_pdf_btn_label = Label(image=split_pdf_btn_img)
+    split_pdf_btn_label.image = split_pdf_btn_img
+    split_pdf_btn = Button(
+        image = split_pdf_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = split_pdf,
+        relief = "flat")
 
-            PdfSplitLabel.place(
-            x = 1022, y = 604,
-            width = 206,
-            height = 46)
+    split_pdf_btn.place(
+        x = 1126, y = 658,
+        width = 158,
+        height = 49)
 
+    selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/selected_pdf_btn.png")
+    selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+    selected_pdf_btn_label.image = selected_pdf_btn_image
+    selected_pdf_btn = Button(
+        image = selected_pdf_btn_image,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        relief = "flat")
 
-        #Canvas Config
-        canvas = Canvas(
-            window,
-            bg = "#0b132b",
-            height = 720,
-            width = 1280,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge")
-        canvas.place(x = 0, y = 0)
+    selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/selected_pdf_entry.png")
+    selected_pdf_bg = canvas.create_image(
+        1151.5, 381.5,
+        image = selected_pdf_entry_img)
 
+    selected_pdf_entry = Entry(
+        bd = 0,
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
 
-        #SplitPdf  background Config
-        splitpdfBGImage = PhotoImage(file =  f"./images/splitpdf/splitpdfBG.png")
-        splitpdfBG = canvas.create_image(
-            640.0, 360.0,
-            image=splitpdfBGImage)
+    starting_range_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/starting_range_entry.png")
+    starting_range_entry_bg = canvas.create_image(
+        508.5, 423.5,
+        image = starting_range_entry_img)
 
+    starting_range_entry = Entry(
+        bd = 0,
+        bg = "#333333",
+        highlightthickness = 0)
 
-        #ChooseFile BG
-        ChooseFileImage = PhotoImage(file = f"./images/splitpdf/ChooseFile.png")
-        ChooseFileButton = Button(
-            image = ChooseFileImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            activebackground="#0B132B",
-            command = getPdf,
-            relief = "flat")
+    starting_range_entry.place(
+        x = 471, y = 405,
+        width = 75,
+        height = 35)
 
-        ChooseFileButton.place(
-            x = 243, y = 344,
-            width = 536,
-            height = 100)
+    ending_range_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/ending_range_entry.png")
+    ending_range_entry_bg = canvas.create_image(
+        508.5, 480.5,
+        image = ending_range_entry_img)
 
+    ending_range_entry = Entry(
+        bd = 0,
+        bg = "#333333",
+        highlightthickness = 0)
 
-        #BackButton Config
-        BackButtonImage = PhotoImage(file = f"./images/splitpdf/BackButton.png")
-        BackButton = Button(
-            image = BackButtonImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            activebackground="#1C2541",
-            command = toHomePage,
-            relief = "flat")
-
-        BackButton.place(
-            x = 17, y = 21,
-            width = 139,
-            height = 58)
-
-
-        #Split pdf button config
-        SplitPdfImage = PhotoImage(file = f"./images/splitpdf/SplitPdf.png")
-        SplitPdfSubmitButton = Button(
-            image = SplitPdfImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            activebackground="#1C2541",
-            command = SplitPdf,
-            relief = "flat")
-
-        SplitPdfSubmitButton.place(
-            x = 1022, y = 604,
-            width = 206,
-            height = 46)
-
-
-        #Starting Range Entry Config
-        StartingRangeEntryImage = PhotoImage(file = f"./images/splitpdf/TextBox1.png")
-        StartingRangeEntryButton = canvas.create_image(
-            1124.5, 337.0,
-            image = StartingRangeEntryImage)
-
-        StartingRange = Entry(
-            bd = 0,
-            bg = "#0b132b",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#5BC0BE",
-            highlightthickness = 0)
-
-        StartingRange.place(
-            x = 1033, y = 304,
-            width = 183,
-            height = 64)
-
-        #Ending Range Entry Config
-        EndingRangeEntryImage = PhotoImage(file = f"./images/splitpdf/TextBox2.png")
-        EndingRangeEntry = canvas.create_image(
-            1122.5, 487.0,
-            image = EndingRangeEntryImage)
-
-        EndingRange = Entry(
-            bd = 0,
-            bg = "#0b132b",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#5BC0BE",
-            highlightthickness = 0)
-
-        EndingRange.place(
-            x = 1031, y = 454,
-            width = 183,
-            height = 64)
-
-        
-        #PdfTextBox
-        PDFTextBoxImage = PhotoImage(file = f"./images/splitpdf/TextBoxBG.png")
-        PDFTextBox = canvas.create_image(
-            1124.5, 605.5,
-            image = PDFTextBoxImage)
-
-        PDFTextBoxEntry = Entry(
-            bd = 0,
-            bg = "#0B132B",
-            font = 20,
-            fg= "#5BC0BE",
-            justify=CENTER,
-            insertbackground= "#0B132B",
-            highlightthickness = 0)
-
-        PDFTextBoxEntry.pack()
-        PDFTextBoxEntry.pack_forget()
-
-
-        #PdfMerged Message
-        PdfSplitImage = PhotoImage(file = f"./images/splitpdf/PdfSplit.png")
-        PdfSplitLabel = Label(
-            image = PdfSplitImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#1C2541",
-            relief = "flat")
-
-        PdfSplitLabel.pack()
-        PdfSplitLabel.pack_forget()
-
-
-        #PdfImage Config
-        PdfImage = PhotoImage(file = f"./images/splitpdf/pdfImage.png")
-        PdfImageIcon = Label(
-            image = PdfImage,
-            borderwidth = 0,
-            highlightthickness = 0,
-            background="#0B132B",
-            relief = "flat")
-
-        PdfImageIcon.pack()
-        PdfImageIcon.pack_forget()
-
-        #if we have routed from options page then set the pdf to be split
-        if store.GetselectedPdfBool() == True:
-            showSplitPdf()
-
-        # additional window config
-        window.resizable(False, False)
-        window.iconbitmap('images/logo.ico')
-        window.deiconify()
-        window.mainloop()
+    ending_range_entry.place(
+        x = 471, y = 462,
+        width = 75,
+        height = 35)

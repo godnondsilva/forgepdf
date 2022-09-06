@@ -1,4 +1,4 @@
-import PyPDF2,os.path   
+import PyPDF2
 
 # funtion to split pdf file into multiple pdf files
 def spliter(start,end, file):

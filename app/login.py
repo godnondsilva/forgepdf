@@ -1,17 +1,14 @@
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning, showerror
+from app.functionality import routing
 
-from app import register, home
 from app.functionality import validate
 from app.store import state, states
 from app.utility import execute_query_fetch_one
 import os
 
+
 def load_login(window):
-     # Button functions 
-    def route_register():
-        # call the load_register function to swap the frame to register screen
-        register.load_register(window)
 
     def submit_details():
         try:
@@ -39,7 +36,7 @@ def load_login(window):
                     state.set_state(states.UID, result[2])
                     state.set_state(states.USERNAME, result[0])
                     # call the Home window class
-                    home.load_home(window)
+                    routing.route_frame(window, "home")
         except Exception as e:
             print(e)
             showerror('Error', 'An error has occurred.')
@@ -134,7 +131,7 @@ def load_login(window):
         highlightthickness = 0,
         background="#111111",
         activebackground="#111111",
-        command = route_register,
+        command = lambda: routing.route_frame(window, "register"),
         relief = "flat")
 
     register_btn.place(

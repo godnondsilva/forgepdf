@@ -7,7 +7,8 @@ class GlobalState:
             'selected_pdf': '',
             'count': 0,
             'location': 'mangalore',
-            'selected_pdf': ''
+            'selected_pdf': '',
+            'current_frame': ''
         }
 
     def get_state(self, key):
@@ -23,7 +24,8 @@ class GlobalState:
             'email': '',
             'count': 0,
             'location': 'mangalore',
-            'selected_pdf': ''
+            'selected_pdf': '',
+            'current_frame': ''
         }
 
 class States:
@@ -34,6 +36,7 @@ class States:
         self.COUNT = 'count'
         self.LOCATION = 'location'
         self.SELECTED_PDF = 'selected_pdf'
+        self.CURRENT_FRAME = 'current_frame'
     
 state = GlobalState()
 states = States()

@@ -1,21 +1,12 @@
 from tkinter import *
-from app import home, encryptpdf, decryptpdf
+from app.store import state, states
+from app.functionality import routing
 import os
 
 def load_sidebar(window):
     # Router guard 
-    def route_frame(location):
-        # Guard before going to the next frame
-
-        # Route paths
-        if location == "home":
-            home.load_home(window)
-
-        if location == "encryptpdf":
-            encryptpdf.load_encrypt_pdf(window)
-
-        if location == "decryptpdf":
-            decryptpdf.load_decrypt_pdf(window)
+    # Reset selected pdf when changing the frame
+    state.set_state(states.SELECTED_PDF, '')
 
     def btn_clicked():
         pass
@@ -37,7 +28,7 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = lambda: route_frame("home"),
+        command = lambda: routing.route_frame(window, "home"),
         relief = "flat")
 
     home_btn.place(
@@ -54,7 +45,7 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = lambda: route_frame("encryptpdf"),
+        command = lambda: routing.route_frame(window, "encryptpdf"),
         relief = "flat")
 
     encrypt_btn.place(
@@ -71,46 +62,12 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = lambda: route_frame("decryptpdf"),
+        command = lambda: routing.route_frame(window, "decryptpdf"),
         relief = "flat")
 
     decrypt_btn.place(
         x = 48, y = 256,
         width = 108,
-        height = 27)
-
-    email_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/email_btn.png")
-    email_btn_label = Label(image=email_btn_img)
-    email_btn_label.image = email_btn_img
-    email_btn = Button(
-        image = email_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    email_btn.place(
-        x = 48, y = 290,
-        width = 86,
-        height = 27)
-
-    extract_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/extract_btn.png")
-    extract_btn_label = Label(image=extract_btn_img)
-    extract_btn_label.image = extract_btn_img
-    extract_btn = Button(
-        image = extract_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#333333",
-        activebackground="#333333",
-        command = btn_clicked,
-        relief = "flat")
-
-    extract_btn.place(
-        x = 48, y = 324,
-        width = 98,
         height = 27)
 
     split_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/split_btn.png")
@@ -122,7 +79,7 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = btn_clicked,
+        command = lambda: routing.route_frame(window, "splitpdf"),
         relief = "flat")
 
     split_btn.place(
