@@ -11,7 +11,7 @@ def merge(pdfList):
     # if above 2 condition is false continue with the following
     else:
         pdfWriter = PyPDF2.PdfFileWriter()
-        newFile = open("Merge.pdf", 'wb')
+        newFile = open("output.pdf", 'wb')
         for pdfCount in range(len(pdfList)):
             # checking whether the inputted files are only pdf
             if pdfList[pdfCount].endswith('.pdf') == False:

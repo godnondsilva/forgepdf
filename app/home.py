@@ -6,7 +6,6 @@ from app import login, encryptpdf, sidebar
 from app.store import state, states
 from app import store
 from app.functionality import weather, thought
-from app.utility import execute_query_fetch_all
 import datetime, os
 
 import threading
@@ -165,22 +164,22 @@ def load_home(window):
         width = 106,
         height = 21)
 
-    view_more_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/view_more_btn.png")
-    view_more_btn_label = Label(image=view_more_btn_img)
-    view_more_btn_label.image = view_more_btn_img
-    view_more_btn = Button(
-        image = view_more_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#111111",
-        activebackground="#111111",
-        command = btn_clicked,
-        relief = "flat")
-
-    view_more_btn.place(
-        x = 522, y = 471,
-        width = 145,
-        height = 28)
+    # Temporarily removed, maybe added back in later version
+    # view_more_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/view_more_btn.png")
+    # view_more_btn_label = Label(image=view_more_btn_img)
+    # view_more_btn_label.image = view_more_btn_img
+    # view_more_btn = Button(
+    #     image = view_more_btn_img,
+    #     borderwidth = 0,
+    #     highlightthickness = 0,
+    #     background="#111111",
+    #     activebackground="#111111",
+    #     command = btn_clicked,
+    #     relief = "flat")
+    # view_more_btn.place(
+    #     x = 522, y = 471,
+    #     width = 145,
+    #     height = 28)
 
     empty_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/empty.png")
     empty_label = Label(image = empty_img, bg = "#333333")

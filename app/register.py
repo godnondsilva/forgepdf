@@ -3,11 +3,10 @@ from tkinter.messagebox import showwarning, showerror, showinfo
 import mysql.connector
 from app.functionality import routing
 from app.functionality import validate
-from app.utility import execute_query, execute_query_fetch_one
-import os
+import os, requests, json
 
 def load_register(window):
-    def submit_details():
+    def submit():
         try:
             # storing the values from the entry fields
             name = name_entry.get()
@@ -20,23 +19,25 @@ def load_register(window):
             if condition != True:
                 showwarning('Error', condition['error'])
             else:
-                # Get the name and the password from the database
-                result = execute_query_fetch_one("select name, password from users where name='" + name + "'")            
-
-                if result == None:
-                    try:
-                        # Insert the new user into the database
-                        execute_query("insert into users (name, email, password) values('" + name + "','" + email + "','" + password + "')")
-                        # Display a success message
-                        showinfo('Successfull','You have successfully registered an account! Please login to continue!')
-                        # Call the load_login function
-                        login.load_login(window)
-                    except:
-                        showerror('Error', 'Could not create an account, please contact support')
-                # If the name already exists in the database
-                elif result != None:
-                    showwarning("Error" , "A user with this name already exist, please choose a new one!")
-        except:
+                # Insert the new user into the database
+                response = requests.post('http://localhost:5000/api/register', json={'name': name, 'email': email, 'password': password})
+                # throwing exception in case of api error
+                response.raise_for_status()
+                # converting the response from json to python dictionary
+                data = json.loads(response.text)
+                # checking if the user was created
+                if data['message'] == 'User created successfully.':
+                    showinfo('Success', 'User created successfully.')
+                    # clearing the entry fields
+                    name_entry.delete(0, END)
+                    email_entry.delete(0, END)
+                    password_entry.delete(0, END)
+                    # loading the login page
+                    routing.route_frame(window, 'login')
+                else:
+                    showerror('Error', 'An error has occurred.')
+        except Exception as e:
+            print(e)
             showerror('Error', 'An error has occurred.')
     
 
@@ -139,7 +140,7 @@ def load_register(window):
         image = register_img,
         borderwidth = 0,
         highlightthickness = 0,
-        command = submit_details,
+        command = submit,
         background="#111111",
         activebackground="#111111",
         relief = "flat")

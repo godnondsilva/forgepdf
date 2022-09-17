@@ -1,5 +1,5 @@
 from app.store import state, states
-from app import login, register, home, encryptpdf, decryptpdf, splitpdf
+from app import login, register, home, encryptpdf, decryptpdf, splitpdf, mergepdf
 
 def route_frame(window, location):
     # Guard before going to the next frame
@@ -30,3 +30,7 @@ def route_frame(window, location):
     if location == "splitpdf":
         state.set_state(states.CURRENT_FRAME, "splitpdf")
         splitpdf.load_split_pdf(window)
+
+    if location == "mergepdf":
+        state.set_state(states.CURRENT_FRAME, "mergepdf")
+        mergepdf.load_merge_pdf(window)

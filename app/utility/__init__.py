@@ -1,7 +1,5 @@
 # This file contains all the common functions used
 # across the application
-
-import mysql.connector
 import os
 import ctypes as ct
 
@@ -15,38 +13,6 @@ def center(window):
     x=(screen_width / 2) - (app_width/2)
     y=(screen_height / 2) - (app_height/2)
     window.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')
-
-# This exportable function is used to execute 
-# queries passed as a parameter
-def execute_query(query):
-    mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
-    mycursor=mydb.cursor()
-    mycursor.execute(query)
-    mydb.commit()
-    mycursor.close()
-    mydb.close()
-
-# This exportable function is used to execute
-# a query and return one row from the cursor
-def execute_query_fetch_one(query):
-    mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
-    mycursor=mydb.cursor()
-    mycursor.execute(query)
-    result=mycursor.fetchone()
-    mycursor.close()
-    mydb.close()
-    return result
-
-# This exportable function is used to execute
-# queries and return the all the rows from the cursor
-def execute_query_fetch_all(query):
-    mydb = mysql.connector.connect(host=os.getenv('HOST'),user=os.getenv('USER'),password=os.getenv('PASSWORD'),database="forgepdf")
-    mycursor=mydb.cursor()
-    mycursor.execute(query)
-    result=mycursor
-    # mycursor.close()
-    # mydb.close()
-    return mycursor
 
 # This exportable function is used to update the 
 # title bar to dark theme

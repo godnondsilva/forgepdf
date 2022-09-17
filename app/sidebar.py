@@ -8,9 +8,6 @@ def load_sidebar(window):
     # Reset selected pdf when changing the frame
     state.set_state(states.SELECTED_PDF, '')
 
-    def btn_clicked():
-        pass
-
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
@@ -32,7 +29,7 @@ def load_sidebar(window):
         relief = "flat")
 
     home_btn.place(
-        x = 48, y = 181,
+        x = 48, y = 180,
         width = 54,
         height = 27)
 
@@ -49,7 +46,7 @@ def load_sidebar(window):
         relief = "flat")
 
     encrypt_btn.place(
-        x = 48, y = 222,
+        x = 48, y = 215,
         width = 105,
         height = 27)
 
@@ -66,7 +63,7 @@ def load_sidebar(window):
         relief = "flat")
 
     decrypt_btn.place(
-        x = 48, y = 256,
+        x = 48, y = 250,
         width = 108,
         height = 27)
 
@@ -83,7 +80,7 @@ def load_sidebar(window):
         relief = "flat")
 
     split_btn.place(
-        x = 48, y = 358,
+        x = 48, y = 285,
         width = 76,
         height = 27)
 
@@ -96,10 +93,10 @@ def load_sidebar(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = btn_clicked,
+        command = lambda: routing.route_frame(window, "mergepdf"),
         relief = "flat")
 
     merge_btn.place(
-        x = 48, y = 388,
+        x = 48, y = 320,
         width = 94,
         height = 27)

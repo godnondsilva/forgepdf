@@ -27,23 +27,6 @@ def load_encrypt_pdf(window):
 
     sidebar.load_sidebar(window)
 
-    cancel_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/cancel_btn.png")
-    cancel_btn_label = Label(image=cancel_btn_img)
-    cancel_btn_label.image = cancel_btn_img
-    cancel_btn = Button(
-        image = cancel_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#111111",
-        activebackground="#111111",
-        # command = btn_clicked,
-        relief = "flat")
-
-    cancel_btn.place(
-        x = 940, y = 658,
-        width = 160,
-        height = 49)
-
     selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
     selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
     selected_pdf_btn_label.image = selected_pdf_btn_image

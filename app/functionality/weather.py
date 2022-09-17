@@ -7,14 +7,14 @@ def convert_to_celsius(kelvin):
 def get_weather(location):
     data = {}
     try:
-        url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={os.getenv("WEATHER_API_KEY")}'
+        # url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&appid={os.getenv("WEATHER_API_KEY")}'
+        url = f'http://localhost:5000/api/weather/{location}'
         # getting the content of the request
         response = requests.get(url)
         # throwing exception in case of api error
         response.raise_for_status()
-        # converting the response from json to python dictionary
-        weather_data = json.loads(response.text)
         # store all the data to send in a dictionary
+        weather_data = json.loads(response.text)
         data = {
             'temp': convert_to_celsius(weather_data['main']['temp']),
             'feels_like': convert_to_celsius(weather_data['main']['feels_like']),

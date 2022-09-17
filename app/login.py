@@ -4,48 +4,43 @@ from app.functionality import routing
 
 from app.functionality import validate
 from app.store import state, states
-from app.utility import execute_query_fetch_one
-import os
-
+import os, requests, json
 
 def load_login(window):
-
-    def submit_details():
+    def submit():
         try:
-            # storing the values from the entry fields
+            # Storing the values from the entry fields
             email = email_entry.get()
             password = password_entry.get();
             condition = validate.validate_login(email, password)
-            # if validation fails
+
+            # If validation fails
             if condition != True:
                 showwarning('Error', condition['error'])
             else:
                 # Get the name and the password from the database
-                result = execute_query_fetch_one("select name, password, user_id from users where email='" + email + "'")
-
-                # checking if the 'email' exists in the database
-                if result == None:
-                    showwarning('Error', 'Email not found.')
-                # checking if the 'password' matches the one in the database
-                elif password != result[1]:
-                    showwarning('Error', 'Invalid Password!.')
-                # else, successfull login
+                response = requests.post('http://localhost:5000/api/login', json={'email': email, 'password': password})
+                # throwing exception in case of api error
+                response.raise_for_status()
+                # converting the response from json to python dictionary
+                data = json.loads(response.text)
+                # checking if the user was created
+                if data['message'] == 'User logged in successfully.':
+                    # storing the user id in the state
+                    # state.set_state(states.UID, data['user_id'])
+                    # loading the dashboard page
+                    routing.route_frame(window, 'home')
                 else:
-                    showinfo('Successfull', 'You have successfully logged in!')
-                    # Set the UID and the name in the state variable
-                    state.set_state(states.UID, result[2])
-                    state.set_state(states.USERNAME, result[0])
-                    # call the Home window class
-                    routing.route_frame(window, "home")
+                    showerror('Error', 'An error has occurred.')
         except Exception as e:
             print(e)
             showerror('Error', 'An error has occurred.')
             
-    
+    # Creating the login frame    
     frame=Frame(window, width=1366, height=768, bg='#111111')
     frame.place(x=0, y=0)
 
-    # Creating a Canvas and setting its configuration
+    # Creating the canvas
     login_canvas = Canvas(
         window,
         bg = "#111111",
@@ -74,7 +69,7 @@ def load_login(window):
         highlightthickness = 0,
         background="#111111",
         activebackground="#111111",
-        command = submit_details,
+        command = submit,
         relief = "flat")
 
     login_btn.place(
@@ -87,7 +82,6 @@ def load_login(window):
     email_entry_bg = login_canvas.create_image(
         807.0, 429.5,
         image = email_entry_img)
-
     email_entry = Entry(
         bd = 0,
         font=16,
@@ -95,7 +89,6 @@ def load_login(window):
         bg = "#333333",
         insertbackground= "#eeeeee",
         highlightthickness = 0)
-
     email_entry.place(
         x = 641, y = 311,
         width = 331,

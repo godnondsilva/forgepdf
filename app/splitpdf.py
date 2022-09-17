@@ -59,7 +59,6 @@ def load_split_pdf(window):
                     move_to_downloads()
 
         except Exception as e:
-            print(e)
             showwarning("ERROR" , "An error has occurred!")
 
     def move_to_downloads():
@@ -104,23 +103,6 @@ def load_split_pdf(window):
     background = canvas.create_image(
         683.0, 384.0,
         image=background_img)
-
-    cancel_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/cancel_btn.png")
-    cancel_btn_label = Label(image=cancel_btn_img)
-    cancel_btn_label.image = cancel_btn_img
-    cancel_btn = Button(
-        image = cancel_btn_img,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#111111",
-        activebackground="#111111",
-        # command = btn_clicked,
-        relief = "flat")
-
-    cancel_btn.place(
-        x = 940, y = 658,
-        width = 160,
-        height = 49)
 
     choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/choose_file_btn.png")
     choose_file_btn_label = Label(image=choose_file_btn_img)
@@ -187,8 +169,11 @@ def load_split_pdf(window):
 
     starting_range_entry = Entry(
         bd = 0,
-        bg = "#333333",
-        highlightthickness = 0)
+        font=("Poppins", 14),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
 
     starting_range_entry.place(
         x = 471, y = 405,
@@ -202,8 +187,11 @@ def load_split_pdf(window):
 
     ending_range_entry = Entry(
         bd = 0,
-        bg = "#333333",
-        highlightthickness = 0)
+        font=("Poppins", 14),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#333333")
 
     ending_range_entry.place(
         x = 471, y = 462,

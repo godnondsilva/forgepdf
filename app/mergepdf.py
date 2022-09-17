@@ -1,346 +1,265 @@
 from tkinter import *
 from tkinter import filedialog
-from tkinter.messagebox import showwarning, showerror
+from tkinter.messagebox import showwarning, showerror, showinfo
 
 import PyPDF2
 from app.functionality import merge
 from app import store
-from app import login
-from app import home
-from app.utility import center,execute_query
+from app import sidebar
+from app.utility import center
 import os
 import shutil
+from app.store import state, states
+from pathlib import Path
 
 def load_merge_pdf(window):
-    #Variable to store the pdfs selected so far
-    pdfstomerge = []
-
-    #selects the pdf for merging
-    def selectPdf():
-        canget = True #allows the user to chose the file if already 3 files are not selected
-
-        #shows error if the user tries to choose a pdf file after 3 files have already been choosed
-        if Pdf1name.get() != '' and Pdf2name.get() != '' and Pdf3name.get() != '':
-            showwarning("Error" , "You cannot add more than 3 pdfs to merge, sorry for the inconvenience!")
-            canget = False
-
-        #opens the file box , gets the abs path of the file and appends in list
-        if canget == True:    
-            fileaddress = filedialog.askopenfilename(initialdir= os.getenv('MERGE_INITIAL_DIR'), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
-            print(fileaddress)
-            if len(fileaddress) == 0:
-                showwarning("Error" , "Please select a pdf file")
-                return
-            pdfstomerge.append(fileaddress)
-            filename = os.path.basename(fileaddress)
-            print(filename)
-
-        
-        #fills the first space if the input is empty
-        if Pdf1name.get() == '':
-            Pdf1name.insert('0',filename)
-            Pdf1name.bind("<Key>", lambda e: "break")
-            showPdf1pic()
-
-        #fills the second space if the input is empty
-        elif Pdf2name.get() == '':
-            Pdf2name.insert('0',filename)
-            Pdf2name.bind("<Key>", lambda e: "break")
-            showPdf2pic()
-
-        #fills the third space if the input is empty
-        elif Pdf3name.get() == '':
-            Pdf3name.insert('0',filename)
-            Pdf3name.bind("<Key>", lambda e: "break")
-            showPdf3pic()
-        
-    #shows the first pdf pic
-    def showPdf1pic():
-        Pdf1Label.pack()
-        Pdf1Label.place(
-        x = 1082, y = 495,
-        width = 81,
-        height = 87)
-
-        #if routed from options page then set the values of the pdf to be merged
-        if store.GetselectedPdfBool() == True:
-            pdfstomerge.append(store.getSelectPdf())
-            Pdf1name.insert('0', os.path.basename(store.getSelectPdf()))
-            Pdf1name.bind("<Key>", lambda e: "break")
-
-
-    #shows the second pdf pic
-    def showPdf2pic():
-        Pdf2Label.pack()
-        Pdf2Label.place(
-        x = 1079, y = 344,
-        width = 81,
-        height = 87)
-
-    #shows the third pdf pic
-    def showPdf3pic():
-        Pdf3Label.pack()
-        Pdf3Label.place(
-        x = 1079, y = 190,
-        width = 81,
-        height = 87)
-
-
-    #merges the files , shows the merge message and hides the button
-    def mergePdf():
-        try:
-            print(pdfstomerge)
-            merge.merge(pdfstomerge) #call the merge function to merge
-            MergeButton.pack_forget()
-            FilesMergedLabel.pack()
-
-            FilesMergedLabel.place(
-            x = 1024, y = 651,
-            width = 204,
-            height = 46)
-
-            #Move the file to specific folder and move one copy to desktop
-            MoveToFolder()
-        except:
-            showerror("Error" , "An error has occurred")
-            window.destroy()
-            home.HomeWindow()
-
-    #Moves the files to a specific directory and copies to desktop
-    def MoveToFolder():
-
-        #increment the count of the pdf to prevent overwriting
-        store.IncrementCount()
-        add = 'C:\\Users\\User\\Downloads\\ForgePdf\\MergePdf' + str(store.getCount()+1) + '.pdf'
-        shutil.move('Merge.pdf' , add)
-        shutil.copy(add , 'C:\\Users\\User\\Desktop')
-        
-        #converts the address to form that can be saved in the database
-        newAdd = store.ConvertAddress(add)
-        saveToDB(newAdd)
-    
-    #Store the value in database
-    def saveToDB(add):
-        execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
-
-#----------------------------------------------------
-    #Canvas Config
     canvas = Canvas(
         window,
-        bg = "#0b132b",
-        height = 720,
-        width = 1280,
+        bg = "#111111",
+        height = 768,
+        width = 1366,
         bd = 0,
         highlightthickness = 0,
         relief = "ridge")
     canvas.place(x = 0, y = 0)
 
+    sidebar.load_sidebar(window)
 
-    #MergePdfBG
-    MergePdfBGImage = PhotoImage(file = f"./images/mergepdf/MergePdfBG.png")
-    MergePdfBG = canvas.create_image(
-        640.5, 360.0,
-        image=MergePdfBGImage)
+    def btn_clicked():
+        pass
 
-    #ChooseFile Button Config 
-    ChooseFileBGImage = PhotoImage(file = f"./images/mergepdf/ChooseFile.png")
-    ChooseFileButton = Button(
-        image = ChooseFileBGImage,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#0B132B",
-        activebackground="#0B132B",
-        command = selectPdf,
-        relief = "flat")
-
-    ChooseFileButton.place(
-        x = 243, y = 344,
-        width = 536,
-        height = 100)
+    def get_pdf():
+        if len(state.get_state(states.SELECTED_PDFS)) > 5:
+            showwarning("Error" , "You can merge only 5 pdfs at a time")
+            return
+        pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
+        filename = os.path.basename(pdf_path)
+        if len(pdf_path) == 0:
+            showwarning("Error" , "Please select a PDF file")
+            return
+        show_preview_pdf(filename, pdf_path)
 
 
+    def merge_pdf():
+        if len(state.get_state(states.SELECTED_PDFS)) < 2:
+            showwarning("Error" , "Please select at least two PDF files")
+            return
+        try:
+            merge.merge(state.get_state(states.SELECTED_PDFS)) #call the merge function to merge
+            move_to_downloads()
+            showinfo("Success" , "The pdf has been merged successfully.")
+        except Exception as e:
+            print(e)
+            showerror("Error" , "An error has occurred")
     
-    #Back Button Config
-    BackBGImage = PhotoImage(file = f"./images/mergepdf/Back.png")
-    BackButton = Button(
-        image = BackBGImage,
+    def move_to_downloads():
+        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
+        new_name = 'forgepdf' + '1' + '.pdf'
+        shutil.move('output.pdf', path_to_download_folder+new_name)
+
+    def show_preview_pdf(filename, pdf_path):
+        state.set_state(states.SELECTED_PDFS, state.get_state(states.SELECTED_PDFS) + [pdf_path])
+        if len(state.get_state(states.SELECTED_PDFS)) == 1:
+            selected_entry_1.insert(0, filename)
+            selected_pdf_1_btn.place(
+                x = 382, y = 430,
+                width = 137,
+                height = 159)
+            selected_entry_1.place(
+                x = 401, y = 556,
+                width = 101,
+                height = 13)
+        if len(state.get_state(states.SELECTED_PDFS)) == 2:
+            selected_entry_2.insert(0, filename)
+            selected_pdf_2_btn.place(
+                 x = 559, y = 430,
+                width = 137,
+                height = 159)
+            selected_entry_2.place(
+                x = 577, y = 556,
+                width = 101,
+                height = 13)
+        if len(state.get_state(states.SELECTED_PDFS)) == 3:
+            selected_entry_3.insert(0, filename)
+            selected_pdf_3_btn.place(
+                x = 736, y = 433,
+                width = 137,
+                height = 159)
+            selected_entry_3.place(
+                x = 753, y = 556,
+                width = 101,
+                height = 13)
+        if len(state.get_state(states.SELECTED_PDFS)) == 4:
+            selected_entry_4.insert(0, filename)
+            selected_pdf_4_btn.place(
+                x = 915, y = 430,
+                width = 137,
+                height = 159)
+            selected_entry_4.place(
+                x = 929, y = 556,
+                width = 101,
+                height = 13)
+        if len(state.get_state(states.SELECTED_PDFS)) == 5:
+            selected_entry_5.insert(0, filename)
+            selected_pdf_5_btn.place(
+                x = 1094, y = 430,
+                width = 137,
+                height = 159)
+            selected_entry_5.place(
+                x = 1113, y = 556,
+                width = 101,
+                height = 13)
+
+
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/background.png")
+    background_label = Label(image=background_img)
+    background_label.image = background_img
+    background = canvas.create_image(
+        683.0, 384.0,
+        image=background_img)
+
+    selected_pdf_1 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_1.png")
+    selected_pdf_btn_1_label = Label(image=selected_pdf_1)
+    selected_pdf_btn_1_label.image = selected_pdf_1
+    selected_pdf_1_btn = Button(
+        image = selected_pdf_1,
         borderwidth = 0,
         highlightthickness = 0,
-        background="#1C2541",
-        activebackground="#1C2541",
-        command = toHomePage,
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        command = btn_clicked,
         relief = "flat")
 
-    BackButton.place(
-        x = 17, y = 21,
-        width = 139,
-        height = 58)
-
-
-    #Merge Button Config
-    MergeBGImage = PhotoImage(file = f"./images/mergepdf/MergerButton.png")
-    MergeButton = Button(
-        image = MergeBGImage,
+    selected_pdf_2 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_2.png")
+    selected_pdf_btn_2_label = Label(image=selected_pdf_2)
+    selected_pdf_btn_2_label.image = selected_pdf_2
+    selected_pdf_2_btn = Button(
+        image = selected_pdf_2,
         borderwidth = 0,
         highlightthickness = 0,
-        background="#1C2541",
-        activebackground="#1C2541",
-        command = mergePdf,
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        command = btn_clicked,
         relief = "flat")
 
-    MergeButton.pack()
-
-    MergeButton.place(
-        x = 1024, y = 651,
-        width = 204,
-        height = 46)
-
-    
-
-
-    #Pdf1 Config
-    Pdf1Image = PhotoImage(file = f"./images/mergepdf/pdf1.png")
-    Pdf1Label = Label(
-        image = Pdf1Image,
+    selected_pdf_3 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_3.png")
+    selected_pdf_btn_3_label = Label(image=selected_pdf_3)
+    selected_pdf_btn_3_label.image = selected_pdf_3
+    selected_pdf_3_btn = Button(
+        image = selected_pdf_3,
         borderwidth = 0,
         highlightthickness = 0,
-        background="#1C2541",
-        activebackground="#1C2541",
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        command = btn_clicked,
         relief = "flat")
-
-    Pdf1Label.place(
-        x = 1082, y = 495,
-        width = 81,
-        height = 87)
-
-    #Hiding the pdf and showing only when a pdf is selected
-    Pdf1Label.pack()
-    Pdf1Label.pack_forget()
-
-
-    #Pdf2 Config
-    Pdf2Image = PhotoImage(file = f"./images/mergepdf/pdf2.png")
-    Pdf2Label = Label(
-        image = Pdf2Image,
+        
+    selected_pdf_4 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_4.png")
+    selected_pdf_btn_4_label = Label(image=selected_pdf_4)
+    selected_pdf_btn_4_label.image = selected_pdf_4
+    selected_pdf_4_btn = Button(
+        image = selected_pdf_4,
         borderwidth = 0,
         highlightthickness = 0,
-        background="#1C2541",
-        activebackground="#1C2541",
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        command = btn_clicked,
         relief = "flat")
 
-    Pdf2Label.place(
-        x = 1079, y = 344,
-        width = 81,
-        height = 87)
-
-    #Hiding the pdf and showing only when a pdf is selected
-    Pdf2Label.pack()
-    Pdf2Label.pack_forget()
-
-
-    #Pdf3 Config
-    Pdf3Image = PhotoImage(file = f"./images/mergepdf/pdf3.png")
-    Pdf3Label = Label(
-        image = Pdf3Image,
+    selected_pdf_5 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_5.png")
+    selected_pdf_btn_5_label = Label(image=selected_pdf_5)
+    selected_pdf_btn_5_label.image = selected_pdf_5
+    selected_pdf_5_btn = Button(
+        image = selected_pdf_5,
         borderwidth = 0,
         highlightthickness = 0,
-        background="#1C2541",
-        activebackground="#1C2541",
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        command = btn_clicked,
         relief = "flat")
 
-    Pdf3Label.place(
-        x = 1079, y = 190,
-        width = 81,
-        height = 87)
+    choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/choose_file_btn.png")
+    choose_file_btn_label = Label(image=choose_file_btn_img)
+    choose_file_btn_label.image = choose_file_btn_img
+    choose_file_btn = Button(
+        image = choose_file_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = get_pdf,
+        relief = "flat")
 
-    #Hiding the pdf and showing only when a pdf is selected
-    Pdf3Label.pack()
-    Pdf3Label.pack_forget()
+    choose_file_btn.place(
+        x = 333, y = 214,
+        width = 314,
+        height = 75)
 
+    merge_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/merge_btn.png")
+    merge_btn_btn_label = Label(image=merge_btn_img)
+    merge_btn_btn_label.image = merge_btn_img
+    merge_btn = Button(
+        image = merge_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = merge_pdf,
+        relief = "flat")
 
-    #Pdf1 file name Config
-    Pdf1nameImage = PhotoImage(file = f"./images/mergepdf/pdf1name.png")
-    Pdf1name = canvas.create_image(
-        1124.5, 605.5,
-        image = Pdf1nameImage)
+    merge_btn.place(
+        x = 1126, y = 658,
+        width = 158,
+        height = 49)
 
-    Pdf1name = Entry(
+    selected_entry_1_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_1.png")
+    selected_entry_1_bg = canvas.create_image(
+        451.5, 563.5,
+        image = selected_entry_1_img)
+
+    selected_entry_1 = Entry(
         bd = 0,
-        bg = "#1c2541",
-        font = 20,
-        fg= "#5BC0BE",
-        justify=CENTER,
-        insertbackground= "#1C2541",
+        bg = "#5a5a5a",
         highlightthickness = 0)
 
-    Pdf1name.place(
-        x = 1008, y = 592,
-        width = 233,
-        height = 25)
+    selected_entry_2_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_2.png")
+    selected_entry_2_bg = canvas.create_image(
+        627.5, 563.5,
+        image = selected_entry_2_img)
 
-
-    #Pdf2 file name Config
-    Pdf2nameImage = PhotoImage(file = f"./images/mergepdf/pdf2name.png")
-    Pdf2name = canvas.create_image(
-        1126.0, 453.0,
-        image = Pdf2nameImage)
-
-    Pdf2name = Entry(
+    selected_entry_2 = Entry(
         bd = 0,
-        bg = "#1c2541",
-        font = 20,
-        fg= "#5BC0BE",
-        justify=CENTER,
-        insertbackground= "#1C2541",
+        bg = "#5a5a5a",
         highlightthickness = 0)
 
-    Pdf2name.place(
-        x = 1011, y = 439,
-        width = 230,
-        height = 26)
+    entry2_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_3.png")
+    selected_entry_3_bg = canvas.create_image(
+        803.5, 563.5,
+        image = entry2_img)
 
-
-    #Pdf3 file name Config
-    Pdf3nameImage = PhotoImage(file = f"./images/mergepdf/pdf3name.png")
-    Pdf3name = canvas.create_image(
-        1125.5, 300.5,
-        image = Pdf3nameImage)
-
-    Pdf3name = Entry(
+    selected_entry_3 = Entry(
         bd = 0,
-        bg = "#1c2541",
-        font = 20,
-        fg= "#5BC0BE",
-        justify=CENTER,
-        insertbackground= "#1C2541",
+        bg = "#5a5a5a",
         highlightthickness = 0)
 
-    Pdf3name.place(
-        x = 1019, y = 282,
-        width = 213,
-        height = 35)
+    selected_entry_5_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_4.png")
+    selected_entry_4_bg = canvas.create_image(
+        979.5, 563.5,
+        image = selected_entry_5_img)
 
-    #Pdf merges dialouge
-    FilesMergedImage = PhotoImage(file = f"./images/mergepdf/FilesMerged.png")
-    FilesMergedLabel = Label(
-        image = FilesMergedImage,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#1C2541",
-        activebackground="#1C2541",
-        relief = "flat")
+    selected_entry_4 = Entry(
+        bd = 0,
+        bg = "#5a5a5a",
+        highlightthickness = 0)
 
-    FilesMergedLabel.place(
-        x = 1024, y = 651,
-        width = 204,
-        height = 46)
+    selected_entry_5_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_5.png")
+    selected_entry_5_bg = canvas.create_image(
+        1163.5, 563.5,
+        image = selected_entry_5_img)
 
-    FilesMergedLabel.pack()
-    FilesMergedLabel.pack_forget()
-
-
-    #if we are routing from options page then set the pdf was the select in options page
-    # if store.GetselectedPdfBool() == True:
-    #     showPdf1pic()
+    selected_entry_5 = Entry(
+        bd = 0,
+        bg = "#5a5a5a",
+        highlightthickness = 0)
 
 

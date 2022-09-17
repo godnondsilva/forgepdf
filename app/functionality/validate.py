@@ -83,12 +83,3 @@ def validate_decrypt(password):
         return {"error": "Please enter a valid password"}
     else:
         return True
-
-# function for validating the inputs from extract pdf page
-# validates the pdf_path which is the absolute path of the pdf file
-def validate_extract(pdf_path):
-    # if the path is empty
-    if len(pdf_path) == 0:
-        return {"error": "Please input a valid pdf path"}
-    else:
-        return True
