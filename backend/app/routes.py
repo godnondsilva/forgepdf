@@ -1,48 +1,103 @@
-from flask import request, jsonify, send_file
+from flask import request, jsonify
 from app import app, db
 from app.models import User
 import json
 import os
-import json, requests
+import json
+import requests
 
-# route to register a new user
+# Route to register a new user
 @app.route('/api/register', methods=['POST'])
 def register():
-    # getting the data from the request
-    data = request.get_json()
-    # creating a new user
-    user = User(
-        name=data['name'],
-        email=data['email'],
-        password=data['password']
-    )
-    # saving the user to the database
-    db.session.add(user)
-    db.session.commit()
-    # returning the data in json format
-    return jsonify({'message': 'User created successfully.'})
+    try:
+        # getting the data from the request
+        data = request.get_json()
+        if data is None:
+            return jsonify
+            (
+                {
+                    'status': 'error',
+                    'message': 'No input data provided'
+                }
+            ), 400
+        # checking if the user already exists
+        user = User.query.filter_by(email=data['email']).first()
+        if user:
+            return jsonify
+            (
+                {
+                    'status': 'error',
+                    'message': 'User already exists'
+                }
+            ), 400
+        # creating a new user
+        user = User(
+            name=data['name'],
+            email=data['email'],
+            password=data['password']
+        )
+        # saving the user to the database
+        db.session.add(user)
+        db.session.commit()
+        # returning the data in json format
+        return jsonify
+        (
+            {
+                'status': 'success',
+                'message': 'User created successfully.'
+            }
+        ), 200
+    except Exception as e:
+        return jsonify
+        (
+            {
+                'status': 'error',
+                'message': 'An error occurred. Please try again.'
+            }
+        ), 500
 
-# route to login a user
+# Route to login a user
 @app.route('/api/login', methods=['POST'])
 def login():
-    # getting the data from the request
-    data = request.get_json()
-    # getting the user from the database
-    user = User.query.filter_by(email=data['email']).first()
-    # checking if the user exists
-    if user:
+    try:
+        # getting the data from the request
+        data = request.get_json()
+        if data is None:
+            return {
+                'status': 'error',
+                'message': 'No input data provided'
+            }, 400
+        # getting the user from the database
+        user = User.query.filter_by(email=data['email']).first()
+        # checking if the user exists
+        if not user:
+            return {
+                "status": 'error',
+                "message": 'User does not exist'
+            }, 200
         # checking if the password is correct
-        if user.password == data['password']:
-            # returning the data in json format
-            return jsonify({'message': 'User logged in successfully.'})
-        else:
-            # returning the data in json format
-            return jsonify({'error': 'Incorrect password.'})
-    else:
-        # returning the data in json format
-        return jsonify({'error': 'User does not exist.'})
+        if user.password != data['password']:
+            return {
+                "status": 'error',
+                'message': 'Incorrect password.'
+            }, 200
+        return {
+            "status": 'success',
+            'message': 'User logged in successfully.',
+            'payload': {
+                'name': user.name,
+                'email': user.email
+            }
+        }, 200
+            
+    except:
+        return {
+            "status": 'error',
+            'message': 'An error occurred. Please try again.'
+        }, 500
+        
 
-# route to get the weather data
+# Route to get the weather data
 @app.route('/api/weather/<location>', methods=['GET'])
 def get_weather(location):
     data = {}
@@ -55,18 +110,21 @@ def get_weather(location):
         # converting the response from json to python dictionary
         weather_data = json.loads(response.text)
         # store all the data to send in a dictionary
-        data = weather_data
+        return {
+            'status': 'success',
+            'message': 'Weather data fetched successfully.',
+            'payload': weather_data
+        }, 200
     except:
-        data = {
+        return {
             'error': 'An error has occurred.'
-        }
+        }, 500
     # returning the data in json format
-    return data
 
-# route to get the thought of the day
+# Route to get the weather data
 @app.route('/api/thought', methods=['GET'])
 def get_thought():
-    data=[]
+    data = []
     try:
         url = 'https://zenquotes.io/api/today'
         # getting the content of the request
@@ -77,10 +135,13 @@ def get_thought():
         thought_data = json.loads(response.text)
         # store all the data to send in a dictionary
         data = thought_data[0]['q']
+        return {
+            'status': 'success',
+            'message': 'Thought of the day fetched successfully.',
+            'payload': data
+        }, 200
     except:
-        data = {
+        return {
             'error': 'An error has occurred.'
-        }
+        }, 500
     # returning the data in json format
-    return data
-

@@ -1,16 +1,15 @@
-import json, requests
+import json, requests, os
 
 def get_thought():
     data=[]
     try:
-        # url = 'https://zenquotes.io/api/today'
-        url = f'http://localhost:5000/api/thought'
+        url = os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/thought'
         # getting the content of the request
         response = requests.get(url)
         # throwing exception in case of api error
         response.raise_for_status()
         # store all the data to send in a dictionary
-        data = response.text
+        data = json.loads(response.text)['payload']
     except:
         data = {
             'error': 'An error has occurred.'

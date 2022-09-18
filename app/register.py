@@ -20,14 +20,14 @@ def load_register(window):
                 showwarning('Error', condition['error'])
             else:
                 # Insert the new user into the database
-                response = requests.post('http://localhost:5000/api/register', json={'name': name, 'email': email, 'password': password})
+                response = requests.post(os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/register', json={'name': name, 'email': email, 'password': password})
                 # throwing exception in case of api error
                 response.raise_for_status()
                 # converting the response from json to python dictionary
                 data = json.loads(response.text)
                 # checking if the user was created
-                if data['message'] == 'User created successfully.':
-                    showinfo('Success', 'User created successfully.')
+                if data['message'] == 'success':
+                    showinfo('Success', data['message'])
                     # clearing the entry fields
                     name_entry.delete(0, END)
                     email_entry.delete(0, END)

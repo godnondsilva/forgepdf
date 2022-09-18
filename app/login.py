@@ -19,19 +19,20 @@ def load_login(window):
                 showwarning('Error', condition['error'])
             else:
                 # Get the name and the password from the database
-                response = requests.post('http://localhost:5000/api/login', json={'email': email, 'password': password})
+                response = requests.post(os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/login', json={'email': email, 'password': password})
                 # throwing exception in case of api error
                 response.raise_for_status()
                 # converting the response from json to python dictionary
                 data = json.loads(response.text)
                 # checking if the user was created
-                if data['message'] == 'User logged in successfully.':
+                if data['status'] == 'success':
+                    showinfo('Success', data['message'])
                     # storing the user id in the state
-                    # state.set_state(states.UID, data['user_id'])
+                    state.set_state(states.USERNAME, data['payload']['name'])
                     # loading the dashboard page
                     routing.route_frame(window, 'home')
-                else:
-                    showerror('Error', 'An error has occurred.')
+                if data['status'] == 'error':
+                    showwarning('Error', data['message'])
         except Exception as e:
             print(e)
             showerror('Error', 'An error has occurred.')
@@ -132,5 +133,5 @@ def load_login(window):
         width = 142,
         height = 41)
 
-    email_entry.insert(0, "testing@testing.com");
-    password_entry.insert(0, "something")
+    email_entry.insert(0, "tester@tester.com");
+    password_entry.insert(0, "tester")
