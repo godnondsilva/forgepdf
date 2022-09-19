@@ -1,12 +1,28 @@
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning, showerror
 from app.functionality import routing
-
 from app.functionality import validate
 from app.store import state, states
 import os, requests, json
 
 def load_login(window):
+    # Creating the login frame    
+    frame=Frame(window, width=1366, height=768, bg='#111111')
+    frame.place(x=0, y=0)
+
+
+    # Creating the canvas
+    login_canvas = Canvas(
+        window,
+        bg = "#111111",
+        height = 768,
+        width = 1366,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge")
+    login_canvas.place(x = 0, y = 0)
+
+
     def submit():
         try:
             # Storing the values from the entry fields
@@ -15,8 +31,8 @@ def load_login(window):
             condition = validate.validate_login(email, password)
 
             # If validation fails
-            if condition != True:
-                showwarning('Error', condition['error'])
+            if condition['status'] != 'success':
+                showwarning('Error', condition['message'])
             else:
                 # Get the name and the password from the database
                 response = requests.post(os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/login', json={'email': email, 'password': password})
@@ -36,21 +52,6 @@ def load_login(window):
         except Exception as e:
             print(e)
             showerror('Error', 'An error has occurred.')
-            
-    # Creating the login frame    
-    frame=Frame(window, width=1366, height=768, bg='#111111')
-    frame.place(x=0, y=0)
-
-    # Creating the canvas
-    login_canvas = Canvas(
-        window,
-        bg = "#111111",
-        height = 768,
-        width = 1366,
-        bd = 0,
-        highlightthickness = 0,
-        relief = "ridge")
-    login_canvas.place(x = 0, y = 0)
 
     # Background image
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/background.png")

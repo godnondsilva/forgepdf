@@ -1,10 +1,8 @@
-# This file contains all the common functions used
-# across the application
+# This file contains all the common functions used across the application
 import os
 import ctypes as ct
 
-# This exportable function is used to display 
-# the window at the center of the page
+# This exportable function is used to display the window at the center of the page
 def center(window):
     app_width=1366 
     app_height=768
@@ -14,8 +12,7 @@ def center(window):
     y=(screen_height / 2) - (app_height/2)
     window.geometry(f'{app_width}x{app_height}+{int(x)}+{int(y)}')
 
-# This exportable function is used to update the 
-# title bar to dark theme
+# This exportable function is used to update the title bar to dark theme
 def dark_title_bar(window):
     """
     MORE INFO:

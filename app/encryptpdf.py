@@ -1,11 +1,11 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
-from app import home, sidebar
-import os, shutil
+from app import sidebar
 from app.store import state, states
 from app.functionality import encrypt, validate
-from pathlib import Path
+from app.utility import file_handler
+import os
 
 def load_encrypt_pdf(window):
     canvas = Canvas(
@@ -18,40 +18,7 @@ def load_encrypt_pdf(window):
         relief = "ridge")
     canvas.place(x = 0, y = 0)
 
-    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/background.png")
-    background_label = Label(image=background_img)
-    background_label.image = background_img
-    background = canvas.create_image(
-        682.0, 384.0,
-        image=background_img)
-
     sidebar.load_sidebar(window)
-
-    selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
-    selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
-    selected_pdf_btn_label.image = selected_pdf_btn_image
-    selected_pdf_btn = Button(
-        image = selected_pdf_btn_image,
-        borderwidth = 0,
-        highlightthickness = 0,
-        background="#5a5a5a",
-        activebackground="#5a5a5a",
-        relief = "flat")
-
-    selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
-    selected_pdf_bg = canvas.create_image(
-        1151.5, 381.5,
-        image = selected_pdf_entry_img)
-
-    selected_pdf_entry = Entry(
-        bd = 0,
-        font=("Poppins", 8),
-        highlightthickness = 0, 
-        borderwidth=0,
-        fg= "#FFFFFF",
-        bg = "#5a5a5a")
-
-    selected_pdf_entry.bind("<Key>", lambda e: "break")
 
     def get_pdf():
         if state.get_state(states.SELECTED_PDF) != '':
@@ -68,35 +35,20 @@ def load_encrypt_pdf(window):
         password = encrypt_password_entry.get().strip()
         try:
             condition = validate.validate_encrypt(password)
-            if condition != True:
-                showwarning('Error', condition['error'])
+            if condition['status'] == 'error':
+                showwarning('Error', condition['message'])
             else:
-                encrypt.encrypt(state.get_state(states.SELECTED_PDF), password)
-                move_to_downloads()
-                showwarning('Success', 'PDF encrypted successfully')
-        except:
+                condition = encrypt.encrypt(state.get_state(states.SELECTED_PDF), password)
+                if condition['status'] == 'success':
+                    file_handler.move_to_downloads('encrypted')
+                    showinfo('Success', condition['message'])
+                else:
+                    showwarning('Error', "An error has occurred")
+        except Exception as e:
+            print(e)
             showerror("Error" , "An error has occurred")
-            home.HomeWindow()
 
 
-    def move_to_downloads():
-        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
-        new_name = 'forgepdf' + '1' + '.pdf'
-        shutil.move('encrypted.pdf', path_to_download_folder+new_name)
-
-        # store.IncrementCount()
-
-        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
-        
-        #converts the address to form that can be saved in the database
-        # newAdd = store.ConvertAddress(add)
-        # saveToDB(newAdd)
-    
-    #Store the value in database
-    # def saveToDB(add):
-    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
-
-    
     def show_preview_pdf(filename, pdf_path):
         selected_pdf_entry.insert('0' , filename)
         state.set_state(states.SELECTED_PDF, pdf_path)
@@ -108,7 +60,39 @@ def load_encrypt_pdf(window):
             x = 1101, y = 374,
             width = 101,
             height = 13)
-        
+    
+    background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/background.png")
+    background_label = Label(image=background_img)
+    background_label.image = background_img
+    background = canvas.create_image(
+        682.0, 384.0,
+        image=background_img)
+
+
+    selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+    selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+    selected_pdf_btn_label.image = selected_pdf_btn_image
+    selected_pdf_btn = Button(
+        image = selected_pdf_btn_image,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#5a5a5a",
+        activebackground="#5a5a5a",
+        relief = "flat")
+
+    selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+    selected_pdf_bg = canvas.create_image(
+        1151.5, 381.5,
+        image = selected_pdf_entry_img)
+    selected_pdf_entry = Entry(
+        bd = 0,
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
+    selected_pdf_entry.bind("<Key>", lambda e: "break")
 
     choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/choose_file_btn.png")
     choose_file_btn_label = Label(image=choose_file_btn_img)
@@ -121,7 +105,6 @@ def load_encrypt_pdf(window):
         activebackground="#111111",
         command = get_pdf,
         relief = "flat")
-
     choose_file_btn.place(
         x = 333, y = 214,
         width = 314,
@@ -138,7 +121,6 @@ def load_encrypt_pdf(window):
         activebackground="#111111",
         command = encrypt_pdf,
         relief = "flat")
-
     encrypt_btn.place(
         x = 1126, y = 658,
         width = 158,
@@ -148,7 +130,6 @@ def load_encrypt_pdf(window):
     encrypt_password_entry_bg = canvas.create_image(
         491.0, 422.5,
         image = encrypt_password_entry_img)
-
     encrypt_password_entry = Entry(
         bd = 0,
         font=("Poppins", 14),
@@ -156,7 +137,6 @@ def load_encrypt_pdf(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#333333")
-
     encrypt_password_entry.place(
         x = 335, y = 404,
         width = 312,

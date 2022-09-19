@@ -2,10 +2,10 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror
 from app.functionality import split, validate
-from app import home, sidebar
+from app import sidebar
 from app.store import state, states
-import os, shutil
-from pathlib import Path
+from app.utility import file_handler
+import os
 
 def load_split_pdf(window):
     #Canvas Config
@@ -40,33 +40,23 @@ def load_split_pdf(window):
             print(start_range)
                 
             condition = validate.validate_split(start_range, end_range)
-            print(condition)
-            if condition != True:
-                showwarning('Error', condition['error'])
+            if condition['status'] == 'error':
+                showwarning('Error', condition['message'])
             else:
-                
                 start_range_integer = int(start_range)
                 end_range_integer = int(end_range)
 
                 #checking if we got exception in page ranges
                 condition = split.spliter(start_range_integer, end_range_integer, state.get_state(states.SELECTED_PDF))
-                if condition == False:
+                if condition['status'] == 'error':
                     showwarning("Error" , "Please add the pages numbers within the range of the pdf.")
-                    return
                 else:
                     #Move the file to specific folder and move one copy to desktop
                     showinfo("Success" , "The pdf has been split successfully.")
-                    move_to_downloads()
+                    file_hanlder.move_to_downloads('split')
 
         except Exception as e:
             showwarning("ERROR" , "An error has occurred!")
-
-    def move_to_downloads():
-        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
-        new_name = 'forgepdf' + '1' + '.pdf'
-        shutil.move('output.pdf', path_to_download_folder+new_name)
-
-        # store.IncrementCount()
 
         # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
         

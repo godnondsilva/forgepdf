@@ -1,6 +1,5 @@
 import PyPDF2
 
-# funtion to split pdf file into multiple pdf files
 def spliter(start,end, file):
     #opening the input and output pdf files
     pdfFile=open(file,'rb')

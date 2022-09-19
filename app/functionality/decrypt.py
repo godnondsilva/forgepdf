@@ -1,39 +1,45 @@
 import PyPDF2
 
-def decrypt(file,password):#function to the Pdf file decrypt
+def decrypt(file, password):
+    # Opening the encrypted file and decrypted file in read and write mode respectively
+    encrypted_file = open(file, 'rb')
+    decrypted_file= open('output.pdf', 'wb')
 
-    #opening the encrypted file and decrypted file in read and write mode respectively
-    efile = open(file, 'rb')
-    defile= open('decrypted.pdf', 'wb')
+    pdf_reader = PyPDF2.PdfFileReader(encrypted_file)
+    pdf_writer = PyPDF2.PdfFileWriter()
 
-    #the reader and writer objects
-    pdfReader = PyPDF2.PdfFileReader(efile)
-    pdfWriter = PyPDF2.PdfFileWriter()
-    #decrypting the Pdf file
-    condition = pdfReader.isEncrypted
-    if condition == 0:
-        efile.close()
-        defile.close()
-        return False , 'This pdf is NOT Encrypted!'
+    isEncrypted = pdf_reader.isEncrypted
+    if isEncrypted == 0:
+        encrypted_file.close()
+        decrypted_file.close()
+        return {
+            'status': 'error',
+            'message': 'The file is not encrypted.'
+        }
 
-    condition = pdfReader.decrypt(password)
-    # here we control that condition
-    if condition == 0:
-        efile.close()
-        defile.close()
-        return False , 'Please enter the correct password!'
+    isPasswordValid = pdf_reader.decrypt(password)
+    if isPasswordValid == 0:
+        encrypted_file.close()
+        decrypted_file.close()
+        return {
+            'status': 'error',
+            'message': 'The password is incorrect.'
+        }
     
-    
-    #copying the pages from the encrypted file to the writer object
-    for pageNo in range(pdfReader.numPages):
-        Page = pdfReader.getPage(pageNo)
-        pdfWriter.addPage(Page)
+    # Copying the pages from the encrypted file to the writer object
+    for page_no in range(pdf_reader.numPages):
+        page = pdf_reader.getPage(page_no)
+        pdf_writer.addPage(page)
 
-    #copying the pages from the writer object to the decrypted file
-    pdfWriter.write(defile)
+    # Write the decrypted file to the disk
+    pdf_writer.write(decrypted_file)
 
-    #saving the changes and closing the files
-    efile.close()
-    defile.close()
+    # Saving the changes and closing the files
+    encrypted_file.close()
+    decrypted_file.close()
 
-    return True,''
+    # Returning the status and message
+    return {
+        'status': 'success',
+        'message': 'The file has been decrypted successfully'
+    }

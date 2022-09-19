@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter.messagebox import showwarning, showerror, showinfo
-import mysql.connector
 from app.functionality import routing
 from app.functionality import validate
 import os, requests, json
@@ -16,7 +15,7 @@ def load_register(window):
             # validating the details
             condition = validate.validate_register(name, email, password)
             # if validation fails
-            if condition != True:
+            if condition['status'] == 'error':
                 showwarning('Error', condition['error'])
             else:
                 # Insert the new user into the database
@@ -26,7 +25,7 @@ def load_register(window):
                 # converting the response from json to python dictionary
                 data = json.loads(response.text)
                 # checking if the user was created
-                if data['message'] == 'success':
+                if data['status'] == 'success':
                     showinfo('Success', data['message'])
                     # clearing the entry fields
                     name_entry.delete(0, END)

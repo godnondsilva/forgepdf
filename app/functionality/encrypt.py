@@ -1,26 +1,29 @@
 import PyPDF2
 
-# this function is used to decrypt the pdf file
-# parameters and the name of the file to be decrypted and the password
 def encrypt(file_name, password):
-    # opening the file in read mode
-    openFile = open(file_name, 'rb')
-    # creating a pdf reader object
-    pdfReader = PyPDF2.PdfFileReader(openFile)
-    # creating a pdf writer object
+    file_to_encrypt = open(file_name, 'rb')
+
+    # Creating a pdf reader and writer objects
+    pdfReader = PyPDF2.PdfFileReader(file_to_encrypt)
     pdfWriter = PyPDF2.PdfFileWriter()
+
     # looping through the pages of the pdf file
     for page in range(pdfReader.numPages):
-        # getting all the individual pages
-        newPage = pdfReader.getPage(page)
-        # adding the pages to the writer object buffer
-        pdfWriter.addPage(newPage)
-    # encrypting the page
+        new_page = pdfReader.getPage(page)
+        pdfWriter.addPage(new_page)
+
+    # Encrypting the page
     pdfWriter.encrypt(password)
-    # creating a new file
-    outFile = open("encrypted.pdf", "wb")
-    # writing the encrypted file to the new file
-    pdfWriter.write(outFile)
-    # closing the files
-    openFile.close()
-    outFile.close()
+
+    # Opening and riting the encrypted file to the new file
+    encrypted_file = open("output.pdf", "wb")
+    pdfWriter.write(encrypted_file)
+
+    # Closing the files
+    file_to_encrypt.close()
+    encrypted_file.close()
+
+    return {
+        'status': 'success',
+        'message': 'PDF encrypted successfully'
+    }

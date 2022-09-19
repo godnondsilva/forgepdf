@@ -27,11 +27,11 @@ def load_sidebar(window):
         activebackground="#333333",
         command = lambda: routing.route_frame(window, "home"),
         relief = "flat")
-
     home_btn.place(
         x = 48, y = 180,
         width = 54,
         height = 27)
+
 
     encrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/encrypt_btn.png")
     encrypt_btn_label = Label(image=encrypt_btn_img)
@@ -44,11 +44,11 @@ def load_sidebar(window):
         activebackground="#333333",
         command = lambda: routing.route_frame(window, "encryptpdf"),
         relief = "flat")
-
     encrypt_btn.place(
         x = 48, y = 215,
         width = 105,
         height = 27)
+
 
     decrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/decrypt_btn.png")
     decrypt_btn_label = Label(image=decrypt_btn_img)
@@ -61,11 +61,11 @@ def load_sidebar(window):
         activebackground="#333333",
         command = lambda: routing.route_frame(window, "decryptpdf"),
         relief = "flat")
-
     decrypt_btn.place(
         x = 48, y = 250,
         width = 108,
         height = 27)
+
 
     split_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/split_btn.png")
     split_btn_label = Label(image=split_btn_img)
@@ -78,11 +78,11 @@ def load_sidebar(window):
         activebackground="#333333",
         command = lambda: routing.route_frame(window, "splitpdf"),
         relief = "flat")
-
     split_btn.place(
         x = 48, y = 285,
         width = 76,
         height = 27)
+
 
     merge_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/merge_btn.png")
     merge_btn_label = Label(image=merge_btn_img)
@@ -95,7 +95,6 @@ def load_sidebar(window):
         activebackground="#333333",
         command = lambda: routing.route_frame(window, "mergepdf"),
         relief = "flat")
-
     merge_btn.place(
         x = 48, y = 320,
         width = 94,

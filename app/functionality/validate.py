@@ -10,15 +10,27 @@ def validate_register(name, email, password):
     passwordRe = re.compile(r'.{2,20}')
     # checking if the name is not a decimal
     if new_name.isdecimal():
-        return {"error": "Please enter your name in the correct format"}
+        return {
+            "status": "error",
+            "message": "Please enter your name in the correct format"
+        }
     # checking if the email is valid
     if len(emailRe.findall(email)) < 1:
-        return {"error": "Please enter your email in the correct format"}
+        return {
+            "status": "error",
+            "message": "Please enter your email in the correct format"
+        }
     # checking if the password is valid
     if len(passwordRe.findall(password)) < 1:
-        return {"error": "Please enter your password"}
+        return {
+            "status": "error",
+            "message": "Please enter your password"
+        }
     else:
-        return True
+        return {
+            "status": "success",
+            "message": "Registration successful"
+        }
 
 
 def validate_email(email):
@@ -32,13 +44,22 @@ def validate_email(email):
     status = response.json()['status']
     # checking if the status is valid
     if status == "valid" and len(emailRe.findall(email)) >= 1:
-        return {"response": True}
+        return {
+            "status": "success",
+            "message": "Email is valid"
+        }
     # checking if the status is invalid
     elif status == "invalid":
-        return {"error": "Please enter a valid email address!"}
+        return {
+            "status": "error",
+            "message": "Please enter a valid email address!"
+        }
     # all other cases
     else:
-        return {"error": "Please enter a valid email address!"}
+        return {
+            "status": "error",
+            "message": "Please enter a valid email address!"
+        }
 
 #input validation for login
 def validate_login(name, password):
@@ -46,24 +67,42 @@ def validate_login(name, password):
     # stripping the name and storing it in new_name variable
     new_name = name.strip()
     if new_name.isdecimal():
-        return {"error": "Please enter your name in the correct format"}
+        return {
+            "status": "error",
+            "message": "Please enter your name in the correct format"
+        }
     if len(passwordRe.findall(password)) < 1:
-        return {"error": "Please enter your password"}
+        return {
+            "status": "error",
+            "message": "Please enter your password"
+        }
     else:
-        return True
+        return {
+            "status": "success",
+            "message": "Login successful"
+        }
 
 
-# function to check whether the string given is containing only numbers
+# Function to check whether the string given is containing only numbers
 def validate_split(start, end):
-    # the variables start and end are string variables
-    # convert to int for comparing values
-    #if starting range is greater than endingrange
+    # The variables start and end are string variables
+    # Convert to int for comparing values
+    # If starting range is greater than endingrange
     if (int(start) > int(end)):
-        return {"error": "Starting range cannt be greater than ending range!!"}
+        return {
+            "status": "error",
+            "message": "Starting range cannt be greater than ending range!"
+        }
     if start.isdecimal()==False and end.isdecimal()==False:
-        return {"error": "Please enter a valid range"}
+        return {
+            "status": "error",
+            "message": "Please enter a valid range"
+        }
     else:
-        return True
+        return {
+            "status": "success",
+            "message": "Range is valid"
+        }
 
 
 # function for validating the inputs from encrypt pdf page
@@ -71,15 +110,46 @@ def validate_split(start, end):
 def validate_encrypt(password):
     # if the password is empty
     if len(password) == 0:
-        return {"error": "Please enter a valid password"}
+        return {
+            "status": "error",
+            "message": "Please enter a valid password"
+        }
     else:
-        return True
+        return {
+            "status": "success",
+            "message": "Password is valid"
+        }
 
 # function for validating the inputs from decrypt pdf page
 # validates the password field
 def validate_decrypt(password):
     # if the password is empty
     if len(password) == 0:
-        return {"error": "Please enter a valid password"}
+        return {
+            "status": "error",
+            "message": "Please enter a valid password"
+        }
     else:
-        return True
+        return {
+            "status": "success",
+            "message": "Password is valid"
+        }
+
+# function for validating the merge pdf function
+def validate_merge(pdf_list):
+    if len(pdf_list) == 0:
+        return {
+            "status": "error",
+            "message": "Please select atleast one pdf file"
+        }
+    # checking whether more than 3 pdf files have entered
+    elif len(pdf_list) > 5:
+        return {
+            "status": "error",
+            "message": "Please select only 5 pdf files"
+        }
+    else:
+        return {
+            "status": "success",
+            "message": "PDF files are valid"
+        }

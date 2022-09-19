@@ -8,10 +8,13 @@ def get_weather(location):
     data = {}
     try:
         url = os.getenv('BACKEND_URL_DEVELOPMENT')+f'/api/weather/{location}'
+
         # getting the content of the request
         response = requests.get(url)
+
         # throwing exception in case of api error
         response.raise_for_status()
+        
         # store all the data to send in a dictionary
         weather_data = json.loads(response.text)['payload']
         data = {

@@ -1,16 +1,11 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter.messagebox import showwarning, showerror, showinfo
-
-import PyPDF2
 from app.functionality import merge
-from app import store
 from app import sidebar
-from app.utility import center
-import os
-import shutil
 from app.store import state, states
-from pathlib import Path
+from app.utility import file_handler
+import os
 
 def load_merge_pdf(window):
     canvas = Canvas(
@@ -45,17 +40,15 @@ def load_merge_pdf(window):
             showwarning("Error" , "Please select at least two PDF files")
             return
         try:
-            merge.merge(state.get_state(states.SELECTED_PDFS)) #call the merge function to merge
-            move_to_downloads()
-            showinfo("Success" , "The pdf has been merged successfully.")
+            result = merge.merge(state.get_state(states.SELECTED_PDFS))
+            if result['status'] == 'success':
+                file_handler.move_to_downloads('merged')
+                showinfo('Success', result['message'])
+            else:
+                showwarning('Error', "An error has occurred")
         except Exception as e:
             print(e)
             showerror("Error" , "An error has occurred")
-    
-    def move_to_downloads():
-        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
-        new_name = 'forgepdf' + '1' + '.pdf'
-        shutil.move('output.pdf', path_to_download_folder+new_name)
 
     def show_preview_pdf(filename, pdf_path):
         state.set_state(states.SELECTED_PDFS, state.get_state(states.SELECTED_PDFS) + [pdf_path])
