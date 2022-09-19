@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter.messagebox import showwarning, showerror, showinfo
+from tkinter.messagebox import showinfo, showwarning, showerror
 from app.functionality import routing
 from app.functionality import validate
 import os, requests, json
@@ -18,6 +18,7 @@ def load_register(window):
             if condition['status'] == 'error':
                 showwarning('Error', condition['error'])
             else:
+                showinfo('Notice', "Registering... Please wait")
                 # Insert the new user into the database
                 response = requests.post(os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/register', json={'name': name, 'email': email, 'password': password})
                 # throwing exception in case of api error

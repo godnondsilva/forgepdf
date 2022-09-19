@@ -111,6 +111,7 @@ def load_merge_pdf(window):
         683.0, 384.0,
         image=background_img)
 
+
     selected_pdf_1 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_1.png")
     selected_pdf_btn_1_label = Label(image=selected_pdf_1)
     selected_pdf_btn_1_label.image = selected_pdf_1
@@ -122,6 +123,7 @@ def load_merge_pdf(window):
         activebackground="#5a5a5a",
         command = btn_clicked,
         relief = "flat")
+
 
     selected_pdf_2 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_2.png")
     selected_pdf_btn_2_label = Label(image=selected_pdf_2)
@@ -135,6 +137,7 @@ def load_merge_pdf(window):
         command = btn_clicked,
         relief = "flat")
 
+
     selected_pdf_3 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_3.png")
     selected_pdf_btn_3_label = Label(image=selected_pdf_3)
     selected_pdf_btn_3_label.image = selected_pdf_3
@@ -147,6 +150,7 @@ def load_merge_pdf(window):
         command = btn_clicked,
         relief = "flat")
         
+
     selected_pdf_4 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_4.png")
     selected_pdf_btn_4_label = Label(image=selected_pdf_4)
     selected_pdf_btn_4_label.image = selected_pdf_4
@@ -158,6 +162,7 @@ def load_merge_pdf(window):
         activebackground="#5a5a5a",
         command = btn_clicked,
         relief = "flat")
+
 
     selected_pdf_5 = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_pdf_5.png")
     selected_pdf_btn_5_label = Label(image=selected_pdf_5)
@@ -171,6 +176,7 @@ def load_merge_pdf(window):
         command = btn_clicked,
         relief = "flat")
 
+
     choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/choose_file_btn.png")
     choose_file_btn_label = Label(image=choose_file_btn_img)
     choose_file_btn_label.image = choose_file_btn_img
@@ -182,11 +188,11 @@ def load_merge_pdf(window):
         activebackground="#111111",
         command = get_pdf,
         relief = "flat")
-
     choose_file_btn.place(
         x = 333, y = 214,
         width = 314,
         height = 75)
+
 
     merge_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/merge_btn.png")
     merge_btn_btn_label = Label(image=merge_btn_img)
@@ -199,60 +205,74 @@ def load_merge_pdf(window):
         activebackground="#111111",
         command = merge_pdf,
         relief = "flat")
-
     merge_btn.place(
         x = 1126, y = 658,
         width = 158,
         height = 49)
 
+
     selected_entry_1_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_1.png")
     selected_entry_1_bg = canvas.create_image(
         451.5, 563.5,
         image = selected_entry_1_img)
-
     selected_entry_1 = Entry(
         bd = 0,
-        bg = "#5a5a5a",
-        highlightthickness = 0)
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
 
     selected_entry_2_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_2.png")
     selected_entry_2_bg = canvas.create_image(
         627.5, 563.5,
         image = selected_entry_2_img)
-
     selected_entry_2 = Entry(
         bd = 0,
-        bg = "#5a5a5a",
-        highlightthickness = 0)
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
 
-    entry2_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_3.png")
+
+    selected_entry_3_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_3.png")
     selected_entry_3_bg = canvas.create_image(
         803.5, 563.5,
-        image = entry2_img)
-
+        image = selected_entry_3_img)
     selected_entry_3 = Entry(
         bd = 0,
-        bg = "#5a5a5a",
-        highlightthickness = 0)
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
 
     selected_entry_5_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_4.png")
     selected_entry_4_bg = canvas.create_image(
         979.5, 563.5,
         image = selected_entry_5_img)
-
     selected_entry_4 = Entry(
         bd = 0,
-        bg = "#5a5a5a",
-        highlightthickness = 0)
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
+
 
     selected_entry_5_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/mergepdf/selected_entry_5.png")
     selected_entry_5_bg = canvas.create_image(
         1163.5, 563.5,
         image = selected_entry_5_img)
-
     selected_entry_5 = Entry(
         bd = 0,
-        bg = "#5a5a5a",
-        highlightthickness = 0)
+        font=("Poppins", 8),
+        highlightthickness = 0, 
+        borderwidth=0,
+        fg= "#FFFFFF",
+        bg = "#5a5a5a")
 
 

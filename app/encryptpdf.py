@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
-from tkinter.messagebox import showwarning, showerror
+from tkinter.messagebox import showinfo, showwarning, showerror
 from app import sidebar
 from app.store import state, states
 from app.functionality import encrypt, validate
@@ -22,8 +22,8 @@ def load_encrypt_pdf(window):
 
     def get_pdf():
         if state.get_state(states.SELECTED_PDF) != '':
-            showwarning("Error" , "You can encrypt only one pdf at a time")
-            return
+            selected_pdf_entry.insert('0' , '')
+            state.set_state(states.SELECTED_PDF, '')
         pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
         filename = os.path.basename(pdf_path)
         if len(pdf_path) == 0:

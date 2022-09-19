@@ -145,10 +145,173 @@ def load_home(window):
     empty_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/empty.png")
     empty_label = Label(image = empty_img, bg = "#333333")
     empty_label.image = empty_img
-    empty_label.place(
-        x = 544, y = 590,
-        width = 528,
-        height = 50)
+    if len(state.get_state(states.PREVIEW_PDFS)) == 0:
+        empty_label.place(
+            x = 544, y = 590,
+            width = 528,
+            height = 50)
+    else:
+        if len(state.get_state(states.PREVIEW_PDFS)) >= 1:
+            selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+            selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+            selected_pdf_btn_label.image = selected_pdf_btn_image
+            selected_pdf_btn = Button(
+                image = selected_pdf_btn_image,
+                borderwidth = 0,
+                highlightthickness = 0,
+                background="#5a5a5a",
+                activebackground="#5a5a5a",
+                relief = "flat")
+            selected_pdf_btn.place(
+                x = 382, y = 541,
+                width = 137,
+                height = 159)
+
+            selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+            selected_pdf_bg = canvas.create_image(
+                1151.5, 381.5,
+                image = selected_pdf_entry_img)
+            selected_pdf_entry = Entry(
+                bd = 0,
+                font=("Poppins", 8),
+                highlightthickness = 0, 
+                borderwidth=0,
+                fg= "#FFFFFF",
+                bg = "#5a5a5a")
+            selected_pdf_entry.place(
+                x = 399, y = 669,
+                width = 101,
+                height = 13)
+            selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[0])
+        if len(state.get_state(states.PREVIEW_PDFS)) >= 2:
+            selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+            selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+            selected_pdf_btn_label.image = selected_pdf_btn_image
+            selected_pdf_btn = Button(
+                image = selected_pdf_btn_image,
+                borderwidth = 0,
+                highlightthickness = 0,
+                background="#5a5a5a",
+                activebackground="#5a5a5a",
+                relief = "flat")
+            selected_pdf_btn.place(
+                x = 559, y = 541,
+                width = 137,
+                height = 159)
+
+            selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+            selected_pdf_bg = canvas.create_image(
+                1151.5, 381.5,
+                image = selected_pdf_entry_img)
+            selected_pdf_entry = Entry(
+                bd = 0,
+                text = state.get_state(states.PREVIEW_PDFS)[1],
+                font=("Poppins", 8),
+                highlightthickness = 0, 
+                borderwidth=0,
+                fg= "#FFFFFF",
+                bg = "#5a5a5a")
+            selected_pdf_entry.place(
+                x = 576, y = 669,
+                width = 101,
+                height = 13)
+            selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[1])
+        if len(state.get_state(states.PREVIEW_PDFS)) >= 3:
+            selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+            selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+            selected_pdf_btn_label.image = selected_pdf_btn_image
+            selected_pdf_btn = Button(
+                image = selected_pdf_btn_image,
+                borderwidth = 0,
+                highlightthickness = 0,
+                background="#5a5a5a",
+                activebackground="#5a5a5a",
+                relief = "flat")
+            selected_pdf_btn.place(
+                x = 736, y = 541,
+                width = 137,
+                height = 159)
+
+            selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+            selected_pdf_bg = canvas.create_image(
+                1151.5, 381.5,
+                image = selected_pdf_entry_img)
+            selected_pdf_entry = Entry(
+                bd = 0,
+                font=("Poppins", 8),
+                highlightthickness = 0, 
+                borderwidth=0,
+                fg= "#FFFFFF",
+                bg = "#5a5a5a")
+            selected_pdf_entry.place(
+                x = 753, y = 669,
+                width = 101,
+                height = 13)
+            selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[2])
+        if len(state.get_state(states.PREVIEW_PDFS)) >= 4:
+            selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+            selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+            selected_pdf_btn_label.image = selected_pdf_btn_image
+            selected_pdf_btn = Button(
+                image = selected_pdf_btn_image,
+                borderwidth = 0,
+                highlightthickness = 0,
+                background="#5a5a5a",
+                activebackground="#5a5a5a",
+                relief = "flat")
+            selected_pdf_btn.place(
+                x = 913, y = 541,
+                width = 137,
+                height = 159)
+
+            selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+            selected_pdf_bg = canvas.create_image(
+                1151.5, 381.5,
+                image = selected_pdf_entry_img)
+            selected_pdf_entry = Entry(
+                bd = 0,
+                font=("Poppins", 8),
+                highlightthickness = 0, 
+                borderwidth=0,
+                fg= "#FFFFFF",
+                bg = "#5a5a5a")
+            selected_pdf_entry.place(
+                x = 930, y = 669,
+                width = 101,
+                height = 13)
+            selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[3])
+        if len(state.get_state(states.PREVIEW_PDFS)) >= 5:
+            selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
+            selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
+            selected_pdf_btn_label.image = selected_pdf_btn_image
+            selected_pdf_btn = Button(
+                image = selected_pdf_btn_image,
+                borderwidth = 0,
+                highlightthickness = 0,
+                background="#5a5a5a",
+                activebackground="#5a5a5a",
+                relief = "flat")
+            selected_pdf_btn.place(
+                x = 1090, y = 541,
+                width = 137,
+                height = 159)
+
+            selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
+            selected_pdf_bg = canvas.create_image(
+                1151.5, 381.5,
+                image = selected_pdf_entry_img)
+            selected_pdf_entry = Entry(
+                bd = 0,
+                font=("Poppins", 8),
+                highlightthickness = 0, 
+                borderwidth=0,
+                fg= "#FFFFFF",
+                bg = "#5a5a5a")
+            selected_pdf_entry.place(
+                x = 1107, y = 669,
+                width = 101,
+                height = 13)
+            selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[4])
     
     thought_text = Text(window, 
         height=549, 

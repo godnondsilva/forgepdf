@@ -5,8 +5,9 @@ import os
 
 def load_sidebar(window):
     # Router guard 
-    # Reset selected pdf when changing the frame
+    # Reset selected pdf and selected pdfs when changing the frame
     state.set_state(states.SELECTED_PDF, '')
+    state.set_state(states.SELECTED_PDFS, [])
 
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/sidebar/background.png")
     background_label = Label(image=background_img)

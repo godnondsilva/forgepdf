@@ -8,7 +8,7 @@ from app.utility import file_handler
 import os
 
 def load_split_pdf(window):
-    #Canvas Config
+    # Canvas Config
     canvas = Canvas(
         window,
         bg = "#111111",
@@ -23,8 +23,8 @@ def load_split_pdf(window):
 
     def get_pdf():
         if state.get_state(states.SELECTED_PDF) != '':
-            showwarning("Error" , "You can decrypt only one pdf at a time")
-            return
+            selected_pdf_entry.insert('0' , '')
+            state.set_state(states.SELECTED_PDF, '')
         pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
         filename = os.path.basename(pdf_path)
         if len(pdf_path) == 0:
@@ -57,18 +57,8 @@ def load_split_pdf(window):
 
         except Exception as e:
             showwarning("ERROR" , "An error has occurred!")
-
-        # add = 'C:\\Users\\User\\Downloads\\ForgePdf\\EncryptPdf' + str(store.getCount()+1) + '.pdf'
-        
-        #converts the address to form that can be saved in the database
-        # newAdd = store.ConvertAddress(add)
-        # saveToDB(newAdd)
-    
-    #Store the value in database
-    # def saveToDB(add):
-    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")
-
-    
+            
+            
     def show_preview_pdf(filename, pdf_path):
         selected_pdf_entry.insert('0' , filename)
         state.set_state(states.SELECTED_PDF, pdf_path)
@@ -80,11 +70,6 @@ def load_split_pdf(window):
             x = 1101, y = 374,
             width = 101,
             height = 13)
-    
-
-    #Store the value in database
-    # def saveToDB(add):
-    #     execute_query("insert into files (file_address , user_id) values ('" + add + "',' " + str(store.getUID()) + "')")  
 
     
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/background.png")
@@ -93,6 +78,7 @@ def load_split_pdf(window):
     background = canvas.create_image(
         683.0, 384.0,
         image=background_img)
+
 
     choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/choose_file_btn.png")
     choose_file_btn_label = Label(image=choose_file_btn_img)
@@ -105,11 +91,11 @@ def load_split_pdf(window):
         activebackground="#111111",
         command = get_pdf,
         relief = "flat")
-
     choose_file_btn.place(
         x = 333, y = 214,
         width = 314,
         height = 75)
+
 
     split_pdf_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/split_pdf_btn.png")
     split_pdf_btn_label = Label(image=split_pdf_btn_img)
@@ -122,11 +108,11 @@ def load_split_pdf(window):
         activebackground="#111111",
         command = split_pdf,
         relief = "flat")
-
     split_pdf_btn.place(
         x = 1126, y = 658,
         width = 158,
         height = 49)
+
 
     selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/selected_pdf_btn.png")
     selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -139,11 +125,11 @@ def load_split_pdf(window):
         activebackground="#5a5a5a",
         relief = "flat")
 
+
     selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/selected_pdf_entry.png")
     selected_pdf_bg = canvas.create_image(
         1151.5, 381.5,
         image = selected_pdf_entry_img)
-
     selected_pdf_entry = Entry(
         bd = 0,
         font=("Poppins", 8),
@@ -152,11 +138,11 @@ def load_split_pdf(window):
         fg= "#FFFFFF",
         bg = "#5a5a5a")
 
+
     starting_range_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/starting_range_entry.png")
     starting_range_entry_bg = canvas.create_image(
         508.5, 423.5,
         image = starting_range_entry_img)
-
     starting_range_entry = Entry(
         bd = 0,
         font=("Poppins", 14),
@@ -164,17 +150,16 @@ def load_split_pdf(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#333333")
-
     starting_range_entry.place(
         x = 471, y = 405,
         width = 75,
         height = 35)
 
+
     ending_range_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/splitpdf/ending_range_entry.png")
     ending_range_entry_bg = canvas.create_image(
         508.5, 480.5,
         image = ending_range_entry_img)
-
     ending_range_entry = Entry(
         bd = 0,
         font=("Poppins", 14),
@@ -182,7 +167,6 @@ def load_split_pdf(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#333333")
-
     ending_range_entry.place(
         x = 471, y = 462,
         width = 75,

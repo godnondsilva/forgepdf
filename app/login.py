@@ -34,6 +34,7 @@ def load_login(window):
             if condition['status'] != 'success':
                 showwarning('Error', condition['message'])
             else:
+                showinfo('Notice', "Logging in... Please wait")
                 # Get the name and the password from the database
                 response = requests.post(os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/login', json={'email': email, 'password': password})
                 # throwing exception in case of api error
