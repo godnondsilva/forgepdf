@@ -1,10 +1,17 @@
-from flask import request, jsonify
+from flask import request
 from app import app, db
 from app.models import User
 import json
 import os
 import json
 import requests
+
+# Route to check if the server is running
+@app.route('/')
+def index():
+    return {
+        'message': 'Server is running'
+    }
 
 # Route to register a new user
 @app.route('/api/register', methods=['POST'])
@@ -13,23 +20,17 @@ def register():
         # getting the data from the request
         data = request.get_json()
         if data is None:
-            return jsonify
-            (
-                {
-                    'status': 'error',
-                    'message': 'No input data provided'
-                }
-            ), 400
+            return {
+                'status': 'error',
+                'message': 'No input data provided'
+            }, 400
         # checking if the user already exists
         user = User.query.filter_by(email=data['email']).first()
         if user:
-            return jsonify
-            (
-                {
-                    'status': 'error',
-                    'message': 'User already exists'
-                }
-            ), 400
+            return {
+                'status': 'error',
+                'message': 'User already exists'
+            }, 400
         # creating a new user
         user = User(
             name=data['name'],
@@ -40,21 +41,15 @@ def register():
         db.session.add(user)
         db.session.commit()
         # returning the data in json format
-        return jsonify
-        (
-            {
-                'status': 'success',
-                'message': 'User created successfully.'
-            }
-        ), 200
+        return {
+            'status': 'success',
+            'message': 'User created successfully.'
+        }, 200
     except Exception as e:
-        return jsonify
-        (
-            {
-                'status': 'error',
-                'message': 'An error occurred. Please try again.'
-            }
-        ), 500
+        return {
+            'status': 'error',
+            'message': 'An error occurred. Please try again.'
+        }, 500
 
 # Route to login a user
 @app.route('/api/login', methods=['POST'])
@@ -144,4 +139,3 @@ def get_thought():
         return {
             'error': 'An error has occurred.'
         }, 500
-    # returning the data in json format
