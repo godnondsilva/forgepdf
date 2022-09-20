@@ -12,8 +12,8 @@ def load_split_pdf(window):
     canvas = Canvas(
         window,
         bg = "#111111",
-        height = 720,
-        width = 1280,
+        height = 768,
+        width = 1366,
         bd = 0,
         highlightthickness = 0,
         relief = "ridge")

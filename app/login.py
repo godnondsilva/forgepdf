@@ -9,8 +9,7 @@ def load_login(window):
     # Creating the login frame    
     frame=Frame(window, width=1366, height=768, bg='#111111')
     frame.place(x=0, y=0)
-
-
+    
     # Creating the canvas
     login_canvas = Canvas(
         window,

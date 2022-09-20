@@ -20,6 +20,7 @@ def get_weather(location):
         data = {
             'temp': convert_to_celsius(weather_data['main']['temp']),
             'feels_like': convert_to_celsius(weather_data['main']['feels_like']),
+            'icon': weather_data['weather'][0]['icon'],
             'main': weather_data['weather'][0]['main'],
             'description': weather_data['weather'][0]['description'],
             'humidity': weather_data['main']['humidity'],

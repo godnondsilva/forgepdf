@@ -20,8 +20,6 @@ def load_merge_pdf(window):
 
     sidebar.load_sidebar(window)
 
-    def btn_clicked():
-        pass
 
     def get_pdf():
         if len(state.get_state(states.SELECTED_PDFS)) > 5:
@@ -121,7 +119,6 @@ def load_merge_pdf(window):
         highlightthickness = 0,
         background="#5a5a5a",
         activebackground="#5a5a5a",
-        command = btn_clicked,
         relief = "flat")
 
 
@@ -134,7 +131,6 @@ def load_merge_pdf(window):
         highlightthickness = 0,
         background="#5a5a5a",
         activebackground="#5a5a5a",
-        command = btn_clicked,
         relief = "flat")
 
 
@@ -147,7 +143,6 @@ def load_merge_pdf(window):
         highlightthickness = 0,
         background="#5a5a5a",
         activebackground="#5a5a5a",
-        command = btn_clicked,
         relief = "flat")
         
 
@@ -160,7 +155,6 @@ def load_merge_pdf(window):
         highlightthickness = 0,
         background="#5a5a5a",
         activebackground="#5a5a5a",
-        command = btn_clicked,
         relief = "flat")
 
 
@@ -173,7 +167,6 @@ def load_merge_pdf(window):
         highlightthickness = 0,
         background="#5a5a5a",
         activebackground="#5a5a5a",
-        command = btn_clicked,
         relief = "flat")
 
 

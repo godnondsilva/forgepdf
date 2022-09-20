@@ -3,6 +3,7 @@ from tkinter.messagebox import showerror
 from app import login, encryptpdf, sidebar
 from app.store import state, states
 from app.functionality import weather, thought, routing
+from app.utility import file_handler
 import datetime, os, threading
 
 def load_home(window):
@@ -17,24 +18,26 @@ def load_home(window):
             if 'error' in weatherData:
                 showerror('Error', weatherData['error'])
             # Description text
-            description_entry.insert(0, "Feels like " + str(int(weatherData['temp'])) + "°C. " + weatherData['main'].capitalize() + ". " + str(weatherData['description']).capitalize())
-            description_entry.bind("<Key>", lambda e: "break")
+            description_entry.delete(0, END)
+            description_entry.insert(END, "Feels like " + str(int(weatherData['temp'])) + "°C. " + weatherData['main'].capitalize() + ". " + str(weatherData['description']).capitalize())
 
             # Temperature text
-            temperature_entry.insert(0, str(int(weatherData['temp'])) + "°C")
-            temperature_entry.bind("<Key>", lambda e: "break")
+            temperature_entry.insert(END, str(int(weatherData['temp'])) + "°C")
 
             # Humidity text
-            humidity_entry.insert(0, "Humidity: " + str(int(weatherData['temp'])) + "%")
-            humidity_entry.bind("<Key>", lambda e: "break")
+            humidity_entry.insert(END, "Humidity: " + str(int(weatherData['temp'])) + "%")
 
             # Wind text
-            wind_entry.insert(0, "Wind: " + str(int(weatherData['temp'])) + "km/hr")
-            wind_entry.bind("<Key>", lambda e: "break")
+            wind_entry.insert(END, "Wind: " + str(int(weatherData['temp'])) + "km/hr")
 
             # Pressure text
-            pressure_entry.insert(0, "Pressure: " + str(int(weatherData['temp'])) + "Pa")
-            pressure_entry.bind("<Key>", lambda e: "break")
+            pressure_entry.insert(END, "Pressure: " + str(int(weatherData['temp'])) + "Pa")
+
+            # Weather icon
+            weather_icon_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/weather_icons/" + weatherData['icon'] + ".png")
+            weather_btn_label.config(image = weather_icon_img)
+            weather_btn_label.image = weather_icon_img
+
 
     class ThoughtThread(threading.Thread):
         def __init__(self):
@@ -51,9 +54,13 @@ def load_home(window):
         state.reset_state()
         # Route to the login frame
         routing.route_frame(window, "login")
+
+    def send_report():
+        # Open mail application
+        os.system("start mailto:godnondsilva@gmail.com")
     
-    def btn_clicked():
-        pass
+    def send_feedback():
+        os.system("start mailto:godnondsilva@gmail.com")
     
     canvas = Canvas(
         window,
@@ -100,7 +107,7 @@ def load_home(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = btn_clicked,
+        command = send_report,
         relief = "flat")
 
     send_bug_report_btn.place(
@@ -117,7 +124,7 @@ def load_home(window):
         highlightthickness = 0,
         background="#333333",
         activebackground="#333333",
-        command = btn_clicked,
+        command = send_feedback,
         relief = "flat")
 
     send_feedback_btn.place(
@@ -183,6 +190,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[0])
+            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[0])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 2:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -216,6 +224,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[1])
+            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[1])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 3:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -231,7 +240,6 @@ def load_home(window):
                 x = 736, y = 541,
                 width = 137,
                 height = 159)
-
             selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
             selected_pdf_bg = canvas.create_image(
                 1151.5, 381.5,
@@ -248,6 +256,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[2])
+            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[2])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 4:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -263,7 +272,6 @@ def load_home(window):
                 x = 913, y = 541,
                 width = 137,
                 height = 159)
-
             selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
             selected_pdf_bg = canvas.create_image(
                 1151.5, 381.5,
@@ -280,6 +288,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[3])
+            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[3])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 5:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -295,7 +304,6 @@ def load_home(window):
                 x = 1090, y = 541,
                 width = 137,
                 height = 159)
-
             selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
             selected_pdf_bg = canvas.create_image(
                 1151.5, 381.5,
@@ -312,6 +320,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[4])
+            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[4])
     
     thought_text = Text(window, 
         height=549, 
@@ -391,16 +400,14 @@ def load_home(window):
         width = 63,
         height = 55)
 
-    # TODO: Change the weather icon based on the current weather
-    sunny_image_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/sunny.png")
-    weather_btn_label.config(image = sunny_image_img)
-    weather_btn_label.image = sunny_image_img
+    weather_icon_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/weather_icons/01d.png")
+    weather_btn_label.config(image = weather_icon_img)
+    weather_btn_label.image = weather_icon_img
 
     temperature_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/temperature_entry.png")
     temperature_entry_bg = canvas.create_image(
         979.0, 223.5,
         image = temperature_entry_img)
-
     temperature_entry = Entry(
         bd = 0,
         font=("Poppins", 26),
@@ -408,17 +415,17 @@ def load_home(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#333333")
-
     temperature_entry.place(
         x = 929, y = 196,
         width = 100,
         height = 53)
+    temperature_entry.bind("<Key>", lambda e: "break")
+
 
     description_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/description_entry.png")
     description_entry_bg = canvas.create_image(
         1006.5, 278.0,
         image = description_entry_img)
-
     description_entry = Entry(
         bd = 0,
         font=("Poppins", 10),
@@ -426,17 +433,17 @@ def load_home(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#333333")
-    
     description_entry.place(
         x = 860, y = 268,
-        width = 271,
+        width = 350,
         height = 18)
+    description_entry.bind("<Key>", lambda e: "break")
+
 
     wind_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/wind_entry.png")
     wind_entry_bg = canvas.create_image(
         935.5, 349.0,
         image = wind_entry_img)
-
     wind_entry = Entry(
         bd = 0,
         font=("Poppins", 10),
@@ -444,17 +451,17 @@ def load_home(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#5a5a5a")
-
     wind_entry.place(
         x = 875, y = 338,
         width = 99,
         height = 20)
+    wind_entry.bind("<Key>", lambda e: "break")
+
 
     humidity_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/humidity_entry.png")
     humidity_entry_bg = canvas.create_image(
         941.5, 324.0,
         image = humidity_entry_img)
-
     humidity_entry = Entry(
         bd = 0,
         font=("Poppins", 10),
@@ -462,17 +469,17 @@ def load_home(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#5a5a5a")
-
     humidity_entry.place(
         x = 875, y = 313,
         width = 111,
         height = 20)
+    humidity_entry.bind("<Key>", lambda e: "break")
+
 
     pressure_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/pressure_entry.png")
     pressure_entry_bg = canvas.create_image(
         939.0, 374.0,
         image = pressure_entry_img)
-
     pressure_entry = Entry(
         bd = 0,
         font=("Poppins", 10),
@@ -480,11 +487,11 @@ def load_home(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#5a5a5a")
-
     pressure_entry.place(
         x = 875, y = 363,
         width = 106,
         height = 20)
+    pressure_entry.bind("<Key>", lambda e: "break")
 
     # Configuration
     # Weather API call
@@ -510,3 +517,6 @@ def load_home(window):
     # Location text
     location_entry.insert(0, "Mangalore")
     location_entry.bind("<Key>", lambda e: "break")
+
+    # Weather default text
+    description_entry.insert(END, "Loading...")
