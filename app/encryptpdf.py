@@ -46,8 +46,7 @@ def load_encrypt_pdf(window):
                 else:
                     showwarning('Error', "An error has occurred")
         except Exception as e:
-            print(e)
-            showerror("Error" , "An error has occurred")
+            showerror("Error", e)
 
 
     def show_preview_pdf(filename, pdf_path):

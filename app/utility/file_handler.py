@@ -16,9 +16,14 @@ def move_to_downloads(save_type):
                 state.set_state(states.PREVIEW_PDFS, state.get_state(states.PREVIEW_PDFS) + [new_name])
         else:
                 state.set_state(states.PREVIEW_PDFS, state.get_state(states.PREVIEW_PDFS)[1:] + [new_name])
-        open_folder(new_name)
+        open_file(new_name)
 
 # Function to open folder of a file
-def open_folder(filename):
+def open_folder():
         path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
         os.startfile(path_to_download_folder)
+
+# Function to open a file
+def open_file(filename):
+        path_to_download_folder = str(os.path.join(Path.home(), "Downloads/ForgePDF/"))
+        os.startfile(path_to_download_folder+filename)

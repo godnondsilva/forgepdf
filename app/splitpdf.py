@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
-from tkinter.messagebox import showwarning, showerror
+from tkinter.messagebox import showinfo, showwarning, showerror
 from app.functionality import split, validate
 from app import sidebar
 from app.store import state, states
@@ -36,7 +36,6 @@ def load_split_pdf(window):
         try:
             start_range = starting_range_entry.get()
             end_range = ending_range_entry.get()
-            print(start_range)
                 
             condition = validate.validate_split(start_range, end_range)
             if condition['status'] == 'error':
@@ -52,10 +51,10 @@ def load_split_pdf(window):
                 else:
                     #Move the file to specific folder and move one copy to desktop
                     showinfo("Success" , "The pdf has been split successfully.")
-                    file_hanlder.move_to_downloads('split')
+                    file_handler.move_to_downloads('split')
 
         except Exception as e:
-            showwarning("ERROR" , "An error has occurred!")
+            showwarning("Error", e)
             
             
     def show_preview_pdf(filename, pdf_path):

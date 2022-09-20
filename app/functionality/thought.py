@@ -3,7 +3,7 @@ import json, requests, os
 def get_thought():
     data=[]
     try:
-        url = os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/thought'
+        url = os.getenv('BACKEND_URL')+'/api/thought'
         # Getting the content of the request
         response = requests.get(url)
         # Throwing exception in case of api error

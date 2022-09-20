@@ -45,8 +45,8 @@ def load_decrypt_pdf(window):
                     showinfo('Success', result['message'])
                 else:
                     showwarning('Error', result['message'])
-        except:
-            showerror("Error" , "An error has occurred")
+        except Exception as e:
+            showerror("Error", e)
 
     
     def show_preview_pdf(filename, pdf_path):

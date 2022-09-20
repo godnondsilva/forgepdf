@@ -19,7 +19,10 @@ def spliter(start,end, file):
             # Closing the pdfs in case of error
             outputFile.close()
             pdfFile.close()
-            return False
+            return {
+                "status": "error",
+                "message": "Page range not in range of pdf"
+            }
 
 
     # Writing the pages stored in pdfwriter to output pdf
@@ -28,4 +31,7 @@ def spliter(start,end, file):
     # Closing the pdfs 
     outputFile.close()
     pdfFile.close()
-    return True
+    return {
+        'status': 'success',
+        'message': 'File split successfully'
+    }

@@ -126,28 +126,28 @@ def load_home(window):
         activebackground="#333333",
         command = send_feedback,
         relief = "flat")
-
     send_feedback_btn.place(
         x = 358, y = 356,
         width = 106,
         height = 21)
 
-    # Temporarily removed, maybe added back in later version
-    # view_more_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/view_more_btn.png")
-    # view_more_btn_label = Label(image=view_more_btn_img)
-    # view_more_btn_label.image = view_more_btn_img
-    # view_more_btn = Button(
-    #     image = view_more_btn_img,
-    #     borderwidth = 0,
-    #     highlightthickness = 0,
-    #     background="#111111",
-    #     activebackground="#111111",
-    #     command = btn_clicked,
-    #     relief = "flat")
-    # view_more_btn.place(
-    #     x = 522, y = 471,
-    #     width = 145,
-    #     height = 28)
+
+    view_more_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/view_more_btn.png")
+    view_more_btn_label = Label(image=view_more_btn_img)
+    view_more_btn_label.image = view_more_btn_img
+    view_more_btn = Button(
+        image = view_more_btn_img,
+        borderwidth = 0,
+        highlightthickness = 0,
+        background="#111111",
+        activebackground="#111111",
+        command = file_handler.open_folder,
+        relief = "flat")
+    view_more_btn.place(
+        x = 522, y = 471,
+        width = 145,
+        height = 28)
+
 
     empty_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/empty.png")
     empty_label = Label(image = empty_img, bg = "#333333")
@@ -190,7 +190,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[0])
-            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[0])
+            file_handler.open_file(state.get_state(states.PREVIEW_PDFS)[0])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 2:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -224,7 +224,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[1])
-            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[1])
+            file_handler.open_file(state.get_state(states.PREVIEW_PDFS)[1])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 3:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -256,7 +256,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[2])
-            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[2])
+            file_handler.open_file(state.get_state(states.PREVIEW_PDFS)[2])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 4:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -288,7 +288,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[3])
-            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[3])
+            file_handler.open_file(state.get_state(states.PREVIEW_PDFS)[3])
         if len(state.get_state(states.PREVIEW_PDFS)) >= 5:
             selected_pdf_btn_image = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_btn.png")
             selected_pdf_btn_label = Label(image=selected_pdf_btn_image)
@@ -320,7 +320,7 @@ def load_home(window):
                 width = 101,
                 height = 13)
             selected_pdf_entry.insert(0, state.get_state(states.PREVIEW_PDFS)[4])
-            file_handler.open_folder(state.get_state(states.PREVIEW_PDFS)[4])
+            file_handler.open_file(state.get_state(states.PREVIEW_PDFS)[4])
     
     thought_text = Text(window, 
         height=549, 

@@ -35,7 +35,7 @@ def load_register(window):
             else:
                 showinfo('Notice', "Registering... Please wait")
                 # Insert the new user into the database
-                response = requests.post(os.getenv('BACKEND_URL_DEVELOPMENT')+'/api/register', json={'name': name, 'email': email, 'password': password})
+                response = requests.post(os.getenv('BACKEND_URL')+'/api/register', json={'name': name, 'email': email, 'password': password})
                 # throwing exception in case of api error
                 response.raise_for_status()
                 # converting the response from json to python dictionary

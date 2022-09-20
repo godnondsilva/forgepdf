@@ -7,7 +7,7 @@ def convert_to_celsius(kelvin):
 def get_weather(location):
     data = {}
     try:
-        url = os.getenv('BACKEND_URL_DEVELOPMENT')+f'/api/weather/{location}'
+        url = os.getenv('BACKEND_URL')+f'/api/weather/{location}'
 
         # Getting the content of the request
         response = requests.get(url)

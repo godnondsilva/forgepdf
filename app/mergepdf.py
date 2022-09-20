@@ -21,7 +21,7 @@ def load_merge_pdf(window):
 
 
     def get_pdf():
-        if len(state.get_state(states.SELECTED_PDFS)) > 5:
+        if len(state.get_state(states.SELECTED_PDFS)) >= 5:
             showwarning("Error" , "You can merge only 5 pdfs at a time")
             return
         pdf_path = filedialog.askopenfilename(initialdir=os.getenv("DEFAULT_SAVE_FOLDER"), title="Select a file" , filetypes=(("Pdf files","*.pdf*"),("all files","*.*")))
@@ -44,8 +44,7 @@ def load_merge_pdf(window):
             else:
                 showwarning('Error', "An error has occurred")
         except Exception as e:
-            print(e)
-            showerror("Error" , "An error has occurred")
+            showerror("Error", e)
 
 
     def show_preview_pdf(filename, pdf_path):
