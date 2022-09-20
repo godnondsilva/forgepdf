@@ -1,26 +1,26 @@
 import requests, re
 
-# function to validate the inputs from the signup page
+# Function to validate the inputs from the signup page
 def validate_register(name, email, password):
-    # stripping the name and storing it in new_name variable
+    # Stripping the name and storing it in new_name variable
     new_name = name.strip()
-    # re for checking if the email is valid or not
+    # Regular expression for checking if the email is valid or not
     emailRe = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
-    # re for checking if the phone no. is valid or not
+    # Re for checking if the phone no. is valid or not
     passwordRe = re.compile(r'.{2,20}')
-    # checking if the name is not a decimal
+    # Checking if the name is not a decimal
     if new_name.isdecimal():
         return {
             "status": "error",
             "message": "Please enter your name in the correct format"
         }
-    # checking if the email is valid
+    # Checking if the email is valid
     if len(emailRe.findall(email)) < 1:
         return {
             "status": "error",
             "message": "Please enter your email in the correct format"
         }
-    # checking if the password is valid
+    # Checking if the password is valid
     if len(passwordRe.findall(password)) < 1:
         return {
             "status": "error",
@@ -35,42 +35,42 @@ def validate_register(name, email, password):
 
 def validate_email(email):
     emailRe = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
-    # passing the email to the api to validate
+    # Passing the email to the api to validate
     response = requests.get(
         "https://isitarealemail.com/api/email/validate",
         params = {'email': email}
     )
-    # getting the data from the response
+    # Getting the data from the response
     status = response.json()['status']
-    # checking if the status is valid
+    # Checking if the status is valid
     if status == "valid" and len(emailRe.findall(email)) >= 1:
         return {
             "status": "success",
             "message": "Email is valid"
         }
-    # checking if the status is invalid
+    # Checking if the status is invalid
     elif status == "invalid":
         return {
             "status": "error",
             "message": "Please enter a valid email address!"
         }
-    # all other cases
     else:
         return {
             "status": "error",
             "message": "Please enter a valid email address!"
         }
 
-#input validation for login
+# Input validation for login
 def validate_login(name, password):
     passwordRe = re.compile(r'.{2,20}')
-    # stripping the name and storing it in new_name variable
+    # Stripping the name and storing it in new_name variable
     new_name = name.strip()
     if new_name.isdecimal():
         return {
             "status": "error",
             "message": "Please enter your name in the correct format"
         }
+    # Checking if the password is valid
     if len(passwordRe.findall(password)) < 1:
         return {
             "status": "error",

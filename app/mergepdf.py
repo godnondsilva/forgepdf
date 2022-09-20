@@ -17,7 +17,6 @@ def load_merge_pdf(window):
         highlightthickness = 0,
         relief = "ridge")
     canvas.place(x = 0, y = 0)
-
     sidebar.load_sidebar(window)
 
 
@@ -47,6 +46,7 @@ def load_merge_pdf(window):
         except Exception as e:
             print(e)
             showerror("Error" , "An error has occurred")
+
 
     def show_preview_pdf(filename, pdf_path):
         state.set_state(states.SELECTED_PDFS, state.get_state(states.SELECTED_PDFS) + [pdf_path])

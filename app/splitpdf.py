@@ -8,7 +8,6 @@ from app.utility import file_handler
 import os
 
 def load_split_pdf(window):
-    # Canvas Config
     canvas = Canvas(
         window,
         bg = "#111111",
@@ -18,8 +17,8 @@ def load_split_pdf(window):
         highlightthickness = 0,
         relief = "ridge")
     canvas.place(x = 0, y = 0)
-    
     sidebar.load_sidebar(window)
+
 
     def get_pdf():
         if state.get_state(states.SELECTED_PDF) != '':
@@ -32,7 +31,7 @@ def load_split_pdf(window):
             return
         show_preview_pdf(filename, pdf_path)
 
-    #checks the condition and splits the pdf
+
     def split_pdf():
         try:
             start_range = starting_range_entry.get()

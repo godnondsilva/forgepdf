@@ -17,8 +17,8 @@ def load_encrypt_pdf(window):
         highlightthickness = 0,
         relief = "ridge")
     canvas.place(x = 0, y = 0)
-
     sidebar.load_sidebar(window)
+
 
     def get_pdf():
         if state.get_state(states.SELECTED_PDF) != '':
@@ -30,6 +30,7 @@ def load_encrypt_pdf(window):
             showwarning("Error" , "Please select a PDF file")
             return
         show_preview_pdf(filename, pdf_path)
+
 
     def encrypt_pdf():
         password = encrypt_password_entry.get().strip()
@@ -61,6 +62,7 @@ def load_encrypt_pdf(window):
             width = 101,
             height = 13)
     
+
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
@@ -80,6 +82,7 @@ def load_encrypt_pdf(window):
         activebackground="#5a5a5a",
         relief = "flat")
 
+
     selected_pdf_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/selected_pdf_entry.png")
     selected_pdf_bg = canvas.create_image(
         1151.5, 381.5,
@@ -91,8 +94,8 @@ def load_encrypt_pdf(window):
         borderwidth=0,
         fg= "#FFFFFF",
         bg = "#5a5a5a")
-
     selected_pdf_entry.bind("<Key>", lambda e: "break")
+
 
     choose_file_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/choose_file_btn.png")
     choose_file_btn_label = Label(image=choose_file_btn_img)
@@ -110,6 +113,7 @@ def load_encrypt_pdf(window):
         width = 314,
         height = 75)
 
+
     encrypt_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/encrypt_btn.png")
     encrypt_btn_label = Label(image=encrypt_btn_img)
     encrypt_btn_label.image = encrypt_btn_img
@@ -125,6 +129,7 @@ def load_encrypt_pdf(window):
         x = 1126, y = 658,
         width = 158,
         height = 49)
+
 
     encrypt_password_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/encryptpdf/encrypt_password_entry.png")
     encrypt_password_entry_bg = canvas.create_image(

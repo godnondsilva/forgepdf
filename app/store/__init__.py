@@ -1,4 +1,4 @@
-initial_data = {
+initial_state = {
     'uid': 0,
     'username': '',
     'email': '',
@@ -13,7 +13,7 @@ initial_data = {
 
 class GlobalState:
     def __init__(self):
-        self.data = initial_data
+        self.data = initial_state
 
     def get_state(self, key):
         return self.data[key]
@@ -22,7 +22,7 @@ class GlobalState:
         self.data[key] = value
 
     def reset_state(self):
-        self.data = initial_data
+        self.data = initial_state
 
 class States:
     def __init__(self):

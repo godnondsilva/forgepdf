@@ -17,8 +17,8 @@ def load_decrypt_pdf(window):
         highlightthickness = 0,
         relief = "ridge")
     canvas.place(x = 0, y = 0)
-
     sidebar.load_sidebar(window)
+    
 
     def get_pdf():
         if state.get_state(states.SELECTED_PDF) != '':
@@ -30,6 +30,7 @@ def load_decrypt_pdf(window):
             showwarning("Error" , "Please select a PDF file")
             return
         show_preview_pdf(filename, pdf_path)
+
 
     def decrypt_pdf():
         password = decrypt_password_entry.get().strip()
@@ -60,6 +61,7 @@ def load_decrypt_pdf(window):
             width = 101,
             height = 13)
 
+
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/decryptpdf/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
@@ -77,7 +79,6 @@ def load_decrypt_pdf(window):
         highlightthickness = 0,
         background="#5a5a5a",
         activebackground="#5a5a5a",
-        # command = get_pdf,
         relief = "flat")
 
 

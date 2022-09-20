@@ -5,12 +5,11 @@ from app.functionality import validate
 from app.store import state, states
 import os, requests, json
 
-def load_login(window):
-    # Creating the login frame    
+def load_login(window): 
     frame=Frame(window, width=1366, height=768, bg='#111111')
     frame.place(x=0, y=0)
     
-    # Creating the canvas
+    
     login_canvas = Canvas(
         window,
         bg = "#111111",
@@ -53,7 +52,6 @@ def load_login(window):
             print(e)
             showerror('Error', 'An error has occurred.')
 
-    # Background image
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/background.png")
     background_label = Label(image=background_img)
     background_label.image = background_img
@@ -61,7 +59,7 @@ def load_login(window):
         671.0, 384.0,
         image=background_img)
 
-    # Login button
+
     login_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/login_btn.png")
     login_btn_label = Label(image=login_btn_img)
     login_btn_label.image = login_btn_img
@@ -73,13 +71,12 @@ def load_login(window):
         activebackground="#111111",
         command = submit,
         relief = "flat")
-
     login_btn.place(
         x = 633, y = 481,
         width = 160,
         height = 51)
 
-    # Email entry field
+    
     email_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/entry.png")
     email_entry_bg = login_canvas.create_image(
         807.0, 429.5,
@@ -96,12 +93,11 @@ def load_login(window):
         width = 331,
         height = 35)
 
-    # Password entry field
+
     password_entry_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/entry.png")
     password_entry_bg = login_canvas.create_image(
         807.0, 329.5,
         image = password_entry_img)
-
     password_entry = Entry(
         bd = 0,
         font=16,
@@ -110,13 +106,12 @@ def load_login(window):
         insertbackground= "#eeeeee",
         show="*",
         highlightthickness = 0)
-
     password_entry.place(
         x = 641, y = 411,
         width = 331,
         height = 35)
 
-    # Register button
+
     register_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/login/register_btn.png")
     register_btn_label = Label(image=register_btn_img)
     register_btn_label.image = register_btn_img
@@ -128,11 +123,7 @@ def load_login(window):
         activebackground="#111111",
         command = lambda: routing.route_frame(window, "register"),
         relief = "flat")
-
     register_btn.place(
         x = 1131, y = 41,
         width = 142,
         height = 41)
-
-    email_entry.insert(0, "tester@tester.com");
-    password_entry.insert(0, "tester")

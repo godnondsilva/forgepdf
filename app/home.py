@@ -7,32 +7,27 @@ from app.utility import file_handler
 import datetime, os, threading
 
 def load_home(window):
-    #Button Functions
     class WeatherThread(threading.Thread):
         def __init__(self):
             threading.Thread.__init__(self)
-    
-            # helper function to execute the threads
+
         def run(self):
+            # Get weather
             weatherData = weather.get_weather(state.get_state(states.LOCATION))
             if 'error' in weatherData:
                 showerror('Error', weatherData['error'])
+            
             # Description text
             description_entry.delete(0, END)
             description_entry.insert(END, "Feels like " + str(int(weatherData['temp'])) + "°C. " + weatherData['main'].capitalize() + ". " + str(weatherData['description']).capitalize())
-
             # Temperature text
             temperature_entry.insert(END, str(int(weatherData['temp'])) + "°C")
-
             # Humidity text
             humidity_entry.insert(END, "Humidity: " + str(int(weatherData['temp'])) + "%")
-
             # Wind text
             wind_entry.insert(END, "Wind: " + str(int(weatherData['temp'])) + "km/hr")
-
             # Pressure text
             pressure_entry.insert(END, "Pressure: " + str(int(weatherData['temp'])) + "Pa")
-
             # Weather icon
             weather_icon_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/weather_icons/" + weatherData['icon'] + ".png")
             weather_btn_label.config(image = weather_icon_img)
@@ -49,19 +44,23 @@ def load_home(window):
             thought_text.insert(END, thought_text_value)
             thought_text.config(state=DISABLED)
 
+
     def logout():
         # Reset the state
         state.reset_state()
         # Route to the login frame
         routing.route_frame(window, "login")
 
+
     def send_report():
         # Open mail application
         os.system("start mailto:godnondsilva@gmail.com")
     
+
     def send_feedback():
         os.system("start mailto:godnondsilva@gmail.com")
     
+
     canvas = Canvas(
         window,
         bg = "#111111",
@@ -71,6 +70,8 @@ def load_home(window):
         highlightthickness = 0,
         relief = "ridge")
     canvas.place(x = 0, y = 0)
+    sidebar.load_sidebar(window)
+    
 
     background_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/background.png")
     background_label = Label(image=background_img)
@@ -78,6 +79,7 @@ def load_home(window):
     background = canvas.create_image(
         671.0, 384.0,
         image=background_img)
+
 
     logout_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/logout_btn.png")
     logout_btn_label = Label(image=logout_btn_img)
@@ -90,13 +92,11 @@ def load_home(window):
         activebackground="#111111",
         command = logout,
         relief = "flat")
-
     logout_btn.place(
         x = 1111, y = 35,
         width = 160,
         height = 45)
 
-    sidebar.load_sidebar(window)
 
     send_bug_report_btn_img = PhotoImage(file = os.getenv("IMAGE_FOLDER_PATH")+"/home/send_bug_report_btn.png")
     send_bug_report_btn_label = Label(image=send_bug_report_btn_img)
