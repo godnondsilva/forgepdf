@@ -10,4 +10,4 @@ env/
 
 # Ignoring deployment files
 build/
-dist/ForgePDF.exe
+*.exe
