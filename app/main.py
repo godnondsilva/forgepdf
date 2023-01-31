@@ -1,6 +1,6 @@
 from tkinter import *
-from app.login import load_login
 from app.utility import center, dark_title_bar
+from app.functionality import routing
 import os
 
 class MainWindow():
@@ -12,8 +12,8 @@ class MainWindow():
         window.configure(bg = "#111111")
         center(window)
 
-        # Call the loadLogIn function to load the login screen
-        load_login(window)
+        # Call the home frame
+        routing.route_frame(window, 'home')
         # Additional window config
         window.resizable(False, False)
         window.iconbitmap(os.getenv('IMAGE_FOLDER_PATH')+'/logo.ico')

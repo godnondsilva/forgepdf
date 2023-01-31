@@ -1,10 +1,6 @@
 initial_state = {
-    'uid': 0,
-    'username': '',
-    'email': '',
     'selected_pdf': '',
     'count': 0,
-    'location': 'mangalore',
     'selected_pdf': '',
     'selected_pdfs': [],
     'current_frame': '',
@@ -26,11 +22,7 @@ class GlobalState:
 
 class States:
     def __init__(self):
-        self.UID = 'uid'
-        self.USERNAME = 'username'
-        self.EMAIL = 'email'
         self.COUNT = 'count'
-        self.LOCATION = 'location'
         self.SELECTED_PDF = 'selected_pdf'
         self.SELECTED_PDFS = 'selected_pdfs'
         self.CURRENT_FRAME = 'current_frame'

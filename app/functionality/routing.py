@@ -1,19 +1,10 @@
 from app.store import state, states
-from app import login, register, home, encryptpdf, decryptpdf, splitpdf, mergepdf
+from app import home, encryptpdf, decryptpdf, splitpdf, mergepdf
 
 def route_frame(window, location):
     # Guard before going to the next frame
     if location == state.get_state(states.CURRENT_FRAME):
         return
-
-    # Route paths
-    if location == "login":
-        state.set_state(states.CURRENT_FRAME, "login")
-        login.load_login(window)
-
-    if location == "register":
-        state.set_state(states.CURRENT_FRAME, "register")
-        register.load_register(window)
 
     if location == "home":
         state.set_state(states.CURRENT_FRAME, "home")
